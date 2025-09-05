@@ -148,6 +148,9 @@ return {
     end
 
     local servers = {
+      prright = {
+        settings = { Python = {} },
+      },
       lua_ls = {
         settings = {
           Lua = {

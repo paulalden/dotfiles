@@ -6,6 +6,7 @@
 export PATH=/usr/local/bin:$PATH # Recommended by brew doctor
 export PATH=$HOME/.bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
+export PATH=$HOME/.local/scripts:$PATH
 export PATH=/opt/homebrew/opt/postgresql@15/bin:$PATH
 export PATH=/opt/homebrew/opt/yarn:$PATH
 export PATH=/opt/homebrew/opt/python@3.13:$PATH

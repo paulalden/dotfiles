@@ -40,7 +40,30 @@ The WM needs to add hacks to get it working fully:
 + [Partially disable system integrity](https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection)
 + [Setup user to run script injection](https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#macos-big-sur---automatically-load-scripting-addition-on-startup)
 
-After upgrading Yabai, you need to follow these steps to properly setup application following: 
+After upgrading Yabai, you need to follow these steps to properly setup application following:
 
 https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#updating-to-the-latest-release
 
+## Claude
+
+Installing claude-code
+
+Add/edit ~/.claude/settings.json to have:
+
+```
+{
+
+"apiKeyHelper": "~/.claude/anthropic_key.sh"
+
+}
+```
+
+Then in ~/.claude/anthropic_key.sh:
+
+```
+echo "sk-........."
+```
+
+and make it executable with:
+
+chmod +x ~/.claude/anthropic_key.sh

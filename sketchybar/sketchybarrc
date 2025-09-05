@@ -14,19 +14,19 @@ source "$CONFIG_DIR/scripts/config.sh"
 sketchybar --bar \
   position=top \
   height=35 \
-  color=$BG_60 \
-  border_color=$BG \
-  corner_radius=9 \
-  blur_radius=15 \
-  border_width=3 \
+  color=$BG \
+  border_color=$BLACK \
+  corner_radius=10 \
+  blur_radius=10 \
+  border_width=0 \
   y_offset=15  \
-  margin=15 \ 
-  display=main \
-  topmost=on \
+  margin=15 \
+  display=all \
+  topmost=off \
   sticky=on \
   font_smoothing=on \
-  padding_left=0 \
-  padding_right=0
+  padding_left=10 \
+  padding_right=10
 
 ##### Changing Defaults #####
 

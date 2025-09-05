@@ -103,6 +103,10 @@ return {
 
     -- Expand 'cc' into 'CodeCompanion' in the command line
     vim.cmd([[cab cc CodeCompanion]])
+
+    require("cmp").setup.filetype("codecompanion", {
+      enabled = false,
+    })
   end,
   keys = {
     { "<C-a>", "<cmd>CodeCompanionActions<cr>", desc = "CodeCompanion Actions" },

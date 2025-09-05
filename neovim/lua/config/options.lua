@@ -68,7 +68,7 @@ vim.opt.winminwidth = 5 -- Minimum window width
 vim.opt.wrap = true -- Disable line wrap
 vim.opt.smoothscroll = true
 vim.opt.backup = false -- creates a backup file
-vim.opt.iskeyword:append({ "_", "-" })
+-- vim.opt.iskeyword:append({ "_", "-" })
 vim.opt.whichwrap:append("<>[]hl") -- go to previous/next line with h,l
 vim.opt.cmdheight = 1 -- 0 = off, more space in the neovim command line for displaying messages
 vim.opt.colorcolumn = "80,120"

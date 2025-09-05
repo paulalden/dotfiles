@@ -19,6 +19,7 @@ alias nvim-kickstart='NVIM_APPNAME="nvim-kickstart" nvim'
 
 # Rails / Ruby
 alias rspec="bundle exec rspec"
+alias be="bundle exec"
 
 # ZSH
 alias zsh:reload="source $ZDOTDIR/.zshrc"

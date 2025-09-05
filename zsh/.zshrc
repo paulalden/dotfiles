@@ -71,11 +71,6 @@ zsh_add_config "config/fzf.sh"
 
 zsh_add_file "$HOME/Dev/secrets.sh" # Shhhh, don't commit secrets
 
-# Ensure Ruby is loaded above, before trying to add Ruby Gems to PATH
-# if which ruby >/dev/null && which gem >/dev/null; then
-#   PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-# fi
-
 ################################################################################
 # Key bindings
 ################################################################################

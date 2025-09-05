@@ -3,7 +3,7 @@ return {
   event = { "BufReadPost", "BufWritePost", "BufNewFile" },
   opts = {
     mode = "cursor",
-    max_lines = 5,
+    max_lines = 1,
   },
   config = function()
     vim.keymap.set("n", "[c", function()
