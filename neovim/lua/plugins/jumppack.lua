@@ -37,8 +37,9 @@ return {
       },
       window = {
         config = function()
-          local height = math.floor(vim.o.lines * 0.4)
-          local width = math.floor(vim.o.columns * 0.5)
+          local height = math.floor(vim.o.lines * 0.6)
+          local width = math.floor(vim.o.columns * 0.7)
+
           return {
             -- anchor = "NW",
             border = "rounded",

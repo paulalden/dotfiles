@@ -171,3 +171,19 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     vim.cmd("setfiletype bash")
   end,
 })
+
+-- Show dashboard when all buffers are closed
+-- vim.api.nvim_create_autocmd("BufDelete", {
+--   callback = function()
+--     vim.schedule(function()
+--       local listed_bufs = vim.tbl_filter(function(buf)
+--         return vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buflisted
+--       end, vim.api.nvim_list_bufs())
+--
+--       if #listed_bufs == 0 then
+--         require("snacks").dashboard.open()
+--       end
+--     end)
+--   end,
+--   group = vim.api.nvim_create_augroup("maat", { clear = true }),
+-- })

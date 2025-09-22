@@ -2,7 +2,7 @@ return {
   {
     "vim-ruby/vim-ruby",
     config = function()
-      vim.cmd [[autocmd FileType ruby setlocal indentkeys-=.]]
+      vim.cmd([[autocmd FileType ruby setlocal indentkeys-=.]])
     end,
   },
   {
@@ -139,7 +139,7 @@ return {
 
       local servers = {
         ruby_lsp = {
-          cmd = { vim.fn.expand "/Users/paul/.asdf/shims/ruby-lsp" },
+          cmd = { vim.fn.expand("/Users/paul/.asdf/shims/ruby-lsp") },
           root_dir = function(fname)
             return require("lspconfig").util.root_pattern("Gemfile", ".git")(fname) or vim.fn.getcwd()
           end,

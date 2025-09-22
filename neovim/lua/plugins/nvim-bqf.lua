@@ -28,7 +28,7 @@ return {
             ret = false
 
           -- skip fugitive buffer
-          elseif bufname:match "^fugitive://" then
+          elseif bufname:match("^fugitive://") then
             ret = false
           end
 
