@@ -10,10 +10,12 @@ export PATH=$HOME/.local/scripts:$PATH
 export PATH=/opt/homebrew/opt/postgresql@15/bin:$PATH
 export PATH=/opt/homebrew/opt/yarn:$PATH
 export PATH=/opt/homebrew/opt/python@3.13:$PATH
-export PATH=/opt/homebrew/opt/openssl@3:$PATH
 export PATH=/opt/homebrew/sbin:$PATH # Recommended by brew doctor
 export PATH=/opt/homebrew/bin:$PATH  # Brew is first as everything else uses that
 export PATH=/opt/homebrew/opt/rustup/bin:$PATH
+export PATH="/opt/homebrew/opt/openssl@3.5/bin:$PATH"
+export PATH=/opt/homebrew/opt/openssl@3:$PATH
+
 export LIBRARY_PATH=$LIBRARY_PATH:/opt/homebrew/opt/zstd/lib/ # Fix for MySQL2 gem not compiling
 export CXX=/usr/bin/clang++
 
