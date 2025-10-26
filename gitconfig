@@ -7,6 +7,7 @@
 	pager = diff-so-fancy | less --tabs=4 -RFX
 	fileMode = false
 	autocrlf = input
+	warnOnCaseInsensitiveFileSystem = false
 [color]
 	ui = true
 [alias]
