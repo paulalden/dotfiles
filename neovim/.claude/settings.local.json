@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nvim:*)",
+      "Read(//Users/paul/Personal/Repos/dotfiles/**)",
+      "Read(//Users/paul/.asdf/shims/**)",
+      "Bash(/Users/paul/.asdf/shims/ruby-lsp:*)",
+      "Read(//private/tmp/**)",
+      "Read(//Users/paul/.local/state/nvim/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
