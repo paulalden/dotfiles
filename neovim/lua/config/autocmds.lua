@@ -2,22 +2,6 @@ local function augroup(name)
   return vim.api.nvim_create_augroup("local_" .. name, { clear = true })
 end
 
--- LSP Progress message
-vim.api.nvim_create_autocmd("LspProgress", {
-  group = augroup("lsp_progress"),
-  callback = function(ev)
-    local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-    vim.notify(vim.lsp.status(), vim.log.levels.WARN, {
-      id = "lsp_progress",
-      title = "LSP Progress",
-      opts = function(notif)
-        notif.icon = ev.data.params.value.kind == "end" and " "
-          or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-      end,
-    })
-  end,
-})
-
 -- Highlight when yanking (copying) text Try it with `yap` in normal mode - See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = augroup("highlight_yank"),

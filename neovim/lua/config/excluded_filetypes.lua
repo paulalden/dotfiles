@@ -4,7 +4,6 @@ return {
   "alpha",
   "help",
   "lazy",
-  "mason",
   "neo-tree",
   "netrw",
   "oil",
