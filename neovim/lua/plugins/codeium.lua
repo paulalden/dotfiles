@@ -1,14 +1,14 @@
 return {
-  "Exafunction/codeium.nvim",
-  dependencies = {
-    "nvim-lua/plenary.nvim",
+  {
+    "Exafunction/codeium.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      { "saghen/blink.cmp", priority = 51 },
+    },
+    config = function()
+      require("codeium").setup({
+        enable_cmp_source = false,
+      })
+    end,
   },
-
-  config = function()
-    require("codeium").setup({
-      enable_chat = false,
-      enable_local_search = false,
-      enable_index_service = false,
-    })
-  end,
 }
