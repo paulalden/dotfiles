@@ -67,11 +67,8 @@ return {
         hl = "SnacksIndentScope", --- hl group for scopes
       },
       chunk = {
-        -- when enabled, scopes will be rendered as chunks, except for the
-        -- top-level scope which will be rendered as a scope.
-        enabled = false,
-        -- only show chunk scopes in the current window
-        only_current = false,
+        enabled = false, -- when enabled, scopes will be rendered as chunks
+        only_current = false, -- only show chunk scopes in the current window
         priority = 200,
         hl = "SnacksIndentChunk", ---@type string|string[] hl group for chunk scopes
         char = {
@@ -358,12 +355,63 @@ return {
     rename = { enabled = true },
     scope = { enabled = true },
     scroll = { enabled = true },
-    statuscolumn = { enabled = true },
+    statuscolumn = {
+      enabled = true,
+      left = { "mark", "sign" }, -- priority of signs on the left (high to low)
+      tstatus = { enabled = false },
+      right = { "fold", "git" }, -- priority of signs on the right (high to low)
+      folds = {
+        open = false, -- show open fold icons
+        git_hl = false, -- use Git Signs hl for fold icons
+      },
+      git = {
+        -- patterns to match Git signs
+        patterns = { "GitSign", "MiniDiffSign" },
+      },
+      refresh = 50, -- refresh at most every 50ms
+    },
     toggle = { enabled = true },
     words = { enabled = true },
     zen = { enabled = true },
   },
   keys = {
+    -- Notify
+    {
+      "<leader>ns",
+      function()
+        Snacks.notifier.show_history()
+      end,
+      desc = "Show notifications",
+    },
+    {
+      "<leader>sh",
+      function()
+        Snacks.notifier.hide()
+      end,
+      desc = "Hide notification",
+    },
+    -- Bufdelete
+    {
+      "<leader>bd",
+      function()
+        Snacks.bufdelete()
+      end,
+      desc = "Buffer delete",
+    },
+    {
+      "<leader>ba",
+      function()
+        Snacks.bufdelete.all()
+      end,
+      desc = "Buffer delete all",
+    },
+    {
+      "<leader>bo",
+      function()
+        Snacks.bufdelete.other()
+      end,
+      desc = "Buffer delete other",
+    },
     {
       "<leader>sb",
       function()
@@ -398,7 +446,7 @@ return {
     {
       "<leader>st",
       function()
-        Snacks.picker.explorer({ hidden = true })
+        Snacks.explorer.reveal({ hidden = true })
       end,
       desc = "[T]ree",
     },
@@ -411,6 +459,13 @@ return {
     },
     -- Git
     {
+      "<leader>gb",
+      function()
+        Snacks.git.blame_line()
+      end,
+      desc = "[G]it [B]lame",
+    },
+    {
       "<leader>sG",
       function()
         Snacks.picker.git_files({ finder = "git_files", hidden = true, show_empty = false })
@@ -418,18 +473,18 @@ return {
       desc = "[G]it Files",
     },
     {
-      "<leader>gc",
+      "<leader>gl",
       function()
         Snacks.picker.git_log()
       end,
-      desc = "Git [L]og",
+      desc = "[G]it [L]og",
     },
     {
       "<leader>gs",
       function()
         Snacks.picker.git_status()
       end,
-      desc = "Git [S]tatus",
+      desc = "[G]it [S]tatus",
     },
     -- Buffer
     {

@@ -171,7 +171,8 @@ end
 
 map({ "n", "x" }, "<leader>gB", function()
   Snacks.gitbrowse()
-end, { desc = "Git Browse (open)" })
+end, { desc = "[G]it [Y]ank URL" })
+
 map({ "n", "x" }, "<leader>gY", function()
   Snacks.gitbrowse({
     open = function(url)
@@ -179,4 +180,4 @@ map({ "n", "x" }, "<leader>gY", function()
     end,
     notify = false,
   })
-end, { desc = "Git Browse (copy)" })
+end, { desc = "[G]it [B]rowse Remote" })

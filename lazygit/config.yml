@@ -33,9 +33,9 @@ gui:
   showCommandLog: false
   commandLogSize: 8
 git:
-  paging:
-    colorArg: always
-    pager: diff-so-fancy
+  pagers:
+    - colorArg: always
+      pager: diff-so-fancy
   merging:
     # only applicable to unix users
     manualCommit: false

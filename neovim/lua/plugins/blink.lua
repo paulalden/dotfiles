@@ -7,7 +7,11 @@ return {
   },
   version = "1.*",
   opts = {
-    keymap = { preset = "default" },
+    keymap = {
+      preset = "enter",
+      ["<C-d>"] = { "show", "show_documentation", "hide_documentation" },
+      -- ["<esc>"] = { "cancel", "fallback" },
+    },
     appearance = {
       use_nvim_cmp_as_default = true,
       nerd_font_variant = "mono",
@@ -75,10 +79,10 @@ return {
       default = {
         "lazydev",
         "lsp",
-        "codeium",
         "path",
-        "snippets",
+        "codeium",
         "buffer",
+        "snippets",
       },
       providers = {
         codeium = {
