@@ -10,6 +10,10 @@ return {
     null_ls.setup({
       debug = false,
       sources = {
+        null_ls.builtins.formatting.sql_formatter,
+        null_ls.builtins.formatting.prettierd.with({
+          filetypes = { "json", "markdown", "yaml" },
+        }),
         null_ls.builtins.formatting.rubocop.with({
           command = "rubocop",
           args = { "-A", "--server", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" },
