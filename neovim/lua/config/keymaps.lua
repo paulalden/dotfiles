@@ -1,31 +1,42 @@
 ---@module "snacks"
 
--------------------------------------------------------------------------------
--- General Keybindings, not plugin specific
--------------------------------------------------------------------------------
 local opts = { silent = true }
 local map = vim.keymap.set
 
+-------------------------------------------------------------------------------
+-- DISABLED KEYS
+-------------------------------------------------------------------------------
 -- Turn off arrow keys - force HJKL
 map("n", "<UP>", "<NOP>", opts)
 map("n", "<DOWN>", "<NOP>", opts)
 map("n", "<LEFT>", "<NOP>", opts)
 map("n", "<RIGHT>", "<NOP>", opts)
 
+-------------------------------------------------------------------------------
+-- EDITOR BEHAVIOR
+-------------------------------------------------------------------------------
 -- Quit all
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
-
--- Insert lines above/below without leaving normal mode
-map("n", "oo", "o<Esc>k", opts)
-map("n", "OO", "O<Esc>j", opts)
 
 -- Alternatives to :w, because I constantly typo it
 map({ "i", "n", "v" }, "<c-s>", "<NOP>", opts)
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
+-- Insert lines above/below without leaving normal mode
+map("n", "oo", "o<Esc>k", opts)
+map("n", "OO", "O<Esc>j", opts)
+
 -- Add line break and jump to start
 map("n", "<Enter>", "a<Enter><Esc>^", opts)
 
+-- Add undo break-points
+map("i", ",", ",<c-g>u")
+map("i", ".", ".<c-g>u")
+map("i", ";", ";<c-g>u")
+
+-------------------------------------------------------------------------------
+-- SEARCH
+-------------------------------------------------------------------------------
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
 map("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
@@ -34,21 +45,19 @@ map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search R
 map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 
--- Add undo break-points
-map("i", ",", ",<c-g>u")
-map("i", ".", ".<c-g>u")
-map("i", ";", ";<c-g>u")
-
--- better indenting
+-------------------------------------------------------------------------------
+-- TEXT EDITING
+-------------------------------------------------------------------------------
+-- Better indenting
 map("v", "<", "<gv")
 map("v", ">", ">gv")
 
--- commenting
+-- Commenting
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
 -------------------------------------------------------------------------------
--- Copy / Paste
+-- COPY / PASTE / REGISTERS
 -------------------------------------------------------------------------------
 -- Use x and Del key for black hole register
 map("", "<Del>", '"_x', opts)
@@ -58,7 +67,7 @@ map("", "x", '"_x', opts)
 map("v", "p", '"_dP', opts)
 
 -------------------------------------------------------------------------------
--- Escape
+-- ESCAPE AND HIGHLIGHTING
 -------------------------------------------------------------------------------
 -- Map ctrl-c to esc
 map("i", "<C-c>", "<esc>", opts)
@@ -70,7 +79,7 @@ map("n", "<esc><esc>", "<esc><cmd>noh<cr><esc>", opts)
 map("n", "<esc>", "<NOP>", opts)
 
 -------------------------------------------------------------------------------
--- Buffers
+-- BUFFERS
 -------------------------------------------------------------------------------
 -- Print the current buffer type
 map({ "n", "t", "v", "i", "" }, "<C-x>", "<cmd>echo &filetype<cr>", opts)
@@ -79,7 +88,7 @@ map({ "n", "t", "v", "i", "" }, "<C-x>", "<cmd>echo &filetype<cr>", opts)
 map("n", "<leader>yr", "<cmd>let @+ = expand('%:~:.')<cr>", { desc = "Relative Path", silent = true })
 map("n", "<leader>yf", "<cmd>let @+ = expand('%:p')<cr>", { desc = "Full Path", silent = true })
 
--- Moving Buffers
+-- Navigation between buffers
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
@@ -93,11 +102,17 @@ map("n", "<c-w>", "<cmd>bd<cr>", { desc = "Delete Buffer" })
 map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 
 -------------------------------------------------------------------------------
--- Splits
+-- SPLITS AND WINDOWS
 -------------------------------------------------------------------------------
 -- Create splits
 map("n", "<leader>\\", "<cmd>vsplit<cr>", { desc = "Vertical Split", silent = true })
 map("n", "<leader>-", "<cmd>split<cr>", { desc = "Horizontal Split", silent = true })
+
+-- Window navigation - Use CTRL+<hjkl> to switch between windows
+map("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
+map("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
+map("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
+map("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- Resize splits with alt+cursor keys
 map({ "n", "i", "v" }, "<A-j>", "<nop>")
@@ -111,35 +126,22 @@ map("n", "<M-Left>", ":vertical resize -2<CR>", opts)
 map("n", "<M-Right>", ":vertical resize +2<CR>", opts)
 
 -------------------------------------------------------------------------------
--- Terminal
+-- TERMINAL
 -------------------------------------------------------------------------------
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
+-- Exit terminal mode with a shortcut that is easier to discover
+-- NOTE: This won't work in all terminal emulators/tmux/etc.
+-- Fallback: use <C-\><C-n> to exit terminal mode
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 -------------------------------------------------------------------------------
--- Navigation
--------------------------------------------------------------------------------
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-map("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
-map("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
-map("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-map("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
-
--------------------------------------------------------------------------------
--- Snacks
+-- PLUGIN: SNACKS
 -------------------------------------------------------------------------------
 local loaded, _ = pcall(require, "snacks")
 if loaded then
+  -- Dashboard
   map("n", "<leader>d", "<cmd>lua Snacks.dashboard.open()<cr>", { desc = "[D]ashboard", silent = true })
 
+  -- Toggle options
   Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
   Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
   Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
@@ -167,17 +169,18 @@ if loaded then
   Snacks.toggle.scroll():map("<leader>uS")
   Snacks.toggle.profiler():map("<leader>dpp")
   Snacks.toggle.profiler_highlights():map("<leader>dph")
+
+  -- Git browsing
+  map({ "n", "x" }, "<leader>gB", function()
+    Snacks.gitbrowse()
+  end, { desc = "[G]it [B]rowse Remote" })
+
+  map({ "n", "x" }, "<leader>gY", function()
+    Snacks.gitbrowse({
+      open = function(url)
+        vim.fn.setreg("+", url)
+      end,
+      notify = false,
+    })
+  end, { desc = "[G]it [Y]ank URL" })
 end
-
-map({ "n", "x" }, "<leader>gB", function()
-  Snacks.gitbrowse()
-end, { desc = "[G]it [Y]ank URL" })
-
-map({ "n", "x" }, "<leader>gY", function()
-  Snacks.gitbrowse({
-    open = function(url)
-      vim.fn.setreg("+", url)
-    end,
-    notify = false,
-  })
-end, { desc = "[G]it [B]rowse Remote" })
