@@ -74,7 +74,6 @@ return {
       },
     },
     signature = { window = { border = "single" } },
-    typing = { documentation = { auto_show = false } },
     sources = {
       default = {
         "lazydev",
