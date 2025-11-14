@@ -5,6 +5,13 @@ vim.schedule(
   end
 )
 
+vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit ShaDa file (for startup)
+-- Enable all filetype plugins and syntax (if not enabled, for better startup)
+vim.cmd("filetype plugin indent on")
+if vim.fn.exists("syntax_on") ~= 1 then
+  vim.cmd("syntax enable")
+end
+
 vim.opt.undofile = true -- Save undo history
 vim.opt.undolevels = 10000
 vim.opt.undoreload = 10000
@@ -17,21 +24,29 @@ vim.g.ruby_host_prog = "/Users/paul/.asdf/shims/neovim-ruby-host" -- avoid needi
 vim.g.have_nerd_font = true -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.markdown_recommended_style = 0 -- Fix markdown indentation settings
 
+vim.o.cursorlineopt = "screenline,number" -- Show cursor line per screen line
 vim.opt.autowrite = true -- Enable auto write
 -- only set clipboard if not in ssh, to make sure the OSC 52
 -- integration works automatically. Requires Neovim >= 0.10.0
 vim.opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
-vim.opt.completeopt = "menu,menuone,noselect"
+-- vim.opt.completeopt = "menu,menuone,noselect"
+vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
 -- vim.opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 vim.opt.conceallevel = 0 -- so that `` is visible in markdown files
 vim.opt.confirm = false -- Confirm to save changes before exiting modified buffer
 vim.opt.cursorline = true -- Enable highlighting of the current line
 vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.opt.fillchars = { foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱", eob = " " }
+
 vim.opt.formatoptions = "jcroqlnt" -- tcqj
+vim.o.formatoptions = "rqnl1j" -- Improve comment editing
+
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.ignorecase = true -- Ignore case
+vim.o.incsearch = true -- Show search matches while typing
+vim.o.infercase = true -- Infer case in built-in completion
+
 vim.opt.inccommand = "nosplit" -- preview incremental substitute
 vim.opt.jumpoptions = "view"
 vim.opt.laststatus = 3 -- global statusline
@@ -48,12 +63,14 @@ vim.opt.scrolloff = 4 -- Lines of context
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 vim.opt.shiftround = true -- Round indent
 vim.opt.shiftwidth = 2 -- Size of an indent
-vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
+-- vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
+vim.o.shortmess = "CFOSWaco" -- Disable some built-in completion messages
 vim.opt.showmode = false -- Dont show mode since we have a statusline
 vim.opt.sidescrolloff = 8 -- Columns of context
 vim.opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 vim.opt.smartcase = true -- Don't ignore case with capitals
 vim.opt.smartindent = true -- Insert indents automatically
+vim.o.spelloptions = "camel" -- Treat camelCase word parts as separate words
 vim.opt.spelllang = { "en" }
 vim.opt.splitbelow = true -- Put new windows below current
 vim.opt.splitkeep = "screen"
@@ -69,6 +86,7 @@ vim.opt.wrap = true -- Disable line wrap
 vim.opt.smoothscroll = true
 vim.opt.backup = false -- creates a backup file
 -- vim.opt.iskeyword:append({ "_", "-" })
+vim.o.iskeyword = "@,48-57,_,192-255,-" -- Treat dash as `word` textobject part
 vim.opt.whichwrap:append("<>[]hl") -- go to previous/next line with h,l
 vim.opt.cmdheight = 1 -- 0 = off, more space in the neovim command line for displaying messages
 vim.opt.colorcolumn = "80,120"
@@ -78,11 +96,19 @@ vim.opt.swapfile = false
 vim.opt.writebackup = false -- if a file is being edited by another program
 vim.opt.mousescroll = "ver:1,hor:0"
 vim.opt.breakindent = true -- Enable break indent
+vim.o.breakindentopt = "list:-1" -- Add padding for lists (if 'wrap' is set)
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.opt.diffopt = "filler,internal,closeoff,algorithm:histogram,context:5,linematch:60,algorithm:histogram"
+vim.o.winborder = "rounded" -- Use border in floating windows
+
+vim.o.autoindent = true -- Use auto indent
 
 vim.opt.foldlevel = 99
 vim.opt.foldmethod = "indent"
+vim.o.foldlevel = 10 -- Fold nothing by default; set to 0 or 1 to fold
+vim.o.foldmethod = "indent" -- Fold based on indent level
+vim.o.foldnestmax = 10 -- Limit number of fold levels
+vim.o.foldtext = "" -- Show text under fold with its highlighting
 
 local loaded, _ = pcall(require, "snacks")
 if loaded then
