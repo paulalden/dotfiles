@@ -1,6 +1,6 @@
 return {
   {
-    "echasnovski/mini.ai",
+    "nvim-mini/mini.ai",
     version = "*",
     config = function()
       local ai = require("mini.ai")
@@ -41,9 +41,9 @@ return {
     end,
   },
 
-  { "echasnovski/mini.jump", version = "*", opts = {} },
-  { "echasnovski/mini.splitjoin", version = "*", opts = {} },
-  { "echasnovski/mini.pairs", version = "*", opts = {} },
+  { "nvim-mini/mini.jump", version = "*", opts = {} },
+  { "nvim-mini/mini.splitjoin", version = "*", opts = {} },
+  { "nvim-mini/mini.pairs", version = "*", opts = {} },
 
   -- buffer     = 'b'
   -- comment    = 'c'
@@ -59,10 +59,10 @@ return {
   -- undo       = 'u'
   -- window     = 'w'
   -- yank       = 'y'
-  { "echasnovski/mini.bracketed", version = "*", opts = {} },
+  { "nvim-mini/mini.bracketed", version = "*", opts = {} },
 
   {
-    "echasnovski/mini.icons",
+    "nvim-mini/mini.icons",
     lazy = true,
     opts = {},
     init = function()
