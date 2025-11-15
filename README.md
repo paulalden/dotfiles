@@ -8,6 +8,8 @@ Link dotbot paths and run `brew bundle --file .Brewfile`
 
 ## Applications
 
+- Nord Color Scheme
+- Homebrew
 + Yabai WM & SKHD
 + Sketchybar
 + Kitty
@@ -16,11 +18,14 @@ Link dotbot paths and run `brew bundle --file .Brewfile`
   - Ruby development focused
   - LSP
   - Treesitter
+  - Snacks
+  - Git
+- Ranger
+- Bat
 + ZSH
 + FZF
 + Starship Prompt
 + LazyGit
-+ Homebrew
 
 ## Screenshots
 
