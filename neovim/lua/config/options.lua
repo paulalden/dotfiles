@@ -118,12 +118,8 @@ vim.o.winborder = "rounded" -- Use rounded borders in floating windows
 -- FOLDING
 -- ----------------------------------------------------------------------------
 
-vim.opt.foldlevel = 99 -- Default fold level
-vim.o.foldlevel = 10 -- Fold nothing by default (0 or 1 to fold)
-vim.opt.foldmethod = "indent" -- Fold based on indentation
-vim.o.foldmethod = "indent" -- Fold method
-vim.o.foldnestmax = 10 -- Maximum fold nesting level
-vim.o.foldtext = "" -- Show text under fold with highlighting
+vim.opt.foldlevel = 99
+vim.opt.foldmethod = "indent"
 
 -- ----------------------------------------------------------------------------
 -- BEHAVIOR & MISCELLANEOUS
