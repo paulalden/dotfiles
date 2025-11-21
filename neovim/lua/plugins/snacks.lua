@@ -97,7 +97,7 @@ return {
       sources = {},
       layout = {
         cycle = true,
-        preset = "mivy",
+        preset = "mivy_test",
       },
       layouts = {
         mivy = {
@@ -118,6 +118,24 @@ return {
               },
               { win = "preview", title = "{preview}", width = vim.o.columns <= 125 and 0.7 or 0.55 },
             },
+          },
+        },
+        mivy_test = {
+          layout = {
+            box = "vertical",
+            backdrop = 80,
+            row = -1,
+            width = 0,
+            height = 0.4,
+            border = "none",
+            title = "{title} {live} {flags}",
+            title_pos = "left",
+            {
+              box = "horizontal",
+              { win = "list", border = "rounded" },
+              { win = "preview", title = "{preview}", width = 0.6, border = "rounded" },
+            },
+            { win = "input", height = 2, border = "bottom" },
           },
         },
       },
@@ -419,7 +437,7 @@ return {
           unloaded = true,
           current = true,
           layout = {
-            preset = "mivy",
+            preset = "mivy_test",
           },
           win = {
             input = {
@@ -438,7 +456,7 @@ return {
         Snacks.picker.files({
           finder = "files",
           hidden = true,
-          layout = { preset = "mivy" },
+          layout = { preset = "mivy_test" },
         })
       end,
       desc = "[F]iles",

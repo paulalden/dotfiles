@@ -48,16 +48,16 @@ return {
         -- Snack Picker
         SnacksPickerDir = { link = "Comment" },
         SnacksPickerBoxTitle = { bg = colors.bg, fg = colors.fg_dark },
-        SnacksPickerBoxBorder = { fg = colors.bg, bg = colors.bg },
+        SnacksPickerBoxBorder = { bg = colors.bg, fg = colors.magenta },
         SnacksPickerList = { bg = colors.bg },
         SnacksPickerListTitle = { bg = colors.bg, fg = colors.fg_dark },
-        SnacksPickerListBorder = { bg = colors.bg, fg = colors.bg },
+        SnacksPickerListBorder = { bg = colors.bg, fg = colors.magenta },
         SnacksPickerInput = { bg = colors.bg },
         SnacksPickerInputTitle = { bg = colors.bg, fg = colors.fg_dark },
-        SnacksPickerInputBorder = { bg = colors.bg, fg = colors.bg },
+        SnacksPickerInputBorder = { bg = colors.bg, fg = colors.magenta },
         SnacksPickerPreview = { bg = colors.bg },
         SnacksPickerPreviewTitle = { bg = colors.bg, fg = colors.fg_dark },
-        SnacksPickerPreviewBorder = { bg = colors.bg, fg = colors.bg },
+        SnacksPickerPreviewBorder = { bg = colors.bg, fg = colors.magenta },
 
         -- Snack indent line scope
         SnacksIndent = { fg = "#353c4a" },
