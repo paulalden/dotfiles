@@ -52,7 +52,7 @@ vim.opt.showmode = false -- Don't show mode (shown in statusline)
 vim.opt.showtabline = 0 -- Never show tabline
 vim.opt.laststatus = 3 -- Global statusline
 vim.opt.termguicolors = true -- Enable 24-bit RGB colors
-vim.o.cmdheight = 0 -- Auto-hide command line (reduces UI clutter)
+vim.o.cmdheight = 1 -- Auto-hide command line (reduces UI clutter)
 vim.o.helpheight = 10 -- Set help window height
 vim.opt.fillchars = { foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱", eob = " " }
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
