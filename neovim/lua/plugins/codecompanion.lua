@@ -112,8 +112,8 @@ return {
     })
   end,
   keys = {
-    { "<C-a>", "<cmd>CodeCompanionActions<cr>", desc = "CodeCompanion Actions" },
+    -- { "<C-a>", "<cmd>CodeCompanionActions<cr>", desc = "CodeCompanion Actions" },
     { "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", desc = "CodeCompanion Chat" },
-    { "ga", "<cmd>CodeCompanionChat Add<cr>", desc = "CodeCompanion Add Visual" },
+    -- { "ga", "<cmd>CodeCompanionChat Add<cr>", desc = "CodeCompanion Add Visual" },
   },
 }
