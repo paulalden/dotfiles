@@ -13,6 +13,8 @@ return {
     ensure_installed = {
       "bash",
       "diff",
+      "http",
+      "kulala_http",
       "lua",
       "markdown",
       "regex",
