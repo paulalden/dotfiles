@@ -61,7 +61,6 @@ zsh_add_plugin "hlissner/zsh-autopair"
 
 zsh_add_config "config/exports.sh"
 zsh_add_config "config/aliases.sh"
-zsh_add_config "config/vim-mode.sh"
 zsh_add_config "config/helpers.sh"
 zsh_add_config "config/fzf.sh"
 
@@ -70,18 +69,6 @@ zsh_add_config "config/fzf.sh"
 ################################################################################
 
 zsh_add_file "$HOME/Dev/secrets.sh" # Shhhh, don't commit secrets
-
-################################################################################
-# Key bindings
-################################################################################
-
-# History substring search keybings - normal mode
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-
-# Vim mode
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
 
 ################################################################################
 # Misc
