@@ -544,6 +544,13 @@ return {
       desc = "[D]iagnostics",
     },
     {
+      "<leader>sn",
+      function()
+        Snacks.picker.notifications()
+      end,
+      desc = "[N]otifications",
+    },
+    {
       "gd",
       function()
         Snacks.picker.lsp_definitions()
