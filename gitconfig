@@ -12,7 +12,7 @@
 	ui = true
 [alias]
 	ch = checkout
-  sw = switch 
+  sw = switch
 	co = commit
 	st = status -sMu
   hide = update-index --assume-unchanged
@@ -30,6 +30,7 @@
   graph = log --all --decorate --oneline --graph
 	fame = !python -m gitfame
   cp = cherry-pick
+  mergetool = "!nvim -c DiffviewOpen"
 [push]
 	default = simple
 	autoSetupRemote = true
