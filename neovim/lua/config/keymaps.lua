@@ -56,6 +56,9 @@ map("v", ">", ">gv")
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
+-- Read the highlighted block
+map("v", "<leader>zs", ":w !say<CR>", { desc = "Say selected text", silent = true })
+
 -------------------------------------------------------------------------------
 -- COPY / PASTE / REGISTERS
 -------------------------------------------------------------------------------
