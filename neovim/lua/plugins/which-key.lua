@@ -84,6 +84,7 @@ return {
       { "<leader>u", group = "[U]I Toggles" },
       { "<leader>x", group = "Trouble" },
       { "<leader>y", group = "[Y]ank" },
+      { "<leader>z", group = "Misc" },
     },
   },
 }
