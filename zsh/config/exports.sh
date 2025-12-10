@@ -38,3 +38,6 @@ export NODE_ENV=development
 export JAVA_HOME=$(/usr/libexec/java_home)
 
 export AWS_REGION=eu-west-1
+
+# Increase the function nesting limit to 100 or higher
+export FUNCNEST=100
