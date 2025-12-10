@@ -141,11 +141,24 @@ autocmd("VimResized", {
 -- Wrap and check for spell in text filetypes
 autocmd("FileType", {
   group = augroup("wrap_spell"),
-  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown", "md" },
   callback = function()
     vim.opt_local.wrap = true
     vim.opt_local.spell = true
+    vim.opt_local.spelllang = "en_gb"
   end,
+})
+
+-- Auto-save markdown files on change
+autocmd({ "TextChanged", "InsertLeave" }, {
+  group = augroup("autosave_markdown"),
+  pattern = "*.md",
+  callback = function()
+    if vim.bo.modified then
+      vim.cmd("silent! write")
+    end
+  end,
+  desc = "Auto-save markdown files",
 })
 
 -------------------------------------------------------------------------------
