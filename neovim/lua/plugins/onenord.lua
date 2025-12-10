@@ -28,6 +28,9 @@ return {
 
         NormalFloat = { fg = colors.magenta, bg = colors.bg_light },
 
+        CursorLine = { bg = colors.grey14 },
+        CursorColumn = { bg = colors.grey14 },
+
         -- Blink
         BlinkCmpMenuBorder = { fg = colors.magenta },
         BlinkCmpMenu = { bg = colors.bg_light },

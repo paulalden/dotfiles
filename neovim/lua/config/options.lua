@@ -44,6 +44,7 @@ vim.opt.writebackup = false -- Disable backup before writing
 vim.opt.number = true -- Show line numbers
 vim.opt.relativenumber = true -- Show relative line numbers
 vim.opt.cursorline = true -- Highlight the current line
+vim.opt.cursorcolumn = true -- Highlight column
 vim.o.cursorlineopt = "screenline,number" -- Highlight per screen line and number
 vim.opt.signcolumn = "yes" -- Always show sign column
 vim.opt.colorcolumn = "80,120" -- Show column guides at 80 and 120 characters
