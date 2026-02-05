@@ -16,6 +16,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Populate workspace diagnostics (external plugin)
     require("workspace-diagnostics").populate_workspace_diagnostics(client, vim.api.nvim_get_current_buf())
 
+    local opts = { buffer = ev.buf, silent = true }
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+
     -- Unset 'formatexpr'
     -- vim.bo[args.buf].formatexpr = nil
     -- Unset 'omnifunc'

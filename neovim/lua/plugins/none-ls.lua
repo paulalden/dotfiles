@@ -16,7 +16,7 @@ return {
         }),
         null_ls.builtins.formatting.rubocop.with({
           command = "rubocop",
-          args = { "-A", "--server", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" },
+          args = { "--autocorrect", "--server", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" },
           to_stdin = true,
         }),
 
