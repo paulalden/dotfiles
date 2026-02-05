@@ -2,7 +2,14 @@
 
 source "$CONFIG_DIR/scripts/config.sh"
 
-COUNT="$(brew outdated | wc -l | tr -d ' ')"
+CACHE_FILE="/tmp/homebrew-outdated-count"
+
+# Read from cache file if it exists
+if [[ -f "$CACHE_FILE" ]]; then
+  COUNT=$(cat "$CACHE_FILE")
+else
+  COUNT=0
+fi
 
 COLOR=$RED
 
