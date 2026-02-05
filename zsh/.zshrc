@@ -59,6 +59,7 @@ zsh_add_plugin "zsh-users/zsh-history-substring-search"
 zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
 zsh_add_plugin "hlissner/zsh-autopair"
 
+zsh_add_config "config/vim_mode.sh"
 zsh_add_config "config/exports.sh"
 zsh_add_config "config/aliases.sh"
 zsh_add_config "config/helpers.sh"
@@ -68,7 +69,7 @@ zsh_add_config "config/fzf.sh"
 # Imports
 ################################################################################
 
-zsh_add_file "$HOME/Dev/secrets.sh" # Shhhh, don't commit secrets
+zsh_add_file "$HOME/secrets.sh" # Shhhh, don't commit secrets
 
 ################################################################################
 # Misc
