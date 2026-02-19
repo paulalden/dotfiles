@@ -2,21 +2,7 @@
 
 source "$CONFIG_DIR/scripts/config.sh"
 
-CACHE_FILE="/tmp/homebrew-outdated-count"
-MAX_AGE=1800 # 30 minutes
-
-# Refresh cache in background if stale or missing
-if [[ ! -f "$CACHE_FILE" ]] || [[ $(($(date +%s) - $(stat -f %m "$CACHE_FILE"))) -gt $MAX_AGE ]]; then
-  ("$CONFIG_DIR/scripts/update_homebrew_cache.sh" &)
-fi
-
-# Read from cache file if it exists
-if [[ -f "$CACHE_FILE" ]]; then
-  COUNT=$(cat "$CACHE_FILE")
-else
-  COUNT=0
-fi
-
+COUNT=$(/opt/homebrew/bin/brew outdated --quiet | wc -l | tr -d ' ')
 COLOR=$RED
 
 case "${COUNT}" in
@@ -34,4 +20,4 @@ case "${COUNT}" in
   ;;
 esac
 
-sketchybar --set $NAME icon= label="$COUNT" icon.color=$COLOR label.color=$COLOR
+sketchybar --set $NAME icon= label="$COUNT" icon.color=$COLOR label.color=$COLOR
