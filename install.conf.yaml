@@ -10,22 +10,28 @@
 
 # Requires 4 space indentation or it will fail
 - link:
-    ~/.config/kitty: kitty
-    ~/.config/lazygit: lazygit
-    ~/.config/nvim: nvim
-    ~/.config/ranger: ranger
-    ~/.config/starship.toml: starship.toml
-    ~/.config/tmuxinator: tmuxinator
-    ~/.zshenv: zshenv
-    ~/.config/zsh: zsh
     ~/.config/bat: bat
-    ~/.editorconfig: editorconfig
+    ~/.bundle/config: bundler_config
+    ~/.config/fd: fd
+    ~/.fzfrc: fzfrc
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
+    ~/.config/gobang: gobang
+    ~/.config/harlequin: harlequin
+    ~/.Brewfile: homebrew/Brewfile
+    ~/.config/htop: htop
     ~/.irbrc: irbrc
+    ~/.config/kitty: kitty
+    ~/.config/lazygit: lazygit
+    ~/.config/nvim: neovim
+    ~/.config/ranger: ranger
+    ~/.config/sketchybar: sketchybar
+    ~/.config/skhd: skhd
+    ~/.config/starship.toml: starship.toml
     ~/.config/tmux: tmux
-    ~/.Brewfile: Brewfile
+    ~/.config/yabai: yabai
+    ~/.editorconfig: editorconfig
+    ~/.zshenv: zshenv
+    ~/.config/zsh: zsh
 
-- shell:
-  - [git submodule update --init --recursive, Installing submodules]
 
