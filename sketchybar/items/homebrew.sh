@@ -6,5 +6,3 @@ sketchybar --add item homebrew right \
   update_freq=60 \
   label=? \
   script="$CONFIG_DIR/plugins/homebrew.sh"
-
-sketchybar --subscribe homebrew brew_update

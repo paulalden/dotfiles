@@ -2,7 +2,11 @@
 
 source "$CONFIG_DIR/scripts/config.sh"
 
-COUNT=$(/opt/homebrew/bin/brew outdated --quiet | wc -l | tr -d ' ')
+export PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:$PATH"
+export HOMEBREW_DOWNLOAD_CONCURRENCY=8
+
+COUNT=$(/opt/homebrew/bin/brew outdated --quiet 2>/dev/null | wc -l | tr -d ' ')
+
 COLOR=$RED
 
 case "${COUNT}" in
@@ -20,4 +24,4 @@ case "${COUNT}" in
   ;;
 esac
 
-sketchybar --set $NAME icon= label="$COUNT" icon.color=$COLOR label.color=$COLOR
+sketchybar --set "$NAME" icon= label="$COUNT" icon.color="$COLOR" label.color="$COLOR"
