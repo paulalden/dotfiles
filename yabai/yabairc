@@ -8,6 +8,8 @@
 
 sudo yabai --load-sa
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+yabai -m signal --add event=space_created action="sketchybar --reload"
+yabai -m signal --add event=space_destroyed action="sketchybar --reload"
 
 # global settings
 yabai -m config \
