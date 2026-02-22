@@ -60,6 +60,7 @@ source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/brightness.sh"
 source "$ITEM_DIR/volume.sh"
 source "$ITEM_DIR/cpu.sh"
+source "$ITEM_DIR/memory.sh"
 source "$ITEM_DIR/homebrew.sh"
 
 sketchybar --hotload on
