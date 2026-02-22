@@ -21,7 +21,7 @@ if [ "$SENDER" = "volume_change" ]; then
   sketchybar --set "$NAME" \
     icon="$ICON" \
     label="$VOLUME%" \
-    icon.font="$FONT:Bold:27.0" \
+    icon.font="$FONT:Bold:19.0" \
     icon.color=$COLOR \
     label.color=$COLOR
 fi
