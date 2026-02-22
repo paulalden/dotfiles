@@ -3,6 +3,8 @@
 source "$CONFIG_DIR/scripts/config.sh"
 source "$CONFIG_DIR/scripts/icon_map_fn.sh"
 
+pgrep -x yabai > /dev/null || exit 0
+
 # Extract space index from item name (space.1 -> 1)
 SID=$(echo "$NAME" | cut -d'.' -f2)
 
