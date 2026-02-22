@@ -1,41 +1,61 @@
 #!/bin/sh
 
 source "$CONFIG_DIR/scripts/config.sh"
+source "$CONFIG_DIR/scripts/icon_map_fn.sh"
 
-# The $SELECTED variable is available for space components and indicates if
-# the space invoking this script (with name: $NAME) is currently selected:
-# https://felixkratz.github.io/SketchyBar/config/components#space----associate-mission-control-spaces-with-an-item
+# Extract space index from item name (space.1 -> 1)
+SID=$(echo "$NAME" | cut -d'.' -f2)
 
-# sketchybar --set "$NAME" background.drawing="$SELECTED"
-# the difference is in this line:
-# sketchybar --set "$NAME" background.drawing="$SELECTED" color=$MAGENTA icon.highlight="$SELECTED" icon.highlight_color=$BG
+# Query yabai for windows in this space and build app icon string
+APPS=$(yabai -m query --windows --space "$SID" 2>/dev/null | python3 -c "
+import sys, json
+try:
+    windows = json.load(sys.stdin)
+    seen = set()
+    apps = []
+    for w in windows:
+        app = w.get('app', '')
+        if app and app not in seen and not w.get('is-minimized', False):
+            seen.add(app)
+            apps.append(app)
+    print('\n'.join(apps))
+except:
+    pass
+")
+
+ICON_STRIP=""
+while IFS= read -r app; do
+  if [ -n "$app" ]; then
+    icon_map "$app"
+    ICON_STRIP+="${icon_result} "
+  fi
+done <<< "$APPS"
+
+# Trim trailing space
+ICON_STRIP=$(echo "$ICON_STRIP" | sed 's/ $//')
 
 COLOR=$MAGENTA_DARK
 
-if [ $SELECTED = true ]; then
-  sketchybar --set $NAME \
+if [ -n "$ICON_STRIP" ]; then
+  LABEL_PADDING=10
+else
+  LABEL_PADDING=5
+fi
+
+if [ "$SELECTED" = true ]; then
+  sketchybar --set "$NAME" \
     background.drawing=on \
     background.color=$COLOR \
+    label="$ICON_STRIP" \
+    label.padding_right=$LABEL_PADDING \
     label.color=$BG \
     icon.color=$BG
 else
-  sketchybar --set $NAME \
-    background.drawing=off \
-    label.color=$COLOR \
-    icon.color=$COLOR
+  sketchybar --set "$NAME" \
+    background.drawing=on \
+    background.color=$GREY16 \
+    label="$ICON_STRIP" \
+    label.padding_right=$LABEL_PADDING \
+    label.color=$MAGENTA_DARK \
+    icon.color=$MAGENTA_DARK
 fi
-
-# and mouse events for special mouse-over highlight effect
-# case "$SENDER" in
-# "mouse.entered")
-#   sketchybar --set $NAME icon.highlight=on background.color="$YELLOW"
-#   ;;
-# "mouse.exited" | "mouse.exited.global")
-#   sketchybar --set $NAME icon.highlight_color=$BG icon.highlight=$SELECTED
-#   ;;
-# "mouse.clicked")
-#   # clicked effect
-#   sketchybar --set $NAME icon.highlight_color=$BG background.color="$YELLOW"
-#   sketchybar --set $NAME icon.highlight=$SELECTED background.color="$YELLOW"
-#   ;;
-# esac
