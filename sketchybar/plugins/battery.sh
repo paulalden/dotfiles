@@ -11,55 +11,25 @@ fi
 
 FONT_SIZE=15
 
-case "${PERCENTAGE}" in
-[8-9][0-9] | 100)
-  ICON="󱊣"
-  COLOR=$GREEN
-  ;;
-[6-7][0-9])
-  ICON="󱊢"
-  COLOR=$YELLOW
-  ;;
-[3-5][0-9])
-  ICON="󱊢"
-  COLOR=$ORANGE
-  ;;
-[1-2][0-9])
-  ICON="󱊡"
-  COLOR=$RED
-  ;;
-*)
-  ICON="󰂎"
-  COLOR=$RED
-  ;;
-esac
+COLOR=$(color_for_value "$PERCENTAGE" 80 $GREEN 60 $YELLOW 30 $ORANGE 0 $RED)
 
 if [[ "$CHARGING" != "" ]]; then
-  # ICON="󰂄"
   case "${PERCENTAGE}" in
-  9[0-9] | 100)
-    ICON="󱊦"
-    COLOR=$GREEN
-    ;;
-  [6-8][0-9])
-    ICON="󱊥"
-    COLOR=$YELLOW
-    ;;
-  [3-5][0-9])
-    ICON="󱊥"
-    COLOR=$ORANGE
-    ;;
-  [1-2][0-9])
-    ICON="󱊤"
-    COLOR=$RED
-    ;;
-  *)
-    ICON="󰢟"
-    COLOR=$RED
-    ;;
+  9[0-9] | 100) ICON="󱊦" ;;
+  [6-8][0-9])   ICON="󱊥" ;;
+  [3-5][0-9])   ICON="󱊥" ;;
+  [1-2][0-9])   ICON="󱊤" ;;
+  *)            ICON="󰢟" ;;
   esac
-
   FONT_SIZE=23
+else
+  case "${PERCENTAGE}" in
+  [8-9][0-9] | 100) ICON="󱊣" ;;
+  [6-7][0-9])       ICON="󱊢" ;;
+  [3-5][0-9])       ICON="󱊢" ;;
+  [1-2][0-9])       ICON="󱊡" ;;
+  *)                ICON="󰂎" ;;
+  esac
 fi
 
 # The item invoking this script (name $NAME) will get its icon and label

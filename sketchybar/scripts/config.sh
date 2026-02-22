@@ -47,3 +47,16 @@ export GREY17=0xff0f1115
 export GREY18=0xff0d0e11
 export GREY19=0xff020203
 export TRANSPARENT=0x00000000
+
+# Usage: color_for_value VALUE THRESHOLD1 COLOR1 THRESHOLD2 COLOR2 ... DEFAULT_COLOR
+# Thresholds must be in descending order. Returns first COLOR where VALUE >= THRESHOLD.
+color_for_value() {
+  local value=$1; shift
+  while [ $# -gt 1 ]; do
+    local threshold=$1 color=$2; shift 2
+    if [ "$value" -ge "$threshold" ]; then
+      echo "$color"; return
+    fi
+  done
+  echo "$1"
+}

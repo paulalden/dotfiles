@@ -9,23 +9,13 @@ source "$CONFIG_DIR/scripts/config.sh"
 if [ "$SENDER" = "volume_change" ]; then
   VOLUME="$INFO"
 
+  COLOR=$(color_for_value "$VOLUME" 70 $RED 20 $ORANGE 1 $GREEN 0 $FG)
+
   case "$VOLUME" in
-  [7-9][0-9] | 100)
-    ICON=""
-    COLOR=$RED
-    ;;
-  [2-6][0-9])
-    ICON=""
-    COLOR=$ORANGE
-    ;;
-  [1-9] | [1-1][0-9])
-    ICON=""
-    COLOR=$GREEN
-    ;;
-  *)
-    ICON=""
-    COLOR=$FG
-    ;;
+  [7-9][0-9] | 100)    ICON="󰕾" ;;
+  [2-6][0-9])          ICON="󰖀" ;;
+  [1-9] | [1-1][0-9])  ICON="󰕿" ;;
+  *)                    ICON="󰝟" ;;
   esac
 
   sketchybar --set "$NAME" \

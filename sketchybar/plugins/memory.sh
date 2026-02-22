@@ -16,23 +16,7 @@ USED_PAGES=$((ACTIVE + WIRED + COMPRESSED))
 USED_MB=$((USED_PAGES * PAGE_SIZE / 1024 / 1024))
 MEM_PERCENT=$((USED_MB * 100 / TOTAL_MEM_MB))
 
-case "${MEM_PERCENT}" in
-9[0-9] | 100)
-  COLOR=$RED
-  ;;
-[7-8][0-9])
-  COLOR=$ORANGE
-  ;;
-[5-6][0-9])
-  COLOR=$YELLOW
-  ;;
-[0-4][0-9] | [0-9])
-  COLOR=$GREEN
-  ;;
-*)
-  COLOR=$RED
-  ;;
-esac
+COLOR=$(color_for_value "$MEM_PERCENT" 90 $RED 70 $ORANGE 50 $YELLOW 0 $GREEN)
 
 sketchybar --set $NAME \
   label="${MEM_PERCENT}%" \
