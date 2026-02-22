@@ -38,3 +38,4 @@ zsh/.zcompdump
 zsh/plugins
 zsh/.zcompcacheneovim-lazy/lazyvim.json
 neovim-lazy/lazyvim.json
+/.claude/settings.local.json
