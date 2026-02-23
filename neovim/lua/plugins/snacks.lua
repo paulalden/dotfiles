@@ -550,13 +550,6 @@ return {
       end,
       desc = "[N]otifications",
     },
-    -- {
-    --   "gd",
-    --   function()
-    --     Snacks.picker.lsp_definitions()
-    --   end,
-    --   desc = "Goto [D]efinition",
-    -- },
     {
       "gr",
       function()

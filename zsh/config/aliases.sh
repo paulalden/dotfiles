@@ -9,7 +9,6 @@ alias ls="eza -s type"
 alias la="ls -la"
 alias lazygit="lazygit -ucd ~/.config/lazygit/"
 alias grep="grep --color=auto"
-# alia cat="bat --paging=never --wrap=never --style=plain"
 alias editdots="cd ~/Personal/Repos/dotfiles; nvim"
 
 # Vim

@@ -22,7 +22,7 @@ end
 
 vim.g.trouble_lualine = true -- Show document symbols from Trouble in lualine
 vim.g.snacks_animate = false -- Disable snacks animations
-vim.g.ruby_host_prog = "/Users/paul/.asdf/shims/neovim-ruby-host" -- Ruby host for plugins
+vim.g.ruby_host_prog = vim.fn.expand("~/.asdf/shims/neovim-ruby-host") -- Ruby host for plugins
 vim.g.have_nerd_font = true -- Nerd Font support
 vim.g.markdown_recommended_style = 0 -- Fix markdown indentation settings
 
@@ -91,8 +91,7 @@ vim.opt.smartindent = true -- Smart autoindenting on new lines
 vim.o.autoindent = true -- Copy indent from current line when starting new line
 vim.opt.breakindent = true -- Enable break indent for wrapped lines
 vim.o.breakindentopt = "list:-1" -- Add padding for lists when wrapped
-vim.opt.formatoptions = "jcroqlnt" -- Format options
-vim.o.formatoptions = "rqnl1j" -- Improve comment editing
+vim.o.formatoptions = "rqnl1j" -- Format options
 
 -- ----------------------------------------------------------------------------
 -- WRAPPING & SCROLLING

@@ -1,5 +1,5 @@
 vim.lsp.config["yamlls"] = {
-  filetypes = { "lua" },
+  filetypes = { "yaml" },
   -- Have to add this for yamlls to understand that we support line folding
   capabilities = {
     textDocument = {

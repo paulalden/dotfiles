@@ -46,7 +46,12 @@ zmodload zsh/complist
 # Include hidden files
 _comp_options+=(globdots)
 
-compinit
+# Cache compinit (only rebuild dump once per day)
+if [[ -n $ZDOTDIR/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
 ################################################################################
 # Plugins and packages
@@ -59,7 +64,7 @@ zsh_add_plugin "zsh-users/zsh-history-substring-search"
 zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
 zsh_add_plugin "hlissner/zsh-autopair"
 
-zsh_add_config "config/vim_mode.sh"
+zsh_add_config "config/vim-mode.sh"
 zsh_add_config "config/exports.sh"
 zsh_add_config "config/aliases.sh"
 zsh_add_config "config/helpers.sh"
@@ -85,4 +90,4 @@ ulimit -Sn 10240 # Increase the default number of sockers (helps with rspec test
 
 eval "$(starship init zsh)"
 
-. $(brew --prefix asdf)/libexec/asdf.sh
+. /opt/homebrew/opt/asdf/libexec/asdf.sh

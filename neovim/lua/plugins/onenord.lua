@@ -71,15 +71,6 @@ return {
         FzfLuaBorder = { bg = colors.bg, fg = colors.fg_dark },
         FzfLuaFzfBorder = { bg = colors.bg, fg = colors.fg_dark },
         FzfLuaFzfBorderFull = { bg = colors.bg, fg = colors.fg_dark },
-        -- SnacksPickerList = { bg = colors.bg },
-        -- SnacksPickerListTitle = { bg = colors.bg, fg = colors.fg_dark },
-        -- SnacksPickerListBorder = { bg = colors.bg, fg = colors.bg },
-        -- SnacksPickerInput = { bg = colors.bg },
-        -- SnacksPickerInputTitle = { bg = colors.bg, fg = colors.fg_dark },
-        -- SnacksPickerInputBorder = { bg = colors.bg, fg = colors.bg },
-        -- SnacksPickerPreview = { bg = colors.bg },
-        -- SnacksPickerPreviewTitle = { bg = colors.bg, fg = colors.fg_dark },
-        -- SnacksPickerPreviewBorder = { bg = colors.bg, fg = colors.bg },
 
         -- QuickFix
         QuickFixLineNr = { fg = colors.grey10 },

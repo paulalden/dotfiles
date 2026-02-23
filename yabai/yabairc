@@ -36,10 +36,10 @@ yabai -m config \
   mouse_modifier fn \
   mouse_action1 move \
   mouse_action2 resize \
-  mouse_drop_action swap \ 
+  mouse_drop_action swap
 
 # apps to not manage (ignore)
-yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Archive Utility$" manage=off
 yabai -m rule --add app="^Alfred Preferences$" manage=off
 yabai -m rule --add title='Preferences$' manage=off layer=above
