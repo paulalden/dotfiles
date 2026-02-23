@@ -21,7 +21,7 @@ return {
     { "<leader>xd", "<cmd>Trouble diagnostics toggle<cr>", desc = "[D]iagnostics" },
     { "<leader>xD", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer [D]iagnostics" },
     { "<leader>xs", "<cmd>Trouble symbols toggle<cr>", desc = "[S]ymbols" },
-    { "<leader>xt", "<cmd>Trouble lsp toggle<cr>", desc = "[T]oggle References" },
+    { "<leader>xl", "<cmd>Trouble lsp toggle<cr>", desc = "[L]SP References" },
     { "<leader>xL", "<cmd>Trouble loclist toggle<cr>", desc = "[L]ocation List" },
     { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", desc = "[Q]uickfix List" },
     {

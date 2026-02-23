@@ -19,7 +19,6 @@ map("n", "<RIGHT>", "<NOP>", opts)
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
 
 -- Alternatives to :w, because I constantly typo it
-map({ "i", "n", "v" }, "<c-s>", "<NOP>", opts)
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 -- Insert lines above/below without leaving normal mode

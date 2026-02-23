@@ -155,11 +155,9 @@ return {
         lualine_z = {},
       },
       extensions = {
-        "nvim-tree",
         "man",
         "lazy",
         "trouble",
-        "toggleterm",
       },
     })
   end,

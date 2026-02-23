@@ -1,6 +1,5 @@
 return {
   "NvimTree",
-  "TelescopePrompt",
   "alpha",
   "help",
   "lazy",

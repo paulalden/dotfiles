@@ -24,7 +24,6 @@ sketchybar --bar \
   display=all \
   topmost=off \
   sticky=on \
-  font_smoothing=on \
   padding_left=10 \
   padding_right=10
 

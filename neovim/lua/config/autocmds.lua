@@ -73,21 +73,14 @@ autocmd("ModeChanged", {
 autocmd("FileType", {
   group = augroup("close_with_q"),
   pattern = {
-    "PlenaryTestPopup",
     "checkhealth",
     "dbout",
     "gitsigns-blame",
-    "grug-far",
     "help",
     "lspinfo",
-    "neotest-output",
-    "neotest-output-panel",
-    "neotest-summary",
     "notify",
     "qf",
-    "spectre_panel",
     "startuptime",
-    "tsplayground",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -169,7 +162,6 @@ autocmd({ "FileType" }, {
   group = augroup("markdown"),
   pattern = { "markdown" },
   callback = function()
-    vim.g["indentLine_enabled"] = 0
     vim.g["markdown_syntax_conceal"] = 0
   end,
 })

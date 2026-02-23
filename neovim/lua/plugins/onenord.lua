@@ -66,12 +66,6 @@ return {
         SnacksIndent = { fg = "#353c4a" },
         SnacksIndentScope = { fg = colors.grey11 },
 
-        -- FZF Lua
-        SnacksPickerDir = { link = "Comment" },
-        FzfLuaBorder = { bg = colors.bg, fg = colors.fg_dark },
-        FzfLuaFzfBorder = { bg = colors.bg, fg = colors.fg_dark },
-        FzfLuaFzfBorderFull = { bg = colors.bg, fg = colors.fg_dark },
-
         -- QuickFix
         QuickFixLineNr = { fg = colors.grey10 },
         QuickFixHeaderHard = { fg = colors.grey10 },
@@ -105,8 +99,6 @@ return {
         VirtColumnNonText = { fg = colors.grey13 },
 
         --
-        IblIndent = { fg = colors.grey13 },
-
         -- Git Signs
         GitSignsAdd = { fg = colors.green },
         GitSignsChange = { fg = colors.yellow },

@@ -15,8 +15,6 @@ return {
           "checkhealth",
           "help",
           "man",
-          "TelescopePrompt",
-          "TelescopeResults",
         },
         buftypes = { "nofile", "quickfix", "terminal", "prompt" },
       },

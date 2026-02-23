@@ -38,8 +38,8 @@ alias yabai:restart="yabai --restart-service"
 alias yabai:start="yabai --start-service"
 alias yabai:stop="yabai --stop-service"
 alias yabai:install_sa="sudo yabai --load-sa"
-alias yabai:borders:off="yabai -m config window_border off"
-alias yabai:borders:on="yabai -m config window_border on"
+alias yabai:borders:off="borders active_color=0x00000000 inactive_color=0x00000000 width=0.0"
+alias yabai:borders:on="borders active_color=0xffcbb1c7 inactive_color=0xff2e3440 width=5.0"
 
 # SKHD
 alias skhd:keys="cat ~/.config/skhd/skhdrc"
@@ -50,8 +50,8 @@ alias skhd:reload="skhd --restart-service"
 
 # Brew
 # alias brew:upgrade:all="brew upgrade; sh ~/Personal/Repos/dotfiles/zsh/user/install_neovim_head.sh; nvim --headless '+Lazy! sync' +qa; yabai:stop; yabai:start;"
-alias brew:upgrade:all="brew upgrade; nvim --headless '+Lazy! sync' +qa > /dev/null; yabai:stop; yabai:start; ~/.config/sketchybar/scripts/update_homebrew_cache.sh"
-alias brew:upgrade="brew upgrade && ~/.config/sketchybar/scripts/update_homebrew_cache.sh"
+alias brew:upgrade:all="brew upgrade; nvim --headless '+Lazy! sync' +qa > /dev/null; yabai:stop; yabai:start; sketchybar --trigger brew_update"
+alias brew:upgrade="brew upgrade && sketchybar --trigger brew_update"
 alias brew:bundle="brew bundle --file ~/.Brewfile"
 
 # Docker Compose

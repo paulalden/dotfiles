@@ -402,7 +402,7 @@ return {
       desc = "Show notifications",
     },
     {
-      "<leader>sh",
+      "<leader>nh",
       function()
         Snacks.notifier.hide()
       end,

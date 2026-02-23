@@ -153,7 +153,7 @@ vim.o.iskeyword = "@,48-57,_,192-255,-" -- Characters that form keywords (includ
 vim.opt.fixendofline = false -- Don't add missing end-of-file newline
 vim.o.spelloptions = "camel" -- Treat camelCase as separate words for spell checking
 vim.opt.spelllang = { "en" } -- Spell check language
-vim.opt.diffopt = "filler,internal,closeoff,algorithm:histogram,context:5,linematch:60,algorithm:histogram"
+vim.opt.diffopt = "filler,internal,closeoff,algorithm:histogram,context:5,linematch:60"
 
 -- ----------------------------------------------------------------------------
 -- COMMAND LINE & WILDMENU

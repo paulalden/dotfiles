@@ -104,11 +104,11 @@ return {
     -- Expand 'cc' into 'CodeCompanion' in the command line
     vim.cmd([[cab cc CodeCompanion]])
 
-    -- require("cmp").setup.filetype("codecompanion", {
-    --   enabled = false,
-    -- })
-    require("blink.cmp").setup.filetype("codecompanion", {
-      enabled = false,
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "codecompanion",
+      callback = function(ev)
+        vim.b[ev.buf].completion = false
+      end,
     })
   end,
   keys = {
