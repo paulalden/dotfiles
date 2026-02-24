@@ -9,7 +9,7 @@ alias ls="eza -s type"
 alias la="ls -la"
 alias lazygit="lazygit -ucd ~/.config/lazygit/"
 alias grep="grep --color=auto"
-alias editdots="cd ~/Personal/Repos/dotfiles; nvim"
+alias editdots="nvim ~/Personal/Repos/dotfiles"
 
 # Vim
 alias vimdiff='nvim -d'
@@ -21,7 +21,7 @@ alias rspec="bundle exec rspec"
 alias be="bundle exec"
 
 # ZSH
-alias zsh:reload="source $ZDOTDIR/.zshrc"
+alias zsh:reload='source $ZDOTDIR/.zshrc'
 alias zsh:edit="nvim $ZDOTDIR/.zshrc"
 alias zsh:alias="cat ~/.config/zsh/config/aliases.sh"
 alias zsh:alias:edit="nvim ~/.config/zsh/config/aliases.sh"

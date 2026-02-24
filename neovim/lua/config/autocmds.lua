@@ -109,12 +109,12 @@ autocmd("FileType", {
 -------------------------------------------------------------------------------
 -- EDITOR BEHAVIOR
 -------------------------------------------------------------------------------
--- Adjust how text is formatted
-autocmd("BufWinEnter", {
+-- Adjust how text is formatted (use FileType to run after ftplugins)
+autocmd("FileType", {
   group = augroup("formatting"),
   pattern = "*",
   callback = function()
-    vim.cmd("set formatoptions-=cro")
+    vim.opt_local.formatoptions:remove({ "c", "r", "o" })
   end,
 })
 
@@ -134,7 +134,7 @@ autocmd("VimResized", {
 -- Wrap and check for spell in text filetypes
 autocmd("FileType", {
   group = augroup("wrap_spell"),
-  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown", "md" },
+  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
   callback = function()
     vim.opt_local.wrap = true
     vim.opt_local.spell = true

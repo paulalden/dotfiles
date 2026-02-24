@@ -11,10 +11,9 @@ HISTSIZE=1000000
 SAVEHIST=1000000
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
-setopt appendhistory
-
 # Ensure no duplicates are recorded in the history
 setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
 
 # Disable highlight of pastes text
 zle_highlight=('paste:none')
@@ -80,7 +79,7 @@ zsh_add_file "$HOME/secrets.sh" # Shhhh, don't commit secrets
 # Misc
 ################################################################################
 
-ssh-add -q --apple-use-keychain ~/.ssh/id_rsa # Ensure that the ssh_key is added to the ssh-agent
+ssh-add -l &>/dev/null || ssh-add -q --apple-use-keychain ~/.ssh/id_rsa # Ensure that the ssh_key is added to the ssh-agent
 
 ulimit -Sn 10240 # Increase the default number of sockers (helps with rspec tests in Chrome)
 

@@ -12,7 +12,7 @@ ACTIVITY="󱎴"
 
 apple_logo=(
   icon=$APPLE
-  icon.font="$FONT:$BG:22.0"
+  icon.font="$FONT:Bold:22.0"
   icon.color=$FG
   padding_right=15
   label.drawing=off

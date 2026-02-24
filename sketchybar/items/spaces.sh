@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SPACE_COUNT=$(yabai -m query --spaces 2>/dev/null | python3 -c "import sys,json; print(len(json.load(sys.stdin)))")
+SPACE_COUNT=$(yabai -m query --spaces 2>/dev/null | jq 'length')
 
 for sid in $(seq 1 "${SPACE_COUNT:-9}")
 do
