@@ -2,11 +2,6 @@
 -- PERFORMANCE & STARTUP
 -- ----------------------------------------------------------------------------
 
--- Sync clipboard between OS and Neovim. Schedule after `UiEnter` to reduce startup time
-vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
-end)
-
 -- Limit ShaDa file size for faster startup
 vim.o.shada = "'100,<50,s10,:1000,/100,@100,h"
 
@@ -23,6 +18,7 @@ end
 vim.g.trouble_lualine = true -- Show document symbols from Trouble in lualine
 vim.g.snacks_animate = false -- Disable snacks animations
 vim.g.ruby_host_prog = vim.fn.expand("~/.asdf/shims/neovim-ruby-host") -- Ruby host for plugins
+vim.g.ai_cmp = true -- Enable AI completion ghost text
 vim.g.have_nerd_font = true -- Nerd Font support
 vim.g.markdown_recommended_style = 0 -- Fix markdown indentation settings
 
@@ -119,7 +115,8 @@ vim.o.winborder = "rounded" -- Use rounded borders in floating windows
 -- ----------------------------------------------------------------------------
 
 vim.opt.foldlevel = 99
-vim.opt.foldmethod = "indent"
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
 -- ----------------------------------------------------------------------------
 -- BEHAVIOR & MISCELLANEOUS

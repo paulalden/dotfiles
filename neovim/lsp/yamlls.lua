@@ -1,4 +1,5 @@
-vim.lsp.config["yamlls"] = {
+return {
+  cmd = { "yaml-language-server", "--stdio" },
   filetypes = { "yaml" },
   -- Have to add this for yamlls to understand that we support line folding
   capabilities = {
