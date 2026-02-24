@@ -1,4 +1,4 @@
-vim.lsp.enable({ "lua_ls", "ruby_lsp", "bashls", "yamlls" })
+vim.lsp.enable({ "lua_ls", "ruby_lsp", "bashls", "yamlls", "ts_ls" })
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
