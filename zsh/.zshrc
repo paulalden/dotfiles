@@ -79,7 +79,7 @@ zsh_add_file "$HOME/secrets.sh" # Shhhh, don't commit secrets
 # Misc
 ################################################################################
 
-ssh-add -l &>/dev/null || ssh-add -q --apple-use-keychain ~/.ssh/id_rsa # Ensure that the ssh_key is added to the ssh-agent
+[ -f ~/.ssh/id_rsa ] && (ssh-add -l &>/dev/null || ssh-add -q --apple-use-keychain ~/.ssh/id_rsa) # Ensure that the ssh_key is added to the ssh-agent
 
 ulimit -Sn 10240 # Increase the default number of sockers (helps with rspec tests in Chrome)
 
@@ -89,4 +89,4 @@ ulimit -Sn 10240 # Increase the default number of sockers (helps with rspec test
 
 eval "$(starship init zsh)"
 
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+[ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ] && . /opt/homebrew/opt/asdf/libexec/asdf.sh

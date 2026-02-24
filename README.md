@@ -4,7 +4,38 @@ My MacOS focused development environment dotfiles.
 
 ## Installation
 
-Link dotbot paths and run `brew bundle --file .Brewfile`
+### Fresh macOS Setup
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/YOUR_USER/dotfiles.git ~/Personal/Repos/dotfiles
+cd ~/Personal/Repos/dotfiles
+
+# 2. Run the install script (installs Homebrew and dotbot if needed, then symlinks everything)
+./install
+
+# 3. Install Homebrew packages
+brew bundle --file ~/.Brewfile
+
+# 4. Open a new terminal to load ZSH configuration
+```
+
+### Post-Install
+
+```bash
+# Install tmux plugins (open tmux first, then press prefix + I)
+tmux
+
+# Neovim plugins auto-install on first launch
+nvim
+```
+
+### Requirements
+
+- macOS (Apple Silicon, paths assume `/opt/homebrew/`)
+- Xcode Command Line Tools (`xcode-select --install`)
+- SSH key at `~/.ssh/id_rsa` (optional, for git/GitHub)
+- `~/secrets.sh` for private environment variables (optional)
 
 ## Applications
 
