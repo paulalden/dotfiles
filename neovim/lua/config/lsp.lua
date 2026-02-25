@@ -1,4 +1,4 @@
-vim.lsp.enable({ "lua_ls", "ruby_lsp", "bashls", "yamlls", "ts_ls" })
+vim.lsp.enable({ "lua_ls", "ruby_lsp", "bashls", "yamlls", "ts_ls", "cssls", "html", "jsonls", "dockerls", "eslint" })
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
@@ -18,14 +18,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     local opts = { buffer = ev.buf, silent = true }
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 
-    -- Unset 'formatexpr'
-    -- vim.bo[args.buf].formatexpr = nil
-    -- Unset 'omnifunc'
-    -- vim.bo[args.buf].omnifunc = nil
-    -- Unmap K
-    -- vim.keymap.del("n", "K", { buffer = args.buf })
-    -- Disable document colors
-    -- vim.lsp.document_color.enable(false, args.buf)
+    -- - grr — references
+    -- - gra — code actions
+    -- - grn — rename
+    -- - gri — implementation
+    -- - K — hover (already default since 0.10)
+    -- - gO — document symbols
+    -- - <C-s> (insert) — signature help
   end,
 })
