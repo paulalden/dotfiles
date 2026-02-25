@@ -97,10 +97,10 @@ return {
       sources = {},
       layout = {
         cycle = true,
-        preset = "mivy_test",
+        preset = "custom_bordered",
       },
       layouts = {
-        mivy = {
+        custom_unbordered = {
           layout = {
             box = "vertical",
             backdrop = 50,
@@ -120,7 +120,7 @@ return {
             },
           },
         },
-        mivy_test = {
+        custom_bordered = {
           layout = {
             box = "vertical",
             backdrop = 80,
@@ -437,7 +437,7 @@ return {
           unloaded = true,
           current = true,
           layout = {
-            preset = "mivy_test",
+            preset = "custom_bordered",
           },
           win = {
             input = {
@@ -456,7 +456,7 @@ return {
         Snacks.picker.files({
           finder = "files",
           hidden = true,
-          layout = { preset = "mivy_test" },
+          layout = { preset = "custom_bordered" },
         })
       end,
       desc = "[F]iles",
