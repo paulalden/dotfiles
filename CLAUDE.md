@@ -51,7 +51,7 @@ yabai --restart-service
 
 ### Neovim Configuration
 - **Plugin Manager**: Lazy.nvim with lazy loading enabled
-- **LSP Setup**: Mason for LSP management, focused on Ruby development
+- **LSP Setup**: Native Neovim 0.11+ LSP configuration (no Mason), focused on Ruby development
 - **Key Features**: Treesitter, completion, AI assistance (CodeCompanion), formatting
 - **Config Structure**: 
   - `lua/config/`: Core configuration (options, keymaps, autocmds)
