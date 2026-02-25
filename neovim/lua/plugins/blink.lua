@@ -3,7 +3,7 @@ return {
   event = { "InsertEnter", "CmdlineEnter" },
   dependencies = {
     "rafamadriz/friendly-snippets",
-    { "Exafunction/codeium.nvim", priority = 49 },
+    { "Exafunction/windsurf.nvim", priority = 49 },
   },
   version = "1.*",
   opts = {
