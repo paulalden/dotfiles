@@ -88,6 +88,10 @@ return {
           name = "Codeium",
           module = "codeium.blink",
           async = true,
+          enabled = function()
+            return vim.api.nvim_buf_get_name(0) ~= ""
+              and not vim.tbl_contains({ "css", "scss", "less" }, vim.bo.filetype)
+          end,
         },
         buffer = {
           opts = {
