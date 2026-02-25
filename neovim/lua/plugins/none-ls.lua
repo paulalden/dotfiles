@@ -31,9 +31,12 @@ return {
         if client.supports_method("textDocument/formatting") then
           vim.api.nvim_create_autocmd("BufWritePre", {
             buffer = bufnr,
-
             callback = function()
-              vim.lsp.buf.format({ bufnr = bufnr })
+              local ft = vim.bo[bufnr].filetype
+              local has_formatter = #require("null-ls.sources").get_available(ft, "NULL_LS_FORMATTING") > 0
+              if has_formatter then
+                vim.lsp.buf.format({ bufnr = bufnr })
+              end
             end,
           })
         end
