@@ -21,6 +21,7 @@ return {
   },
   {
     "lewis6991/gitsigns.nvim",
+    event = "BufReadPost",
     config = function()
       require("gitsigns").setup({
         word_diff = false,
