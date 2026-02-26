@@ -43,7 +43,6 @@ return {
 
   { "nvim-mini/mini.jump", version = "*", opts = {} },
   { "nvim-mini/mini.splitjoin", version = "*", opts = {} },
-  { "nvim-mini/mini.pairs", version = "*", opts = {} },
 
   -- buffer     = 'b'
   -- comment    = 'c'
