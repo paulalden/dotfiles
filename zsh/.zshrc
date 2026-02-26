@@ -105,7 +105,7 @@ function _cached_eval() {
   source "$cache_file"
 }
 
-_cached_eval starship starship init zsh
+source "$ZDOTDIR/user/prompt.sh"
 _cached_eval fzf fzf --zsh
 
 [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ] && . /opt/homebrew/opt/asdf/libexec/asdf.sh

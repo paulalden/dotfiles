@@ -27,7 +27,6 @@
     ~/.config/ranger: ranger
     ~/.config/sketchybar: sketchybar
     ~/.config/skhd: skhd
-    ~/.config/starship.toml: starship.toml
     ~/.config/tmux: tmux
     ~/.config/yabai: yabai
     ~/.editorconfig: editorconfig
