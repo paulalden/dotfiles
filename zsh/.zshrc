@@ -2,6 +2,9 @@
 # ZSH configuration
 ################################################################################
 
+# Exit early for non-interactive shells
+[[ -o interactive ]] || return
+
 DISABLE_AUTO_TITLE="true" # Disable auto-setting terminal title.
 COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 DISABLE_UNTRACKED_FILES_DIRTY="true" # Disable marking untracked files
@@ -22,7 +25,7 @@ zle_highlight=('paste:none')
 setopt autocd extendedglob nomatch menucomplete interactive_comments
 
 # Disable ctrl-s to freeze terminal.
-stty stop undef
+[[ -t 0 ]] && stty stop undef
 
 # Unset defaults
 unsetopt correct_all BEEP
@@ -46,10 +49,10 @@ zmodload zsh/complist
 _comp_options+=(globdots)
 
 # Cache compinit (only rebuild dump once per day)
-if [[ -n $ZDOTDIR/.zcompdump(#qN.mh+24) ]]; then
-  compinit
-else
+if [[ -f $ZDOTDIR/.zcompdump(#qNmh-24) ]]; then
   compinit -C
+else
+  compinit
 fi
 
 ################################################################################
@@ -60,8 +63,8 @@ source "$ZDOTDIR/user/packages.sh"
 
 zsh_add_plugin "zsh-users/zsh-autosuggestions"
 zsh_add_plugin "zsh-users/zsh-history-substring-search"
-zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
 zsh_add_plugin "hlissner/zsh-autopair"
+zsh_add_plugin "zsh-users/zsh-syntax-highlighting" # Must be last
 
 zsh_add_config "config/vim-mode.sh"
 zsh_add_config "config/exports.sh"
@@ -79,7 +82,10 @@ zsh_add_file "$HOME/secrets.sh" # Shhhh, don't commit secrets
 # Misc
 ################################################################################
 
-[ -f ~/.ssh/id_rsa ] && (ssh-add -l &>/dev/null || ssh-add -q --apple-use-keychain ~/.ssh/id_rsa) # Ensure that the ssh_key is added to the ssh-agent
+# Ensure ssh key is added (only on login shells, in background)
+if [[ -o login && -f ~/.ssh/id_rsa ]]; then
+  (ssh-add -l &>/dev/null || ssh-add -q --apple-use-keychain ~/.ssh/id_rsa) &!
+fi
 
 ulimit -Sn 10240 # Increase the default number of sockers (helps with rspec tests in Chrome)
 
@@ -87,6 +93,19 @@ ulimit -Sn 10240 # Increase the default number of sockers (helps with rspec test
 # Extras
 ################################################################################
 
-eval "$(starship init zsh)"
+# Cache eval output for faster startup (regenerate with: rm ~/.cache/zsh/*)
+function _cached_eval() {
+  local name=$1; shift
+  local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+  local cache_file="$cache_dir/$name.zsh"
+  if [[ ! -f "$cache_file" || ! -s "$cache_file" ]]; then
+    mkdir -p "$cache_dir"
+    "$@" > "$cache_file"
+  fi
+  source "$cache_file"
+}
+
+_cached_eval starship starship init zsh
+_cached_eval fzf fzf --zsh
 
 [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ] && . /opt/homebrew/opt/asdf/libexec/asdf.sh

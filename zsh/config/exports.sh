@@ -2,18 +2,21 @@
 # Exported Variables
 ################################################################################
 
-# First items are added first, but referred to last - first in, last out.
-export PATH=/usr/local/bin:$PATH # Recommended by brew doctor
-export PATH=$HOME/.bin:$PATH
-export PATH=$HOME/.local/bin:$PATH
-export PATH=$HOME/.local/scripts:$PATH
-export PATH=/opt/homebrew/opt/postgresql@15/bin:$PATH
-export PATH=/opt/homebrew/opt/yarn:$PATH
-export PATH=/opt/homebrew/opt/python@3.13/bin:$PATH
-export PATH=/opt/homebrew/sbin:$PATH # Recommended by brew doctor
-export PATH=/opt/homebrew/bin:$PATH  # Brew is first as everything else uses that
-export PATH=/opt/homebrew/opt/rustup/bin:$PATH
-export PATH=/opt/homebrew/opt/openssl@3.5/bin:$PATH
+# Build PATH once (last entry has highest priority)
+path=(
+  /opt/homebrew/opt/openssl@3.5/bin
+  /opt/homebrew/opt/rustup/bin
+  /opt/homebrew/bin
+  /opt/homebrew/sbin
+  /opt/homebrew/opt/python@3.13/bin
+  /opt/homebrew/opt/yarn/bin
+  /opt/homebrew/opt/postgresql@15/bin
+  $HOME/.local/scripts
+  $HOME/.local/bin
+  $HOME/.bin
+  /usr/local/bin
+  $path
+)
 
 export LIBRARY_PATH=$LIBRARY_PATH:/opt/homebrew/opt/zstd/lib/ # Fix for MySQL2 gem not compiling
 export CXX=/usr/bin/clang++
@@ -31,7 +34,10 @@ export MANPAGER='nvim +Man!'
 
 # Mobile app
 export NODE_ENV=development
-export JAVA_HOME=$(/usr/libexec/java_home)
+# Cache JAVA_HOME to avoid subprocess on every shell start
+if [[ -z "$JAVA_HOME" ]] && [[ -x /usr/libexec/java_home ]]; then
+  export JAVA_HOME=$(/usr/libexec/java_home 2>/dev/null)
+fi
 
 # Increase the function nesting limit to 100 or higher
 export FUNCNEST=100
