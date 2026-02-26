@@ -108,17 +108,11 @@ map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 map("n", "<leader>\\", "<cmd>vsplit<cr>", { desc = "Vertical Split", silent = true })
 map("n", "<leader>-", "<cmd>split<cr>", { desc = "Horizontal Split", silent = true })
 
--- Window navigation - Use CTRL+<hjkl> to switch between windows
-map("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
-map("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
-map("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-map("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+-- Window navigation - handled by vim-tmux-navigator plugin (tmux.lua)
 
 -- Resize splits with alt+cursor keys
 map({ "n", "i", "v" }, "<A-j>", "<nop>")
 map({ "n", "i", "v" }, "<A-k>", "<nop>")
-map({ "n", "i", "v" }, "<M-j>", "<nop>")
-map({ "n", "i", "v" }, "<M-k>", "<nop>")
 
 map("n", "<M-Up>", ":resize +2<CR>", opts)
 map("n", "<M-Down>", ":resize -2<CR>", opts)
