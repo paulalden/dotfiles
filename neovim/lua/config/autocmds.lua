@@ -4,6 +4,27 @@ local function augroup(name)
 end
 
 -------------------------------------------------------------------------------
+-- CURSOR RESTORE
+-------------------------------------------------------------------------------
+-- Restore cursor position when reopening files
+autocmd("BufReadPost", {
+  group = augroup("restore_cursor"),
+  callback = function(event)
+    local exclude = { "gitcommit" }
+    local buf = event.buf
+    if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].last_cursor then
+      return
+    end
+    vim.b[buf].last_cursor = true
+    local mark = vim.api.nvim_buf_get_mark(buf, '"')
+    local lcount = vim.api.nvim_buf_line_count(buf)
+    if mark[1] > 0 and mark[1] <= lcount then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+
+-------------------------------------------------------------------------------
 -- FILE BEHAVIOR
 -------------------------------------------------------------------------------
 -- Check if we need to reload the file when it changed
@@ -93,6 +114,25 @@ autocmd("FileType", {
         silent = true,
         desc = "Quit buffer",
       })
+    end)
+  end,
+})
+
+-- Show dashboard when last real buffer is closed
+autocmd("BufDelete", {
+  group = augroup("dashboard_on_empty"),
+  callback = function()
+    vim.schedule(function()
+      local bufs = vim.tbl_filter(function(bufnr)
+        return vim.api.nvim_buf_is_valid(bufnr)
+          and vim.bo[bufnr].buflisted
+          and vim.api.nvim_buf_get_name(bufnr) ~= ""
+      end, vim.api.nvim_list_bufs())
+      if #bufs == 0 then
+        pcall(function()
+          Snacks.dashboard.open()
+        end)
+      end
     end)
   end,
 })
@@ -199,6 +239,19 @@ autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "skhdrc",
   callback = function()
     vim.cmd("setfiletype bash")
+  end,
+})
+
+-------------------------------------------------------------------------------
+-- TRAILING WHITESPACE
+-------------------------------------------------------------------------------
+-- Remove trailing whitespace on save (only on changed lines)
+autocmd("BufWritePre", {
+  group = augroup("trim_whitespace"),
+  callback = function()
+    local save = vim.fn.winsaveview()
+    vim.cmd([[%s/\s\+$//e]])
+    vim.fn.winrestview(save)
   end,
 })
 

@@ -20,6 +20,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Populate workspace diagnostics (external plugin)
     require("workspace-diagnostics").populate_workspace_diagnostics(client, vim.api.nvim_get_current_buf())
 
+    -- Highlight references of symbol under cursor
+    if client.supports_method("textDocument/documentHighlight") then
+      local highlight_group = vim.api.nvim_create_augroup("local_lsp_highlight_" .. ev.buf, { clear = true })
+      vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+        buffer = ev.buf,
+        group = highlight_group,
+        callback = vim.lsp.buf.document_highlight,
+      })
+      vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+        buffer = ev.buf,
+        group = highlight_group,
+        callback = vim.lsp.buf.clear_references,
+      })
+    end
+
     local opts = { buffer = ev.buf, silent = true }
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 
