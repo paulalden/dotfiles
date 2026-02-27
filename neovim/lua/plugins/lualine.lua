@@ -1,6 +1,5 @@
 return {
   "nvim-lualine/lualine.nvim",
-  -- event = "VimEnter",
   config = function()
     local highlight = require("lualine.highlight")
     local colors = require("config.colors").colors
@@ -23,16 +22,6 @@ return {
         newfile = "[New]",
       },
     }
-
-    local contains = function(list, x)
-      for _, v in pairs(list) do
-        if v == x then
-          return true
-        end
-      end
-
-      return false
-    end
 
     function fname:init(options)
       fname.super.init(self, options)
@@ -59,51 +48,31 @@ return {
     end
 
     function fname:update_status()
-      local data
-      local symbols = {}
-
-      if contains(require("config.excluded_filetypes"), vim.bo.filetype) then
-        return
-      end
-
-      -- Relative path
-      data = vim.fn.expand("%:t")
+      local data = vim.fn.expand("%:t")
       data = modules.utils.stl_escape(data)
 
       if data == "" then
         data = self.options.symbols.unnamed
       end
 
-      local state
+      -- Determine state symbol and highlight
+      local state, hi_color
       if vim.bo.modified then
         state = self.options.symbols.modified
-      elseif vim.bo.modifiable == false or vim.bo.readonly == true then
-        state = self.options.symbols.readonly
-      else
-        state = self.options.symbols.saved
-      end
-      table.insert(symbols, state)
-
-      -- data = data .. "" .. (#symbols > 0 and "" .. table.concat(symbols, "") or "")
-      local icon = icons[vim.fn.expand("%:e")]
-      if icon then
-        icon = icon.icon
-      else
-        icon = ""
-      end
-
-      data = icon .. " " .. data .. "" .. (#symbols > 0 and "" .. table.concat(symbols, "") or "")
-
-      local hi_color
-      if vim.bo.modified then
         hi_color = self.highlights.modified
-      elseif vim.bo.readonly then
+      elseif vim.bo.modifiable == false or vim.bo.readonly then
+        state = self.options.symbols.readonly
         hi_color = self.highlights.readonly
       else
+        state = self.options.symbols.saved
         hi_color = self.highlights.saved
       end
 
-      data = highlight.component_format_highlight(hi_color) .. data
+      -- File icon
+      local icon_data = icons[vim.fn.expand("%:e")]
+      local icon = icon_data and icon_data.icon or ""
+
+      data = highlight.component_format_highlight(hi_color) .. icon .. " " .. data .. state
 
       return data
     end
@@ -113,7 +82,7 @@ return {
         icons_enabled = true,
         component_separators = { left = "", right = "" },
         section_separators = { left = "", right = "" },
-        disabled_filetypes = { "alpha", "Ranger" },
+        disabled_filetypes = require("config.excluded_filetypes"),
         globalstatus = true,
         always_divide_middle = true,
       },
