@@ -2,7 +2,12 @@ return {
   {
     "vim-ruby/vim-ruby",
     config = function()
-      vim.cmd([[autocmd FileType ruby setlocal indentkeys-=.]])
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "ruby",
+        callback = function()
+          vim.opt_local.indentkeys:remove(".")
+        end,
+      })
     end,
   },
   {
@@ -16,12 +21,12 @@ return {
   {
     "RRethy/nvim-treesitter-endwise",
     event = "InsertEnter",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        endwise = {
-          enable = true,
-        },
-      })
-    end,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {
+      endwise = {
+        enable = true,
+      },
+    },
+    main = "nvim-treesitter.configs",
   },
 }
