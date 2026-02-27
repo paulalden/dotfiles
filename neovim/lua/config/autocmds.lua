@@ -124,9 +124,7 @@ autocmd("BufDelete", {
   callback = function()
     vim.schedule(function()
       local bufs = vim.tbl_filter(function(bufnr)
-        return vim.api.nvim_buf_is_valid(bufnr)
-          and vim.bo[bufnr].buflisted
-          and vim.api.nvim_buf_get_name(bufnr) ~= ""
+        return vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted and vim.api.nvim_buf_get_name(bufnr) ~= ""
       end, vim.api.nvim_list_bufs())
       if #bufs == 0 then
         pcall(function()
@@ -254,17 +252,3 @@ autocmd("BufWritePre", {
     vim.fn.winrestview(save)
   end,
 })
-
--------------------------------------------------------------------------------
--- PLUGIN: COLORIZER
--------------------------------------------------------------------------------
-local colorizer_loaded, _ = pcall(require, "colorizer")
-if colorizer_loaded then
-  autocmd("FileType", {
-    group = augroup("colorizer"),
-    pattern = "lazy",
-    callback = function()
-      vim.cmd("ColorizerDetachFromBuffer")
-    end,
-  })
-end
