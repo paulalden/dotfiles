@@ -4,7 +4,7 @@ capabilities.general.positionEncodings = { "utf-16" }
 
 return {
   cmd = { vim.fn.expand("~/.asdf/shims/ruby-lsp") },
-  root_markers = { "Gemfile", ".git" },
+  root_markers = { "Gemfile", ".git", "." },
   filetypes = { "ruby" },
   capabilities = capabilities,
   init_options = {
