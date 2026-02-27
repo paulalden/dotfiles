@@ -5,12 +5,6 @@
 -- Limit ShaDa file size for faster startup
 vim.o.shada = "'100,<50,s10,:1000,/100,@100,h"
 
--- Enable all filetype plugins and syntax
-vim.cmd("filetype plugin indent on")
-if vim.fn.exists("syntax_on") ~= 1 then
-  vim.cmd("syntax enable")
-end
-
 -- ----------------------------------------------------------------------------
 -- GLOBAL VARIABLES
 -- ----------------------------------------------------------------------------
@@ -71,7 +65,7 @@ vim.opt.inccommand = "nosplit" -- Preview incremental substitute
 -- COMPLETION
 -- ----------------------------------------------------------------------------
 
-vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Completion behavior
+vim.o.completeopt = "menuone,noselect,fuzzy" -- Completion behavior
 vim.o.pumheight = 8 -- Popup menu height
 vim.o.pumblend = 0 -- Popup menu transparency (0 = opaque)
 
@@ -115,8 +109,16 @@ vim.o.winborder = "rounded" -- Use rounded borders in floating windows
 -- ----------------------------------------------------------------------------
 
 vim.opt.foldlevel = 99
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+-- Set after plugins load to prevent overrides (e.g. snacks statuscolumn)
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    if vim.wo.foldmethod == "manual" then
+      vim.wo.foldmethod = "expr"
+      vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    end
+  end,
+})
 
 -- ----------------------------------------------------------------------------
 -- BEHAVIOR & MISCELLANEOUS
@@ -158,15 +160,6 @@ vim.opt.diffopt = "filler,internal,closeoff,algorithm:histogram,context:5,linema
 
 vim.opt.wildmode = "longest:full,full" -- Command-line completion behavior
 vim.o.shortmess = "CFOSWaco" -- Disable verbose completion messages
-
--- ----------------------------------------------------------------------------
--- STATUS COLUMN
--- ----------------------------------------------------------------------------
-
-local loaded, _ = pcall(require, "snacks")
-if loaded then
-  vim.opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
-end
 
 -- ----------------------------------------------------------------------------
 -- COMMAND ABBREVIATIONS
