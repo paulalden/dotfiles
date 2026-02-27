@@ -1,4 +1,34 @@
-vim.lsp.enable({ "lua_ls", "ruby_lsp", "bashls", "yamlls", "ts_ls", "cssls", "html", "jsonls", "dockerls" })
+vim.lsp.enable({
+  "lua_ls",
+  "ruby_lsp",
+  "bashls",
+  "yamlls",
+  "ts_ls",
+  "cssls",
+  "html",
+  "jsonls",
+  "dockerls",
+  "eslint",
+})
+
+-- Diagnostic display configuration
+vim.diagnostic.config({
+  virtual_text = {
+    spacing = 4,
+    prefix = "●",
+    severity = { min = vim.diagnostic.severity.WARN },
+  },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = " ",
+      [vim.diagnostic.severity.WARN] = " ",
+      [vim.diagnostic.severity.HINT] = " ",
+      [vim.diagnostic.severity.INFO] = " ",
+    },
+  },
+  severity_sort = true,
+  float = { border = "rounded" },
+})
 
 -- Disable LSP semantic highlights once at startup and on colorscheme change
 local function disable_semantic_highlights()
@@ -18,7 +48,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     -- Populate workspace diagnostics (external plugin)
-    require("workspace-diagnostics").populate_workspace_diagnostics(client, vim.api.nvim_get_current_buf())
+    pcall(function()
+      require("workspace-diagnostics").populate_workspace_diagnostics(client, vim.api.nvim_get_current_buf())
+    end)
+
+    -- Enable inlay hints when supported
+    if client.supports_method("textDocument/inlayHint") then
+      vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+    end
 
     -- Highlight references of symbol under cursor
     if client.supports_method("textDocument/documentHighlight") then
