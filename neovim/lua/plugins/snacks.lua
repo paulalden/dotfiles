@@ -376,7 +376,7 @@ return {
     statuscolumn = {
       enabled = true,
       left = { "mark", "sign" }, -- priority of signs on the left (high to low)
-        right = { "fold", "git" }, -- priority of signs on the right (high to low)
+      right = { "fold", "git" }, -- priority of signs on the right (high to low)
       folds = {
         open = false, -- show open fold icons
         git_hl = false, -- use Git Signs hl for fold icons
@@ -391,7 +391,72 @@ return {
     words = { enabled = true },
     zen = { enabled = true },
   },
+  config = function(_, opts)
+    require("snacks").setup(opts)
+
+    -- Set statuscolumn
+    vim.opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
+
+    -- Toggle options (must be in config, not keys, since they use Snacks.toggle API eagerly)
+    Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+    Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+    Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
+    Snacks.toggle.diagnostics():map("<leader>ud")
+    Snacks.toggle.line_number():map("<leader>ul")
+    Snacks.toggle
+      .option("conceallevel", {
+        off = 0,
+        on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2,
+        name = "Conceal Level",
+      })
+      :map("<leader>uc")
+    Snacks.toggle
+      .option("showtabline", {
+        off = 0,
+        on = vim.o.showtabline > 0 and vim.o.showtabline or 2,
+        name = "Tabline",
+      })
+      :map("<leader>uA")
+    Snacks.toggle.treesitter():map("<leader>uT")
+    Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
+    Snacks.toggle.dim():map("<leader>uD")
+    Snacks.toggle.animate():map("<leader>ua")
+    Snacks.toggle.indent():map("<leader>ug")
+    Snacks.toggle.scroll():map("<leader>uS")
+    Snacks.toggle.profiler():map("<leader>dpp")
+    Snacks.toggle.profiler_highlights():map("<leader>dph")
+  end,
   keys = {
+    -- Dashboard
+    {
+      "<leader>d",
+      function()
+        Snacks.dashboard.open()
+      end,
+      desc = "[D]ashboard",
+    },
+    -- Git browsing
+    {
+      "<leader>gB",
+      function()
+        Snacks.gitbrowse()
+      end,
+      desc = "[G]it [B]rowse Remote",
+      mode = { "n", "x" },
+    },
+    {
+      "<leader>gY",
+      function()
+        Snacks.gitbrowse({
+          open = function(url)
+            vim.fn.setreg("+", url)
+          end,
+          notify = false,
+        })
+      end,
+      desc = "[G]it [Y]ank URL",
+      mode = { "n", "x" },
+    },
     -- Notify
     {
       "<leader>ns",
