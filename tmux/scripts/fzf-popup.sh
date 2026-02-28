@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
 # Wrapper that dims the background panes while a popup script runs.
-# Usage: fzf-popup.sh <window_id> <script> [args...]
+# Usage: fzf-popup.sh <script> [args...]
+#
+# Detects the parent window automatically via TMUX_PANE.
 
-WINDOW_ID="$1"
-shift
+# Find the window containing the pane that launched this popup
+WINDOW_ID=$(tmux list-panes -a -F '#{pane_id} #{window_id}' | awk -v pane="$TMUX_PANE" '$1 != pane {print $2}' | head -1)
+
+# Fallback: use the active window of the current client
+if [[ -z "$WINDOW_ID" ]]; then
+  WINDOW_ID=$(tmux display-message -p '#{window_id}')
+fi
 
 # Dim the original window's panes
 tmux set -t "$WINDOW_ID" -w window-style "fg=#464f62,bg=#1c1f26"
