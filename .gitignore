@@ -17,6 +17,7 @@ openvpn/uk.protonvpn.com.udp.ovpn
 ranger/plugins
 ranger/devicons
 .luarc.json
+minimal.lua
 
 neovim*/plugin/packer_compiled.lua
 neovim/spell/*
@@ -36,6 +37,6 @@ zsh/.zsh_history
 zsh/.zsh_sessions
 zsh/.zcompdump
 zsh/plugins
-zsh/.zcompcacheneovim-lazy/lazyvim.json
+zsh/.zcompcache
 neovim-lazy/lazyvim.json
 /.claude/settings.local.json

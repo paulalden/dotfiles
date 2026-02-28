@@ -11,41 +11,52 @@ _prompt_blue="%F{#5E81AC}"
 _prompt_magenta="%F{#B48EAD}"
 _prompt_reset="%f"
 
-# -- Async git info -----------------------------------------------------------
+# -- Async worker -------------------------------------------------------------
 _prompt_git_info=""
+_prompt_lang_info=""
 _prompt_async_fd=""
 
-_prompt_git_worker() {
+_prompt_async_worker() {
+  # Git info
+  local git_result="NONE"
   local branch
   branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-  [[ -z "$branch" ]] && { print "NONE"; return }
+  if [[ -n "$branch" ]]; then
+    local staged=0 modified=0 untracked=0 ahead=0 behind=0
+    local line
+    while IFS= read -r line; do
+      case "${line:0:2}" in
+        "##"*)
+          [[ "$line" =~ "ahead ([0-9]+)" ]] && ahead=${match[1]}
+          [[ "$line" =~ "behind ([0-9]+)" ]] && behind=${match[1]}
+          ;;
+        [ADMRC]?" "|[ADMRC][ADMRC]*) ((staged++)) ;;
+      esac
+      case "${line:1:1}" in
+        M|D) ((modified++)) ;;
+      esac
+      case "${line:0:2}" in
+        "??") ((untracked++)) ;;
+      esac
+    done < <(git status --porcelain=v2 --branch 2>/dev/null)
 
-  local staged=0 modified=0 untracked=0 ahead=0 behind=0
-  local line
-  while IFS= read -r line; do
-    case "${line:0:2}" in
-      "##"*)
-        [[ "$line" =~ "ahead ([0-9]+)" ]] && ahead=${match[1]}
-        [[ "$line" =~ "behind ([0-9]+)" ]] && behind=${match[1]}
-        ;;
-      [ADMRC]?" "|[ADMRC][ADMRC]*) ((staged++)) ;;
-    esac
-    case "${line:1:1}" in
-      M|D) ((modified++)) ;;
-    esac
-    case "${line:0:2}" in
-      "??") ((untracked++)) ;;
-    esac
-  done < <(git status --porcelain=v2 --branch 2>/dev/null)
+    local status_str=""
+    ((staged > 0))    && status_str+=" +${staged}"
+    ((modified > 0))  && status_str+=" !${modified}"
+    ((untracked > 0)) && status_str+=" ?${untracked}"
+    ((ahead > 0))     && status_str+=" ⇡${ahead}"
+    ((behind > 0))    && status_str+=" ⇣${behind}"
 
-  local status_str=""
-  ((staged > 0))    && status_str+=" +${staged}"
-  ((modified > 0))  && status_str+=" !${modified}"
-  ((untracked > 0)) && status_str+=" ?${untracked}"
-  ((ahead > 0))     && status_str+=" ⇡${ahead}"
-  ((behind > 0))    && status_str+=" ⇣${behind}"
+    git_result="${branch}${status_str}"
+  fi
 
-  print "${branch}${status_str}"
+  # Language versions (only check if relevant files exist)
+  local ruby_ver="" node_ver=""
+  [[ -f Gemfile || -f .ruby-version ]] && ruby_ver=$(ruby -e 'print RUBY_VERSION' 2>/dev/null)
+  [[ -f package.json || -f .node-version || -f .nvmrc ]] && node_ver=$(node --version 2>/dev/null) && node_ver="${node_ver#v}"
+
+  # Output all results on one line, tab-separated
+  print "${git_result}\t${ruby_ver}\t${node_ver}"
 }
 
 _prompt_format_git() {
@@ -63,6 +74,13 @@ _prompt_format_git() {
   _prompt_git_info+=" "
 }
 
+_prompt_format_langs() {
+  local ruby=$1 node=$2
+  _prompt_lang_info=""
+  [[ -n "$ruby" ]] && _prompt_lang_info+="${_prompt_magenta}${ruby}${_prompt_reset} "
+  [[ -n "$node" ]] && _prompt_lang_info+="${_prompt_magenta}${node}${_prompt_reset} "
+}
+
 _prompt_async_start() {
   # Clean up any existing worker
   if [[ -n "$_prompt_async_fd" ]] && { true <&$_prompt_async_fd } 2>/dev/null; then
@@ -71,13 +89,7 @@ _prompt_async_start() {
   fi
   _prompt_async_fd=""
 
-  # Only start if we're in a git repo
-  if ! git rev-parse --is-inside-work-tree &>/dev/null; then
-    _prompt_git_info=""
-    return
-  fi
-
-  exec {_prompt_async_fd} < <(_prompt_git_worker)
+  exec {_prompt_async_fd} < <(_prompt_async_worker)
   zle -F $_prompt_async_fd _prompt_async_callback
 }
 
@@ -90,36 +102,21 @@ _prompt_async_callback() {
   exec {fd}<&-
   _prompt_async_fd=""
 
-  _prompt_format_git "$result"
+  # Parse tab-separated results
+  local git_part="${result%%	*}"
+  local rest="${result#*	}"
+  local ruby_part="${rest%%	*}"
+  local node_part="${rest#*	}"
+
+  _prompt_format_git "$git_part"
+  _prompt_format_langs "$ruby_part" "$node_part"
   zle reset-prompt
-}
-
-# -- Language versions --------------------------------------------------------
-_prompt_ruby_version() {
-  local ver
-  ver=$(ruby -e 'print RUBY_VERSION' 2>/dev/null) || return
-  [[ -n "$ver" ]] && print "${ver}"
-}
-
-_prompt_node_version() {
-  local ver
-  ver=$(node --version 2>/dev/null) || return
-  [[ -n "$ver" ]] && print "${ver#v}"
 }
 
 # -- Build prompt -------------------------------------------------------------
 _prompt_precmd() {
-  # Async git (non-blocking)
+  # Async git + language versions (non-blocking)
   _prompt_async_start
-
-  # Language versions (cached per directory)
-  if [[ "$PWD" != "$_prompt_lang_pwd" ]]; then
-    _prompt_lang_pwd="$PWD"
-    _prompt_ruby_cache=""
-    _prompt_node_cache=""
-    [[ -f Gemfile || -f .ruby-version ]] && _prompt_ruby_cache=$(_prompt_ruby_version)
-    [[ -f package.json || -f .node-version || -f .nvmrc ]] && _prompt_node_cache=$(_prompt_node_version)
-  fi
 
   # SSH hostname
   local host=""
@@ -131,12 +128,7 @@ _prompt_precmd() {
   # Prompt character (red on error)
   local char="%(?:%F{white}:%F{red})❯${_prompt_reset}"
 
-  # Language version indicators (magenta)
-  local langs=""
-  [[ -n "$_prompt_ruby_cache" ]] && langs+="${_prompt_magenta}${_prompt_ruby_cache}${_prompt_reset} "
-  [[ -n "$_prompt_node_cache" ]] && langs+="${_prompt_magenta}${_prompt_node_cache}${_prompt_reset} "
-
-  PROMPT=$'\n'"${host}${dir} \${_prompt_git_info}${langs}
+  PROMPT=$'\n'"${host}${dir} \${_prompt_git_info}\${_prompt_lang_info}
 ${char} "
 }
 
