@@ -4,7 +4,7 @@
 # Shows local and remote branches with last commit info
 branch=$(git branch -a --sort=-committerdate \
   --format='%(refname:short) %(committerdate:relative) %(subject)' | \
-  fzf --header 'Switch branch' \
+  fzf --no-tmux --header 'Switch branch' \
       --preview 'git log --oneline --graph --color=always {1} -- | head -20' \
       --exit-0 | \
   awk '{print $1}')

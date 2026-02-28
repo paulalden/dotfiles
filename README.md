@@ -77,14 +77,35 @@ FZF commands are available both as shell functions and as tmux popup keybindings
 
 All bindings use the tmux prefix (`Ctrl+Space`):
 
+**Files & Navigation**
+
 | Binding | Description |
 |---------|-------------|
 | `prefix + e` | Sessionizer - find a project directory and open/switch to a tmux session |
 | `prefix + E` | Find and edit a file in the current directory |
+| `prefix + p` | Switch to another tmux pane across windows |
+| `prefix + s` | Live ripgrep search, Enter to open file at match |
+| `prefix + u` | Extract URLs from tmux pane scrollback and open in browser |
+
+**Git**
+
+| Binding | Description |
+|---------|-------------|
 | `prefix + G` | Git branch switcher (sorted by recent, with log preview) |
 | `prefix + L` | Git log browser (Enter to view diff, Ctrl-O to checkout) |
+| `prefix + S` | Git stash browser (Enter to apply, Ctrl-D to drop) |
+| `prefix + A` | Interactive git add with diff preview |
+
+**System & Tools**
+
+| Binding | Description |
+|---------|-------------|
 | `prefix + K` | Fuzzy find and kill a process |
-| `prefix + p` | Switch to another tmux pane across windows |
+| `prefix + N` | Browse listening ports and kill the process |
+| `prefix + B` | Homebrew install/uninstall with preview |
+| `prefix + D` | Exec into a running Docker container |
+| `prefix + T` | Browse tldr cheat sheets with preview |
+| `prefix + m` | Fuzzy search and open man pages |
 
 ### Shell Functions
 

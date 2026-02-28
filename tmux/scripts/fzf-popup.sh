@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Wrapper that dims the background panes while a popup script runs.
+# Usage: fzf-popup.sh <window_id> <script> [args...]
+
+WINDOW_ID="$1"
+shift
+
+# Dim the original window's panes
+tmux set -t "$WINDOW_ID" -w window-style "fg=#464f62,bg=#1c1f26"
+tmux set -t "$WINDOW_ID" -w window-active-style "fg=#464f62,bg=#1c1f26"
+
+# Restore original styles on exit (matches theme.conf values)
+restore() {
+  tmux set -t "$WINDOW_ID" -w window-style "fg=#74819a,bg=#282e38" 2>/dev/null
+  tmux set -t "$WINDOW_ID" -w window-active-style "fg=#ECEFF4,bg=#2e3440" 2>/dev/null
+}
+trap restore EXIT
+
+# Run the actual script
+"$@"

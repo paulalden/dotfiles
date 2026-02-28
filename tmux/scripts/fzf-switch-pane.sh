@@ -4,7 +4,7 @@
 panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
 current_pane=$(tmux display-message -p '#I:#P')
 
-target=$(echo "$panes" | grep -v "$current_pane" | fzf +m --reverse --exit-0) || exit 0
+target=$(echo "$panes" | grep -v "$current_pane" | fzf --no-tmux +m --reverse --exit-0) || exit 0
 
 target_window=$(echo "$target" | awk 'BEGIN{FS=":|-"} {print$1}')
 target_pane=$(echo "$target" | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
