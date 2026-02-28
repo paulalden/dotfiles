@@ -69,6 +69,44 @@ nvim
 ![FZF Floating interface](https://github.com/user-attachments/assets/96ccf3d3-333d-4427-822c-91d185231a2e)
 
 
+## FZF
+
+FZF commands are available both as shell functions and as tmux popup keybindings.
+
+### Tmux Keybindings
+
+All bindings use the tmux prefix (`Ctrl+Space`):
+
+| Binding | Description |
+|---------|-------------|
+| `prefix + e` | Sessionizer - find a project directory and open/switch to a tmux session |
+| `prefix + E` | Find and edit a file in the current directory |
+| `prefix + G` | Git branch switcher (sorted by recent, with log preview) |
+| `prefix + L` | Git log browser (Enter to view diff, Ctrl-O to checkout) |
+| `prefix + K` | Fuzzy find and kill a process |
+| `prefix + p` | Switch to another tmux pane across windows |
+
+### Shell Functions
+
+| Command | Description |
+|---------|-------------|
+| `tm [name]` | Create or switch to a tmux session (fuzzy select if no name given) |
+| `fs [query]` | Switch tmux session with fuzzy search |
+| `ftpane` | Switch to a tmux pane with fuzzy search |
+| `fe [query]` | Find and open a file in `$EDITOR` |
+| `fo [query]` | Find a file - Ctrl-O to `open`, Enter to edit |
+| `fda` | cd into a directory (including hidden) |
+| `fdr` | cd to a parent directory |
+| `fh` | Search and re-run a command from shell history |
+| `fkill` | Fuzzy find and kill a process |
+
+### Built-in FZF Keybindings
+
+| Binding | Description |
+|---------|-------------|
+| `Ctrl+R` | Search shell history (Ctrl-Y to copy to clipboard) |
+| `Ctrl+T` | Find files/directories with preview |
+
 ## Yabai
 
 The WM needs to add hacks to get it working fully:
