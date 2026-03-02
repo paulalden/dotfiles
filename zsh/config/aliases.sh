@@ -59,6 +59,7 @@ alias skhd:reload="skhd --restart-service"
 alias brew:upgrade:all="brew upgrade; nvim --headless '+Lazy! sync' +qa > /dev/null; yabai:stop; yabai:start; sketchybar --trigger brew_update"
 alias brew:upgrade="brew upgrade && sketchybar --trigger brew_update"
 alias brew:bundle="brew bundle --file ~/.Brewfile"
+alias brew:dump="brew bundle dump --force --file ~/Personal/Repos/dotfiles/homebrew/Brewfile"
 
 # Docker Compose
 alias dc="docker-compose"
