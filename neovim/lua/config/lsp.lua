@@ -72,6 +72,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
       })
     end
 
+    -- Code lens refresh when server supports it
+    if client.supports_method("textDocument/codeLens") then
+      vim.lsp.codelens.refresh()
+      vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+        buffer = ev.buf,
+        callback = vim.lsp.codelens.refresh,
+      })
+    end
+
     local opts = { buffer = ev.buf, silent = true }
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 

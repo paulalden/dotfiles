@@ -8,8 +8,12 @@ return {
   filetypes = { "ruby" },
   capabilities = capabilities,
   init_options = {
-    formatter = "none",
+    formatter = "auto",
+    linters = { "rubocop" },
+    codeLens = true,
   },
+  -- Suppress documentHighlight — ruby-lsp has a bug with UTF-16 position
+  -- encoding that causes InvalidLocationError on highlight requests
   handlers = {
     ["textDocument/documentHighlight"] = function() end,
   },

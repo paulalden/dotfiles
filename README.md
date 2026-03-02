@@ -128,6 +128,71 @@ All bindings use the tmux prefix (`Ctrl+Space`):
 | `Ctrl+R` | Search shell history (Ctrl-Y to copy to clipboard) |
 | `Ctrl+T` | Find files/directories with preview |
 
+## Neovim
+
+### Ruby Debugging (DAP)
+
+Debug Ruby files, RSpec tests, and Rails servers directly in Neovim using `nvim-dap` with the `rdbg` adapter (from the `debug` gem).
+
+**Prerequisites:**
+
+The `debug` gem must be available in your project. It's already bundled as a dependency of `ruby-lsp`, but you can also add it explicitly:
+
+```ruby
+# Gemfile
+group :development, :test do
+  gem "debug"
+end
+```
+
+**Keybindings:**
+
+| Binding | Description |
+|---------|-------------|
+| `<leader>db` | Toggle breakpoint |
+| `<leader>dc` | Start/continue debugging |
+| `<leader>di` | Step into |
+| `<leader>do` | Step over |
+| `<leader>dO` | Step out |
+| `<leader>du` | Toggle DAP UI |
+
+**Usage:**
+
+1. Open a Ruby file and set breakpoints with `<leader>db`
+2. Start debugging with `<leader>dc` — you'll be prompted to choose a launch config:
+   - **Run current file** — runs `ruby <file>` under the debugger
+   - **RSpec - current file** — runs `bundle exec rspec <file>` under the debugger
+   - **Rails server** — starts `bundle exec rails server` under the debugger
+3. The DAP UI opens automatically showing scopes, breakpoints, stacks, and a REPL
+4. Step through code with `<leader>di` / `<leader>do` / `<leader>dO`
+5. Close the UI with `<leader>du`
+
+### Testing (Neotest)
+
+Run RSpec tests from within Neovim using `neotest` with the `neotest-rspec` adapter.
+
+| Binding | Description |
+|---------|-------------|
+| `<leader>tn` | Run nearest test |
+| `<leader>tf` | Run current file |
+| `<leader>ts` | Run full test suite |
+| `<leader>to` | Show test output |
+| `<leader>tS` | Toggle test summary panel |
+
+### Rails Navigation
+
+`vim-rails` provides Rails-aware navigation commands:
+
+| Command | Description |
+|---------|-------------|
+| `:Emodel <name>` | Jump to a model |
+| `:Econtroller <name>` | Jump to a controller |
+| `:Eview <name>` | Jump to a view |
+| `:Emigration <name>` | Jump to a migration |
+| `:A` | Jump to alternate file (e.g. model → test) |
+| `:R` | Jump to related file (e.g. migration → schema) |
+| `gf` | Enhanced go-to-file that understands Rails paths |
+
 ## Yabai
 
 The WM needs to add hacks to get it working fully:

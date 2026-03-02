@@ -19,7 +19,6 @@ return {
           args = { "--autocorrect", "--server", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" },
           to_stdin = true,
         }),
-
         null_ls.builtins.formatting.stylua.with({
           extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
           filetypes = { "lua" },
