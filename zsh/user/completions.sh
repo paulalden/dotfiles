@@ -3,6 +3,7 @@
 #
 function zsh_add_completion() {
   PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
+
   if [ -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then
     # For completions
     completion_file_path=$(ls $ZDOTDIR/plugins/$PLUGIN_NAME/_*)
@@ -13,6 +14,10 @@ function zsh_add_completion() {
     fpath+=$(ls $ZDOTDIR/plugins/$PLUGIN_NAME/_*)
     [ -f $ZDOTDIR/.zccompdump ] && $ZDOTDIR/.zccompdump
   fi
+
   completion_file="$(basename "${completion_file_path}")"
-  if [ "$2" = true ] && compinit "${completion_file:1}"
+
+  if [ "$2" = true ]; then
+    compinit "${completion_file:1}"
+  fi
 }
