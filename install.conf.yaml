@@ -6,6 +6,7 @@
 
 - create:
     - ~/.local/bin
+    - ~/.local/scripts
     - ~/.config/ranger
 
 # Requires 4 space indentation or it will fail
@@ -33,4 +34,28 @@
     ~/.zshenv: zshenv
     ~/.config/zsh: zsh
 
-
+- shell:
+    - [chsh -s /bin/zsh, Setting ZSH as default shell]
+    - [brew bundle --file=homebrew/Brewfile --no-lock, Installing Homebrew packages]
+    - [bundle install, Installing Ruby gems]
+    - ["test -d ~/.config/tmux/plugins/tpm || git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm", Installing TPM]
+    - ["~/.config/tmux/plugins/tpm/bin/install_plugins", Installing tmux plugins]
+    - description: Setting macOS defaults
+      command: |
+        # Keyboard
+        defaults write NSGlobalDomain KeyRepeat -int 2
+        defaults write NSGlobalDomain InitialKeyRepeat -int 15
+        defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+        # Dock
+        defaults write com.apple.dock autohide -bool true
+        defaults write com.apple.dock autohide-delay -float 0
+        defaults write com.apple.dock autohide-time-modifier -float 0.4
+        defaults write com.apple.dock mru-spaces -bool false
+        # Finder
+        defaults write com.apple.finder AppleShowAllFiles -bool true
+        defaults write com.apple.finder ShowPathbar -bool true
+        defaults write com.apple.finder ShowStatusBar -bool true
+        # Misc
+        defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+        defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+        killall Dock Finder &>/dev/null || true
