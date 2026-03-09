@@ -132,7 +132,7 @@ All bindings use the tmux prefix (`Ctrl+Space`):
 
 ### Ruby Debugging (DAP)
 
-Debug Ruby files, RSpec tests, and Rails servers directly in Neovim using `nvim-dap` with the `rdbg` adapter (from the `debug` gem).
+Debug Ruby files, RSpec tests, and Rails servers directly in Neovim using `nvim-dap` with the `rdbg` adapter (from the `debug` gem). Two debugging UIs are available: `nvim-dap-ui` (multi-panel layout) and `nvim-dap-view` (single-window).
 
 **Prerequisites:**
 
@@ -154,18 +154,47 @@ end
 | `<leader>di` | Step into |
 | `<leader>do` | Step over |
 | `<leader>dO` | Step out |
-| `<leader>du` | Toggle DAP UI |
+| `<leader>du` | Toggle DAP UI (multi-panel) |
+| `<leader>dv` | Toggle DAP View (single-window) |
+| `<leader>dw` | Add watch expression (DAP View) |
 
-**Usage:**
+**DAP UI** opens automatically when a debug session starts and closes when it ends. It shows scopes, breakpoints, stacks, watches, and a REPL in a multi-panel layout.
+
+**DAP View** is toggled manually with `<leader>dv`. Switch between sections using the winbar keys:
+
+| Key | Section |
+|-----|---------|
+| `S` | Scopes — inspect local/global variables |
+| `W` | Watches — evaluate custom expressions |
+| `B` | Breakpoints — view and manage breakpoints |
+| `T` | Threads — navigate call stacks |
+| `E` | Exceptions — configure exception breakpoints |
+| `R` | REPL — interactive debug console |
+
+Press `g?` inside any section to see all available actions (expand, edit, delete, etc.).
+
+**Debugging Ruby files and RSpec:**
 
 1. Open a Ruby file and set breakpoints with `<leader>db`
-2. Start debugging with `<leader>dc` — you'll be prompted to choose a launch config:
+2. Start debugging with `<leader>dc` and choose a launch config:
    - **Run current file** — runs `ruby <file>` under the debugger
    - **RSpec - current file** — runs `bundle exec rspec <file>` under the debugger
-   - **Rails server** — starts `bundle exec rails server` under the debugger
-3. The DAP UI opens automatically showing scopes, breakpoints, stacks, and a REPL
+3. DAP UI opens automatically showing scopes, breakpoints, stacks, and a REPL
 4. Step through code with `<leader>di` / `<leader>do` / `<leader>dO`
-5. Close the UI with `<leader>du`
+5. Optionally open DAP View with `<leader>dv` for a focused single-window view
+
+**Debugging a Rails server:**
+
+Rails requires an attach workflow since Puma manages its own process lifecycle:
+
+1. Start Rails with rdbg in a separate terminal or tmux pane:
+   ```bash
+   bundle exec rdbg --open --port 12345 --nonstop -c -- bin/rails server
+   ```
+2. Set breakpoints in a controller/model with `<leader>db`
+3. Attach with `<leader>dc` → **Attach to Rails server**
+4. Hit the route in your browser — Neovim will pause at the breakpoint
+5. Step through code and inspect variables in DAP UI or DAP View
 
 ### Testing (Neotest)
 
