@@ -39,8 +39,8 @@ alias tls="t ls"
 alias tn="t new -t"
 
 # Yabai
-alias yabai:reload="yabai --restart-service"
-alias yabai:restart="yabai --restart-service"
+alias yabai:reload="yabai --stop-service; pkill -x yabai; rm -f /tmp/yabai_${USER}.lock; yabai --start-service"
+alias yabai:restart="yabai --stop-service; pkill -x yabai; rm -f /tmp/yabai_${USER}.lock; yabai --start-service"
 alias yabai:start="yabai --start-service"
 alias yabai:stop="yabai --stop-service"
 alias yabai:install_sa="sudo yabai --load-sa"
