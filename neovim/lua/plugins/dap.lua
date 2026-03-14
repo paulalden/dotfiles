@@ -153,7 +153,6 @@ return {
         dapui_scopes = "Scopes",
         dapui_breakpoints = "Breakpoints",
         dapui_stacks = "Call Stack",
-        dapui_console = "Console",
       }
       for ft, title in pairs(titles) do
         vim.api.nvim_create_autocmd("FileType", {
