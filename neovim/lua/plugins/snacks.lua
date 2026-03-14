@@ -427,14 +427,6 @@ return {
     Snacks.toggle.profiler_highlights():map("<leader>dph")
   end,
   keys = {
-    -- Dashboard
-    {
-      "<leader>d",
-      function()
-        Snacks.dashboard.open()
-      end,
-      desc = "[D]ashboard",
-    },
     -- Git browsing
     {
       "<leader>gB",
