@@ -44,7 +44,6 @@ return {
         end,
         desc = "Toggle DAP UI",
       },
-      { "<leader>dv", "<cmd>DapViewToggle<cr>", desc = "Toggle DAP View" },
       {
         "<leader>dr",
         function()
@@ -149,6 +148,22 @@ return {
       local dapui = require("dapui")
       dapui.setup(opts)
 
+      -- Set winbar titles for dap-ui panels
+      local titles = {
+        dapui_scopes = "Scopes",
+        dapui_breakpoints = "Breakpoints",
+        dapui_stacks = "Call Stack",
+        dapui_console = "Console",
+      }
+      for ft, title in pairs(titles) do
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = ft,
+          callback = function()
+            vim.wo.winbar = " " .. title
+          end,
+        })
+      end
+
       local dap = require("dap")
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
@@ -160,20 +175,5 @@ return {
         dapui.close()
       end
     end,
-  },
-  {
-    "igorlfs/nvim-dap-view",
-    dependencies = { "mfussenegger/nvim-dap" },
-    opts = {
-      winbar = {
-        show = true,
-        sections = { "scopes", "exceptions", "breakpoints", "threads", "repl" },
-        default_section = "scopes",
-      },
-      windows = {
-        size = 0.30,
-        position = "right",
-      },
-    },
   },
 }
