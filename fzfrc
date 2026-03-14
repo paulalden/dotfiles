@@ -5,7 +5,7 @@
 --preview 'fzf-preview.sh {}'
 --padding=0% --color='dark,fg:magenta'
 --layout=reverse
---border-label=' Search '
+--border-label=''
 --info=hidden
 --prompt='▶ '
 --pointer='▶'
