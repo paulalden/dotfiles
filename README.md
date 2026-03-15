@@ -87,17 +87,22 @@ All bindings use the tmux prefix (`Ctrl+Space`). Popup windows display a centere
 | `prefix + d` | LazySQL               |
 | `prefix + h` | Htop                  |
 | `prefix + i` | IRB (Ruby REPL)       |
-| `prefix + R` | Rails console         |
 | `prefix + v` | Cloudflare speed test |
 
 **Files & Navigation**
 
-| Binding      | Description                                                              |
-| ------------ | ------------------------------------------------------------------------ |
-| `prefix + e` | Sessionizer - find a project directory and open/switch to a tmux session |
-| `prefix + E` | Find and edit a file in the current directory                            |
-| `prefix + p` | Switch to another tmux pane across windows                               |
-| `prefix + s` | Live ripgrep search, Enter to open file at match                         |
+| Binding      | Description                                      |
+| ------------ | ------------------------------------------------ |
+| `prefix + e` | Find and edit a file in the current directory     |
+| `prefix + s` | Live ripgrep search, Enter to open file at match |
+
+**Tmux** (prefix + t, then second key)
+
+| Binding        | Description                                                              |
+| -------------- | ------------------------------------------------------------------------ |
+| `prefix + t p` | Switch to another tmux pane across windows                               |
+| `prefix + t e` | Sessionizer - find a project directory and open/switch to a tmux session |
+| `prefix + t t` | Toggle the status bar                                                    |
 
 **Git** (prefix + g, then second key)
 
@@ -110,9 +115,9 @@ All bindings use the tmux prefix (`Ctrl+Space`). Popup windows display a centere
 
 **System & Tools**
 
-| Binding      | Description                                 |
-| ------------ | ------------------------------------------- |
-| `prefix + K` | Fuzzy find and kill a process               |
+| Binding      | Description                                |
+| ------------ | ------------------------------------------ |
+| `prefix + K` | Fuzzy find and kill a process              |
 | `prefix + N` | Browse listening ports and kill the process |
 
 ### Shell Functions
