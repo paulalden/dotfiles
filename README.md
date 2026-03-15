@@ -41,22 +41,25 @@ nvim
 
 - Nord Color Scheme
 - Homebrew
-+ Yabai WM & SKHD
-+ Sketchybar
-+ Kitty
-+ Tmux
-+ Neovim
+
+* Yabai WM & SKHD
+* Sketchybar
+* Kitty
+* Tmux
+* Neovim
   - Ruby development focused
   - LSP
   - Treesitter
   - Snacks
   - Git
+
 - Ranger
 - Bat
-+ ZSH
-+ FZF
-+ Starship Prompt
-+ LazyGit
+
+* ZSH
+* FZF
+* Starship Prompt
+* LazyGit
 
 ## Screenshots
 
@@ -68,7 +71,6 @@ nvim
 
 ![FZF Floating interface](https://github.com/user-attachments/assets/96ccf3d3-333d-4427-822c-91d185231a2e)
 
-
 ## FZF
 
 FZF commands are available both as shell functions and as tmux popup keybindings.
@@ -79,60 +81,60 @@ All bindings use the tmux prefix (`Ctrl+Space`). Popup windows display a centere
 
 **Popup Apps**
 
-| Binding | Description |
-|---------|-------------|
-| `prefix + f` | Ranger file manager |
-| `prefix + d` | LazySQL |
-| `prefix + h` | Htop |
-| `prefix + i` | IRB (Ruby REPL) |
-| `prefix + R` | Rails console |
+| Binding      | Description           |
+| ------------ | --------------------- |
+| `prefix + f` | Ranger file manager   |
+| `prefix + d` | LazySQL               |
+| `prefix + h` | Htop                  |
+| `prefix + i` | IRB (Ruby REPL)       |
+| `prefix + R` | Rails console         |
 | `prefix + v` | Cloudflare speed test |
 
 **Files & Navigation**
 
-| Binding | Description |
-|---------|-------------|
+| Binding      | Description                                                              |
+| ------------ | ------------------------------------------------------------------------ |
 | `prefix + e` | Sessionizer - find a project directory and open/switch to a tmux session |
-| `prefix + E` | Find and edit a file in the current directory |
-| `prefix + p` | Switch to another tmux pane across windows |
-| `prefix + s` | Live ripgrep search, Enter to open file at match |
+| `prefix + E` | Find and edit a file in the current directory                            |
+| `prefix + p` | Switch to another tmux pane across windows                               |
+| `prefix + s` | Live ripgrep search, Enter to open file at match                         |
 
 **Git** (prefix + g, then second key)
 
-| Binding | Description |
-|---------|-------------|
-| `prefix + g g` | Lazygit |
+| Binding        | Description                                              |
+| -------------- | -------------------------------------------------------- |
+| `prefix + g g` | Lazygit                                                  |
 | `prefix + g b` | Git branch switcher (sorted by recent, with log preview) |
 | `prefix + g l` | Git log browser (Enter to view diff, Ctrl-O to checkout) |
-| `prefix + g s` | Git stash browser (Enter to apply, Ctrl-D to drop) |
+| `prefix + g s` | Git stash browser (Enter to apply, Ctrl-D to drop)       |
 
 **System & Tools**
 
-| Binding | Description |
-|---------|-------------|
-| `prefix + K` | Fuzzy find and kill a process |
+| Binding      | Description                                 |
+| ------------ | ------------------------------------------- |
+| `prefix + K` | Fuzzy find and kill a process               |
 | `prefix + N` | Browse listening ports and kill the process |
 
 ### Shell Functions
 
-| Command | Description |
-|---------|-------------|
-| `tm [name]` | Create or switch to a tmux session (fuzzy select if no name given) |
-| `fs [query]` | Switch tmux session with fuzzy search |
-| `ftpane` | Switch to a tmux pane with fuzzy search |
-| `fe [query]` | Find and open a file in `$EDITOR` |
-| `fo [query]` | Find a file - Ctrl-O to `open`, Enter to edit |
-| `fda` | cd into a directory (including hidden) |
-| `fdr` | cd to a parent directory |
-| `fh` | Search and re-run a command from shell history |
-| `fkill` | Fuzzy find and kill a process |
+| Command      | Description                                                        |
+| ------------ | ------------------------------------------------------------------ |
+| `tm [name]`  | Create or switch to a tmux session (fuzzy select if no name given) |
+| `fs [query]` | Switch tmux session with fuzzy search                              |
+| `ftpane`     | Switch to a tmux pane with fuzzy search                            |
+| `fe [query]` | Find and open a file in `$EDITOR`                                  |
+| `fo [query]` | Find a file - Ctrl-O to `open`, Enter to edit                      |
+| `fcd`        | cd into a directory (including hidden)                             |
+| `fdr`        | cd to a parent directory                                           |
+| `fh`         | Search and re-run a command from shell history                     |
+| `fkill`      | Fuzzy find and kill a process                                      |
 
 ### Built-in FZF Keybindings
 
-| Binding | Description |
-|---------|-------------|
+| Binding  | Description                                        |
+| -------- | -------------------------------------------------- |
 | `Ctrl+R` | Search shell history (Ctrl-Y to copy to clipboard) |
-| `Ctrl+T` | Find files/directories with preview |
+| `Ctrl+T` | Find files/directories with preview                |
 
 ## Neovim
 
@@ -153,14 +155,14 @@ end
 
 **Keybindings:**
 
-| Binding | Description |
-|---------|-------------|
-| `<leader>db` | Toggle breakpoint |
-| `<leader>dc` | Start/continue debugging |
-| `<leader>di` | Step into |
-| `<leader>do` | Step over |
-| `<leader>dO` | Step out |
-| `<leader>du` | Toggle DAP UI (multi-panel) |
+| Binding      | Description                     |
+| ------------ | ------------------------------- |
+| `<leader>db` | Toggle breakpoint               |
+| `<leader>dc` | Start/continue debugging        |
+| `<leader>di` | Step into                       |
+| `<leader>do` | Step over                       |
+| `<leader>dO` | Step out                        |
+| `<leader>du` | Toggle DAP UI (multi-panel)     |
 | `<leader>dv` | Toggle DAP View (single-window) |
 | `<leader>dw` | Add watch expression (DAP View) |
 
@@ -168,14 +170,14 @@ end
 
 **DAP View** is toggled manually with `<leader>dv`. Switch between sections using the winbar keys:
 
-| Key | Section |
-|-----|---------|
-| `S` | Scopes — inspect local/global variables |
-| `W` | Watches — evaluate custom expressions |
-| `B` | Breakpoints — view and manage breakpoints |
-| `T` | Threads — navigate call stacks |
+| Key | Section                                      |
+| --- | -------------------------------------------- |
+| `S` | Scopes — inspect local/global variables      |
+| `W` | Watches — evaluate custom expressions        |
+| `B` | Breakpoints — view and manage breakpoints    |
+| `T` | Threads — navigate call stacks               |
 | `E` | Exceptions — configure exception breakpoints |
-| `R` | REPL — interactive debug console |
+| `R` | REPL — interactive debug console             |
 
 Press `g?` inside any section to see all available actions (expand, edit, delete, etc.).
 
@@ -206,34 +208,34 @@ Rails requires an attach workflow since Puma manages its own process lifecycle:
 
 Run RSpec tests from within Neovim using `neotest` with the `neotest-rspec` adapter.
 
-| Binding | Description |
-|---------|-------------|
-| `<leader>tn` | Run nearest test |
-| `<leader>tf` | Run current file |
-| `<leader>ts` | Run full test suite |
-| `<leader>to` | Show test output |
+| Binding      | Description               |
+| ------------ | ------------------------- |
+| `<leader>tn` | Run nearest test          |
+| `<leader>tf` | Run current file          |
+| `<leader>ts` | Run full test suite       |
+| `<leader>to` | Show test output          |
 | `<leader>tS` | Toggle test summary panel |
 
 ### Rails Navigation
 
 `vim-rails` provides Rails-aware navigation commands:
 
-| Command | Description |
-|---------|-------------|
-| `:Emodel <name>` | Jump to a model |
-| `:Econtroller <name>` | Jump to a controller |
-| `:Eview <name>` | Jump to a view |
-| `:Emigration <name>` | Jump to a migration |
-| `:A` | Jump to alternate file (e.g. model → test) |
-| `:R` | Jump to related file (e.g. migration → schema) |
-| `gf` | Enhanced go-to-file that understands Rails paths |
+| Command               | Description                                      |
+| --------------------- | ------------------------------------------------ |
+| `:Emodel <name>`      | Jump to a model                                  |
+| `:Econtroller <name>` | Jump to a controller                             |
+| `:Eview <name>`       | Jump to a view                                   |
+| `:Emigration <name>`  | Jump to a migration                              |
+| `:A`                  | Jump to alternate file (e.g. model → test)       |
+| `:R`                  | Jump to related file (e.g. migration → schema)   |
+| `gf`                  | Enhanced go-to-file that understands Rails paths |
 
 ## Yabai
 
 The WM needs to add hacks to get it working fully:
 
-+ [Partially disable system integrity](https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection)
-+ [Setup user to run script injection](https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#macos-big-sur---automatically-load-scripting-addition-on-startup)
+- [Partially disable system integrity](https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection)
+- [Setup user to run script injection](<https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#macos-big-sur---automatically-load-scripting-addition-on-startup>)
 
 After upgrading Yabai, you need to follow these steps to properly setup application following:
 
