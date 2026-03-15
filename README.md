@@ -122,17 +122,11 @@ All bindings use the tmux prefix (`Ctrl+Space`). Popup windows display a centere
 
 ### Shell Functions
 
-| Command      | Description                                                        |
-| ------------ | ------------------------------------------------------------------ |
-| `tm [name]`  | Create or switch to a tmux session (fuzzy select if no name given) |
-| `fs [query]` | Switch tmux session with fuzzy search                              |
-| `ftpane`     | Switch to a tmux pane with fuzzy search                            |
-| `fe [query]` | Find and open a file in `$EDITOR`                                  |
-| `fo [query]` | Find a file - Ctrl-O to `open`, Enter to edit                      |
-| `fcd`        | cd into a directory (including hidden)                             |
-| `fdr`        | cd to a parent directory                                           |
-| `fh`         | Search and re-run a command from shell history                     |
-| `fkill`      | Fuzzy find and kill a process                                      |
+| Command      | Description                                   |
+| ------------ | --------------------------------------------- |
+| `fe [query]` | Find and open a file in `$EDITOR`             |
+| `fo [query]` | Find a file - Ctrl-O to `open`, Enter to edit |
+| `fcd`        | cd into a directory (including hidden)         |
 
 ### Built-in FZF Keybindings
 

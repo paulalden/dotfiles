@@ -2,8 +2,7 @@
 
 # Browse listening ports and kill the selected process
 pid=$(lsof -iTCP -sTCP:LISTEN -n -P 2>/dev/null | tail -n +2 | \
-  fzf --no-tmux --header 'Select port to kill process' \
-      --preview 'echo {}' \
+  fzf --no-tmux --no-preview --header 'Select port to kill process' \
       --exit-0 | \
   awk '{print $2}')
 
