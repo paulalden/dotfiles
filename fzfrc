@@ -1,7 +1,9 @@
 --tmux 90%,90%
 --multi
 --bind='ctrl-o:become($EDITOR {})'
---bind 'P:toggle-preview'
+--bind 'ctrl-/:toggle-preview'
+--bind 'ctrl-d:preview-half-page-down'
+--bind 'ctrl-u:preview-half-page-up'
 --preview 'fzf-preview.sh {}'
 --padding=0% --color='dark,fg:magenta'
 --layout=reverse
