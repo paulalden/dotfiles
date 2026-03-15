@@ -75,7 +75,18 @@ FZF commands are available both as shell functions and as tmux popup keybindings
 
 ### Tmux Keybindings
 
-All bindings use the tmux prefix (`Ctrl+Space`):
+All bindings use the tmux prefix (`Ctrl+Space`). Popup windows display a centered title so you know what you're looking at.
+
+**Popup Apps**
+
+| Binding | Description |
+|---------|-------------|
+| `prefix + f` | Ranger file manager |
+| `prefix + d` | LazySQL |
+| `prefix + h` | Htop |
+| `prefix + i` | IRB (Ruby REPL) |
+| `prefix + R` | Rails console |
+| `prefix + v` | Cloudflare speed test |
 
 **Files & Navigation**
 
@@ -85,16 +96,15 @@ All bindings use the tmux prefix (`Ctrl+Space`):
 | `prefix + E` | Find and edit a file in the current directory |
 | `prefix + p` | Switch to another tmux pane across windows |
 | `prefix + s` | Live ripgrep search, Enter to open file at match |
-| `prefix + u` | Extract URLs from tmux pane scrollback and open in browser |
 
-**Git**
+**Git** (prefix + g, then second key)
 
 | Binding | Description |
 |---------|-------------|
-| `prefix + G` | Git branch switcher (sorted by recent, with log preview) |
-| `prefix + L` | Git log browser (Enter to view diff, Ctrl-O to checkout) |
-| `prefix + S` | Git stash browser (Enter to apply, Ctrl-D to drop) |
-| `prefix + A` | Interactive git add with diff preview |
+| `prefix + g g` | Lazygit |
+| `prefix + g b` | Git branch switcher (sorted by recent, with log preview) |
+| `prefix + g l` | Git log browser (Enter to view diff, Ctrl-O to checkout) |
+| `prefix + g s` | Git stash browser (Enter to apply, Ctrl-D to drop) |
 
 **System & Tools**
 
@@ -102,10 +112,6 @@ All bindings use the tmux prefix (`Ctrl+Space`):
 |---------|-------------|
 | `prefix + K` | Fuzzy find and kill a process |
 | `prefix + N` | Browse listening ports and kill the process |
-| `prefix + B` | Homebrew install/uninstall with preview |
-| `prefix + D` | Exec into a running Docker container |
-| `prefix + T` | Browse tldr cheat sheets with preview |
-| `prefix + m` | Fuzzy search and open man pages |
 
 ### Shell Functions
 
