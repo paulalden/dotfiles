@@ -14,10 +14,10 @@ source "$CONFIG_DIR/scripts/config.sh"
 sketchybar --bar \
   position=top \
   height=35 \
-  color=$TRANSPARENT \
+  color=$BG_80 \
   border_color=$TRANSPARENT \
-  corner_radius=10 \
-  blur_radius=10 \
+  corner_radius=12 \
+  blur_radius=30 \
   border_width=1 \
   y_offset=15  \
   margin=15 \

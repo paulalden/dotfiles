@@ -31,6 +31,12 @@ theme_2049=(
   click_script="$CONFIG_DIR/scripts/theme_switcher.sh 2049; $POPUP_OFF"
 )
 
+theme_evergreen=(
+  icon="󰌵"
+  label="Evergreen"
+  click_script="$CONFIG_DIR/scripts/theme_switcher.sh evergreen; $POPUP_OFF"
+)
+
 sketchybar --add item theme right \
   --set theme "${theme_icon[@]}" \
   \
@@ -38,4 +44,7 @@ sketchybar --add item theme right \
   --set theme.nord "${theme_nord[@]}" \
   \
   --add item theme.2049 popup.theme \
-  --set theme.2049 "${theme_2049[@]}"
+  --set theme.2049 "${theme_2049[@]}" \
+  \
+  --add item theme.evergreen popup.theme \
+  --set theme.evergreen "${theme_evergreen[@]}"
