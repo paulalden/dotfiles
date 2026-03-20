@@ -63,13 +63,11 @@ nvim
 
 ## Screenshots
 
-![Desktop](https://github.com/user-attachments/assets/a48505e1-9de0-490e-97ea-6c0097467886)
-
-![Neovim](https://github.com/user-attachments/assets/1e079905-ed3b-41a0-9589-0a16ab6f9c84)
-
-![Tmux, Neovim and Lazygit](https://github.com/user-attachments/assets/35deebbf-0b3e-4469-81c8-0b734036fffd)
-
-![FZF Floating interface](https://github.com/user-attachments/assets/96ccf3d3-333d-4427-822c-91d185231a2e)
+![desktop](https://github.com/user-attachments/assets/e033179a-7a18-4157-924b-1b2ef6689b13)
+![neovim](https://github.com/user-attachments/assets/a7d33132-b177-4d1d-aeff-708ebf29c481)
+![tmux](https://github.com/user-attachments/assets/f547c5f2-7582-4d98-8db1-11e7ac666b34)
+![tmux-gitlog](https://github.com/user-attachments/assets/d88082d9-bdf2-45bb-81cb-6890640319fb)
+![lazygit](https://github.com/user-attachments/assets/cc4fbde6-da74-4a3a-b668-edab709f1abb)
 
 ## FZF
 
