@@ -36,7 +36,7 @@ done <<< "$APPS"
 # Trim trailing space
 ICON_STRIP=$(echo "$ICON_STRIP" | sed 's/ $//')
 
-COLOR=$MAGENTA_DARK
+COLOR=$FG
 
 if [ -n "$ICON_STRIP" ]; then
   LABEL_PADDING=10
@@ -58,6 +58,6 @@ else
     background.color=$GREY16 \
     label="$ICON_STRIP" \
     label.padding_right=$LABEL_PADDING \
-    label.color=$MAGENTA_DARK \
-    icon.color=$MAGENTA_DARK
+    label.color=$COLOR \
+    icon.color=$COLOR
 fi
