@@ -58,4 +58,5 @@
         # Misc
         defaults write NSGlobalDomain AppleShowAllExtensions -bool true
         defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+        defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
         killall Dock Finder &>/dev/null || true
