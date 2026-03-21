@@ -87,17 +87,12 @@ All bindings use the tmux prefix (`Ctrl+Space`). Popup windows display a centere
 | `prefix + i` | IRB (Ruby REPL)       |
 | `prefix + v` | Cloudflare speed test |
 
-**Files & Navigation**
-
-| Binding      | Description                                      |
-| ------------ | ------------------------------------------------ |
-| `prefix + e` | Find and edit a file in the current directory     |
-| `prefix + s` | Live ripgrep search, Enter to open file at match |
-
 **Tmux** (prefix + t, then second key)
 
 | Binding        | Description                                                              |
 | -------------- | ------------------------------------------------------------------------ |
+| `prefix + t f` | Find and edit a file (Enter: in popup, Ctrl-S: in pane)                  |
+| `prefix + t g` | Live ripgrep search (Enter: in popup, Ctrl-S: in pane)                   |
 | `prefix + t p` | Switch to another tmux pane across windows                               |
 | `prefix + t e` | Sessionizer - find a project directory and open/switch to a tmux session |
 | `prefix + t t` | Toggle the status bar                                                    |

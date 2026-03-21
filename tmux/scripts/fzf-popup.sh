@@ -13,6 +13,9 @@ if [[ -z "$WINDOW_ID" ]]; then
   WINDOW_ID=$(tmux display-message -p '#{window_id}')
 fi
 
+# Export the active pane in the original window so scripts can send commands to it
+export CALLER_PANE=$(tmux list-panes -t "$WINDOW_ID" -F '#{pane_id} #{pane_active}' | awk '$2 == 1 {print $1}')
+
 # Dim the original window's panes
 tmux set -t "$WINDOW_ID" -w window-style "fg=#464f62,bg=#1c1f26"
 tmux set -t "$WINDOW_ID" -w window-active-style "fg=#464f62,bg=#1c1f26"
