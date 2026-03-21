@@ -44,7 +44,9 @@ else
   LABEL_PADDING=5
 fi
 
-if [ "$SELECTED" = true ]; then
+FOCUSED_SPACE=$(yabai -m query --spaces --space 2>/dev/null | jq -r '.index')
+
+if [ "$SID" = "$FOCUSED_SPACE" ]; then
   sketchybar --set "$NAME" \
     background.drawing=on \
     background.color=$COLOR \

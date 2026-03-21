@@ -26,5 +26,5 @@ do
     click_script="yabai -m space --focus $sid"
   )
   sketchybar --add space space."$sid" left --set space."$sid" "${space[@]}" ignore_association=on
-  sketchybar --subscribe space."$sid" mouse.clicked space_windows_change front_app_switched
+  sketchybar --subscribe space."$sid" mouse.clicked space_change space_windows_change front_app_switched
 done
