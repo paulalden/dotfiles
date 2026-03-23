@@ -55,7 +55,7 @@ source "$ITEM_DIR/front_app.sh"
 
 ##### Adding Right Items #####
 
-source "$ITEM_DIR/theme.sh"
+# source "$ITEM_DIR/theme.sh"
 source "$ITEM_DIR/time.sh"
 source "$ITEM_DIR/date.sh"
 source "$ITEM_DIR/battery.sh"
