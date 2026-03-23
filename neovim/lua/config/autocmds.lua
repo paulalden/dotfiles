@@ -241,6 +241,31 @@ autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 -------------------------------------------------------------------------------
+-- TMUX PANE DIMMING
+-------------------------------------------------------------------------------
+-- Match tmux's inactive pane dimming by adjusting Normal background on focus
+autocmd("FocusLost", {
+  group = augroup("tmux_dim"),
+  callback = function()
+    local colors = require("config.colors").colors
+    local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
+    vim.g._normal_bg = normal.bg
+    vim.g._normal_fg = normal.fg
+    vim.api.nvim_set_hl(0, "Normal", vim.tbl_extend("force", normal, { bg = colors.bg_unfocused, fg = colors.grey10 }))
+  end,
+})
+
+autocmd("FocusGained", {
+  group = augroup("tmux_undim"),
+  callback = function()
+    if vim.g._normal_bg then
+      local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
+      vim.api.nvim_set_hl(0, "Normal", vim.tbl_extend("force", normal, { bg = vim.g._normal_bg, fg = vim.g._normal_fg }))
+    end
+  end,
+})
+
+-------------------------------------------------------------------------------
 -- TRAILING WHITESPACE
 -------------------------------------------------------------------------------
 -- Remove trailing whitespace on save (only on changed lines)

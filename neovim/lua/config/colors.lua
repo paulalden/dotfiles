@@ -3,6 +3,7 @@ local M = {}
 M.colors = {
   bg_light = "#353b49",
   bg = "#2e3440",
+  bg_unfocused = "#282e38",
   bg_dark = "#191c22",
   fg = "#ECEFF4",
   fg_dark = "#6C7A96",
