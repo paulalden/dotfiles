@@ -31,7 +31,7 @@
     ~/.config/zsh: zsh
 
 - shell:
-- [brew bundle --file=homebrew/Brewfile, Installing Homebrew packages]
+    - [brew bundle --file=homebrew/Brewfile, Installing Homebrew packages]
     - ["test -d ~/.config/tmux/plugins/tpm || git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm", Installing TPM]
     - ["~/.config/tmux/plugins/tpm/bin/install_plugins", Installing tmux plugins]
     - description: Setting macOS defaults
