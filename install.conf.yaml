@@ -6,19 +6,15 @@
 
 - create:
     - ~/.local/bin
-    - ~/.local/scripts
     - ~/.config/ranger
 
 # Requires 4 space indentation or it will fail
 - link:
     ~/.config/bat: bat
     ~/.bundle/config: bundler_config
-    ~/.config/fd: fd
     ~/.fzfrc: fzfrc
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
-    ~/.config/gobang: gobang
-    ~/.config/harlequin: harlequin
     ~/.Brewfile: homebrew/Brewfile
     ~/.config/htop: htop
     ~/.irbrc: irbrc
@@ -35,9 +31,7 @@
     ~/.config/zsh: zsh
 
 - shell:
-    - [chsh -s /bin/zsh, Setting ZSH as default shell]
-    - [brew bundle --file=homebrew/Brewfile --no-lock, Installing Homebrew packages]
-    - [bundle install, Installing Ruby gems]
+- [brew bundle --file=homebrew/Brewfile, Installing Homebrew packages]
     - ["test -d ~/.config/tmux/plugins/tpm || git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm", Installing TPM]
     - ["~/.config/tmux/plugins/tpm/bin/install_plugins", Installing tmux plugins]
     - description: Setting macOS defaults
