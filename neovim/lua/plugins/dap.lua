@@ -75,47 +75,6 @@ return {
         })
       end
 
-      -- Ruby launch adapter using rdbg (debug gem, bundled with ruby-lsp)
-      dap.adapters.ruby = function(callback, config)
-        local args = { "exec", "rdbg", "--open", "--port", "${port}", "-c", "--" }
-        for _, v in ipairs(config.command) do
-          table.insert(args, v)
-        end
-        callback({
-          type = "server",
-          host = "127.0.0.1",
-          port = "${port}",
-          executable = { command = "bundle", args = args },
-        })
-      end
-
-      -- Attach adapter for connecting to an already-running rdbg session
-      dap.adapters.ruby_attach = {
-        type = "server",
-        host = "127.0.0.1",
-        port = 12345,
-      }
-
-      dap.configurations.ruby = {
-        {
-          type = "ruby_attach",
-          name = "Attach to Rails server",
-          request = "attach",
-          localfs = true,
-        },
-        {
-          type = "ruby",
-          name = "Run current file",
-          request = "launch",
-          command = { "ruby", "${file}" },
-        },
-        {
-          type = "ruby",
-          name = "RSpec - current file",
-          request = "launch",
-          command = { "bundle", "exec", "rspec", "${file}" },
-        },
-      }
     end,
   },
   {

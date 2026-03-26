@@ -11,13 +11,11 @@
 # Requires 4 space indentation or it will fail
 - link:
     ~/.config/bat: bat
-    ~/.bundle/config: bundler_config
     ~/.fzfrc: fzfrc
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
     ~/.Brewfile: homebrew/Brewfile
     ~/.config/htop: htop
-    ~/.irbrc: irbrc
     ~/.config/kitty: kitty
     ~/.config/lazygit: lazygit
     ~/.config/nvim: neovim
