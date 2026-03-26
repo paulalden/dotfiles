@@ -1,8 +1,8 @@
 [user]
-	name = Paul Danelli
-	email = prdanelli@gmail.com
+	name = Tom Ward
+	email = twarddev@gmail.com
 [core]
-	excludesfile = /Users/paul/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	editor = nvim
 	pager = diff-so-fancy | less --tabs=4 -RFX
 	fileMode = false
