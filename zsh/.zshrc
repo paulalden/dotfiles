@@ -105,3 +105,6 @@ _cached_eval fzf fzf --zsh
 
 
 [[ "$(uname)" == "Darwin" ]] && eval "$(/opt/homebrew/bin/zsh-patina activate)"
+
+# Local overrides (not tracked in repo)
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
