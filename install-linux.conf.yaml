@@ -1,0 +1,28 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- create:
+    - ~/.local/bin
+    - ~/.config/ranger
+
+# Requires 4 space indentation or it will fail
+- link:
+    ~/.config/bat: bat
+    ~/.fzfrc: fzfrc
+    ~/.gitconfig: gitconfig
+    ~/.gitignore_global: gitignore_global
+    ~/.config/htop: htop
+    ~/.config/lazygit: lazygit
+    ~/.config/nvim: neovim
+    ~/.config/ranger: ranger
+    ~/.config/tmux: tmux
+    ~/.editorconfig: editorconfig
+    ~/.zshenv: zshenv
+    ~/.config/zsh: zsh
+
+- shell:
+    - ["test -d ~/.config/tmux/plugins/tpm || git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm", Installing TPM]
+    - ["~/.config/tmux/plugins/tpm/bin/install_plugins", Installing tmux plugins]
