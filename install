@@ -4,6 +4,15 @@ set -e
 
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Warn if no backup exists
+if [[ ! -d "$HOME/.dotfiles-backup" ]]; then
+  echo "WARNING: No backup found at ~/.dotfiles-backup/"
+  echo "Run ./backup.sh first to snapshot your current config."
+  echo ""
+  read -p "Continue without backup? [y/N] " answer
+  [[ "$answer" =~ ^[Yy]$ ]] || exit 0
+fi
+
 if [[ "$(uname)" == "Darwin" ]]; then
   CONFIG="install-mac.conf.yaml"
 
@@ -28,5 +37,12 @@ else
     pip3 install dotbot
   fi
 fi
+
+echo ""
+echo "This will create symlinks from the dotbot config ($CONFIG)."
+echo "Existing symlinks will be replaced. Real files will NOT be overwritten."
+echo ""
+read -p "Proceed? [y/N] " answer
+[[ "$answer" =~ ^[Yy]$ ]] || exit 0
 
 dotbot -d "${BASEDIR}" -c "${CONFIG}" "${@}"
