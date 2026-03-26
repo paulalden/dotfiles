@@ -2,8 +2,6 @@
     link:
       relink: true
 
-- clean: ['~']
-
 - create:
     - ~/.local/bin
     - ~/.config/ranger
