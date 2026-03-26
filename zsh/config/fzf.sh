@@ -6,13 +6,19 @@
 export FZF_DEFAULT_OPTS_FILE=~/.fzfrc
 
 # History
-# CTRL-Y to copy the command into clipboard using pbcopy
+# CTRL-Y to copy the command into clipboard
+if [[ "$(uname)" == "Darwin" ]]; then
+  _fzf_clip_cmd="pbcopy"
+else
+  _fzf_clip_cmd="xclip -selection clipboard"
+fi
 export FZF_CTRL_R_OPTS="
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | $_fzf_clip_cmd)+abort'
   --color header:italic
   --header 'CTRL-Y to copy into clipboard'
   --height=100%
   --preview-window=:hidden"
+unset _fzf_clip_cmd
 
 # Files / Directories
 # Preview file content using bat (https://github.com/sharkdp/bat)
