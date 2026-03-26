@@ -81,10 +81,6 @@ zsh_add_file "$HOME/secrets.sh" # Shhhh, don't commit secrets
 # Misc
 ################################################################################
 
-# Ensure ssh key is added (only on login shells, in background)
-if [[ -o login && -f ~/.ssh/id_rsa ]]; then
-  (ssh-add -l &>/dev/null || ssh-add -q --apple-use-keychain ~/.ssh/id_rsa) &!
-fi
 
 ulimit -Sn 10240 # Increase the default number of sockers (helps with rspec tests in Chrome)
 
@@ -107,6 +103,5 @@ function _cached_eval() {
 source "$ZDOTDIR/user/prompt.sh"
 _cached_eval fzf fzf --zsh
 
-[ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ] && . /opt/homebrew/opt/asdf/libexec/asdf.sh
 
-eval "$(/opt/homebrew/bin/zsh-patina activate)"
+[[ "$(uname)" == "Darwin" ]] && eval "$(/opt/homebrew/bin/zsh-patina activate)"
