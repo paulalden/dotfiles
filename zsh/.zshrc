@@ -39,8 +39,6 @@ autoload -Uz colors && colors
 
 autoload -Uz compinit
 
-fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
-
 zstyle ':completion:*' completer _complete
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
 zmodload zsh/complist

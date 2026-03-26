@@ -28,6 +28,18 @@ fi
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
+# Detect architecture for GitHub binary downloads
+ARCH=$(uname -m)
+case "$ARCH" in
+  x86_64)  LAZYGIT_ARCH="x86_64" ;;
+  aarch64) LAZYGIT_ARCH="arm64" ;;
+  *)
+    echo "WARNING: Unsupported architecture $ARCH for binary downloads."
+    echo "lazygit and diff-so-fancy will need to be installed manually."
+    LAZYGIT_ARCH=""
+    ;;
+esac
+
 # --- apt packages ---
 APT_PACKAGES=(
   software-properties-common
@@ -94,25 +106,31 @@ apt install -y neovim
 
 # --- lazygit from GitHub ---
 echo ""
-echo "==> Installing lazygit..."
-LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-if [[ -z "$LAZYGIT_VERSION" ]]; then
-  echo "WARNING: Could not determine lazygit version. Skipping."
-else
-  curl -Lo "$TMPDIR/lazygit.tar.gz" "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-  tar xf "$TMPDIR/lazygit.tar.gz" -C "$TMPDIR" lazygit
-  install "$TMPDIR/lazygit" /usr/local/bin
-  echo "  Installed lazygit $LAZYGIT_VERSION"
-fi
+if [[ -n "$LAZYGIT_ARCH" ]]; then
+  echo "==> Installing lazygit..."
+  LAZYGIT_VERSION=$(curl -sf "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*') || true
+  if [[ -z "$LAZYGIT_VERSION" ]]; then
+    echo "WARNING: Could not determine lazygit version. Skipping."
+  else
+    if curl -fLo "$TMPDIR/lazygit.tar.gz" "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz"; then
+      tar xf "$TMPDIR/lazygit.tar.gz" -C "$TMPDIR" lazygit
+      install "$TMPDIR/lazygit" /usr/local/bin
+      echo "  Installed lazygit $LAZYGIT_VERSION"
+    else
+      echo "WARNING: Failed to download lazygit. Skipping."
+    fi
+  fi
 
-# --- diff-so-fancy from GitHub ---
-echo ""
-echo "==> Installing diff-so-fancy..."
-if curl -Lo /usr/local/bin/diff-so-fancy "https://github.com/so-fancy/diff-so-fancy/releases/latest/download/diff-so-fancy"; then
-  chmod +x /usr/local/bin/diff-so-fancy
-  echo "  Installed diff-so-fancy"
-else
-  echo "WARNING: Failed to download diff-so-fancy. Skipping."
+  # --- diff-so-fancy from GitHub ---
+  echo ""
+  echo "==> Installing diff-so-fancy..."
+  if curl -fLo "$TMPDIR/diff-so-fancy" "https://github.com/so-fancy/diff-so-fancy/releases/latest/download/diff-so-fancy"; then
+    chmod +x "$TMPDIR/diff-so-fancy"
+    mv "$TMPDIR/diff-so-fancy" /usr/local/bin/
+    echo "  Installed diff-so-fancy"
+  else
+    echo "WARNING: Failed to download diff-so-fancy. Skipping."
+  fi
 fi
 
 # --- Set default shell ---

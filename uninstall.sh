@@ -55,7 +55,7 @@ for target in "${TARGETS[@]}"; do
   # Only remove if it's a symlink pointing into our repo
   if [[ -L "$expanded" ]]; then
     link_target=$(readlink "$expanded")
-    if [[ "$link_target" == "$BASEDIR"* || "$link_target" == *dotfiles* ]]; then
+    if [[ "$link_target" == "$BASEDIR"/* ]]; then
       rm "$expanded"
       echo "  Removed $target"
       removed=$((removed + 1))
