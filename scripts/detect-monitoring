@@ -1,0 +1,250 @@
+#!/usr/bin/env bash
+
+# Detects common employee monitoring, activity tracking, and keylogging software on macOS.
+# Run during dotfiles install or anytime with: ./scripts/detect-monitoring
+
+set -euo pipefail
+
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+found_count=0
+
+warn() {
+  echo -e "${RED}  [FOUND]${RESET} $1"
+  found_count=$((found_count + 1))
+}
+
+info() {
+  echo -e "${YELLOW}  [NOTE]${RESET} $1"
+}
+
+section() {
+  echo ""
+  echo -e "${BOLD}$1${RESET}"
+}
+
+echo ""
+echo -e "${BOLD}=========================================${RESET}"
+echo -e "${BOLD}  Monitoring & Tracking Software Check${RESET}"
+echo -e "${BOLD}=========================================${RESET}"
+
+# --- Known monitoring apps (name:bundle_id pairs) ---
+section "Checking for known monitoring applications..."
+
+# Format: "Display Name|bundle.id|search_term"
+monitoring_apps=(
+  # Activity & productivity monitoring
+  "Hubstaff|com.hubstaff|hubstaff"
+  "ActivTrak|com.activtrak|activtrak"
+  "Teramind|com.teramind|teramind"
+  "Time Doctor|com.timedoctor|time doctor"
+  "Veriato|com.veriato|veriato"
+  "InterGuard|com.interguard|interguard"
+  "DeskTime|com.desktime|desktime"
+  "Workpuls|com.workpuls|workpuls"
+  "CleverControl|com.clevercontrol|clevercontrol"
+  "StaffCop|com.staffcop|staffcop"
+  "Controlio|com.controlio|controlio"
+  "CurrentWare|com.currentware|currentware"
+  "Prodoscore|com.prodoscore|prodoscore"
+  "Kickidler|com.kickidler|kickidler"
+  # Screen capture & surveillance
+  "ScreenshotMonitor|com.screenshotmonitor|screenshotmonitor"
+  # MDM & endpoint management
+  "Jamf|com.jamfsoftware|jamf"
+  "Kandji|io.kandji|kandji"
+  "Mosyle|com.mosyle|mosyle"
+  "Hexnode|com.hexnode|hexnode"
+  "Addigy|com.addigy|addigy"
+  "Fleet|com.fleetdm|fleetdm"
+  "Munki|com.googlecode.munki|munki"
+  # Endpoint security
+  "CrowdStrike Falcon|com.crowdstrike.falcon|crowdstrike"
+  "SentinelOne|com.sentinelone|sentinelone"
+  "Carbon Black|com.vmware.carbonblack|carbon black"
+  "Cisco AMP|com.cisco.amp|cisco amp"
+  "Sophos|com.sophos|sophos"
+  "Symantec|com.symantec|symantec"
+  "McAfee|com.mcafee|mcafee"
+  "Absolute|com.absolute|absolute"
+  "Tanium|com.tanium|tanium"
+  "Zscaler|com.zscaler|zscaler"
+  # Communication monitoring
+  "Aware|com.awarehq|awarehq"
+  "Securiti|com.securiti|securiti"
+)
+
+# Get list of installed apps once (fast filesystem check)
+installed_apps=$(find /Applications -maxdepth 3 -name "*.app" 2>/dev/null | tr '[:upper:]' '[:lower:]')
+
+for entry in "${monitoring_apps[@]}"; do
+  app_name="${entry%%|*}"
+  remainder="${entry#*|}"
+  bundle_id="${remainder%%|*}"
+  search_term="${remainder##*|}"
+
+  # Check in /Applications
+  if echo "$installed_apps" | grep -qi "$search_term"; then
+    warn "$app_name (found in /Applications)"
+    continue
+  fi
+
+  # Check running processes
+  if pgrep -fi "$search_term" &>/dev/null; then
+    warn "$app_name (running process detected)"
+    continue
+  fi
+done
+
+# --- Running processes ---
+section "Checking running processes..."
+
+monitoring_processes=(
+  hubstaff activtrak teramind timedoctor veriato interguard
+  desktime workpuls clevercontrol staffcop controlio currentware
+  prodoscore kickidler screenshotmonitor
+  # MDM agents
+  jamf kandji mosyle hexnode addigy fleetd munki
+  # Endpoint agents
+  falcon sentinelagent cbagent ciscoamp sophos symantec mcafee
+  absolute tanium zscaler
+)
+
+for proc in "${monitoring_processes[@]}"; do
+  if pgrep -fi "$proc" &>/dev/null; then
+    pids=$(pgrep -fi "$proc" | tr '\n' ' ')
+    warn "Process matching '$proc' is running (PIDs: $pids)"
+  fi
+done
+
+# --- Launch agents & daemons ---
+section "Checking launch agents and daemons..."
+
+launch_dirs=(
+  /Library/LaunchAgents
+  /Library/LaunchDaemons
+  ~/Library/LaunchAgents
+)
+
+for dir in "${launch_dirs[@]}"; do
+  dir=$(eval echo "$dir")
+  [ -d "$dir" ] || continue
+  for plist in "$dir"/*.plist; do
+    [ -f "$plist" ] || continue
+    plist_lower=$(echo "$plist" | tr '[:upper:]' '[:lower:]')
+    for proc in "${monitoring_processes[@]}"; do
+      if echo "$plist_lower" | grep -qi "$proc"; then
+        warn "Launch plist: $plist"
+      fi
+    done
+  done
+done
+
+# --- System Extensions & Profiles ---
+section "Checking MDM profiles..."
+
+if profiles status 2>/dev/null | grep -qi "enrolled"; then
+  warn "This Mac is enrolled in MDM (Mobile Device Management)"
+  info "Run 'profiles show' for details on installed profiles"
+elif profiles status 2>/dev/null | grep -qi "not enrolled"; then
+  echo -e "${GREEN}  [OK]${RESET} Not enrolled in MDM"
+else
+  info "Could not determine MDM enrollment status"
+fi
+
+# Check for configuration profiles
+profile_count=$(profiles list 2>/dev/null | grep -c "attribute" || true)
+profile_count=$(echo "$profile_count" | tr -d '[:space:]')
+profile_count=${profile_count:-0}
+if [ "$profile_count" -gt 0 ]; then
+  info "$profile_count configuration profile(s) installed (run 'profiles list' to inspect)"
+fi
+
+# --- System extensions ---
+section "Checking system extensions..."
+
+if systemextensionsctl list 2>/dev/null | grep -Ei "crowdstrike|sentinel|carbon|cisco|sophos|symantec|mcafee|zscaler|tanium|absolute" | grep -qi "enabled"; then
+  while IFS= read -r line; do
+    warn "System extension: $line"
+  done < <(systemextensionsctl list 2>/dev/null | grep -Ei "crowdstrike|sentinel|carbon|cisco|sophos|symantec|mcafee|zscaler|tanium|absolute")
+fi
+
+# --- Accessibility & input monitoring permissions (TCC) ---
+section "Checking TCC permissions (apps with input monitoring/screen capture access)..."
+
+tcc_db="/Library/Application Support/com.apple.TCC/TCC.db"
+if [ -r "$tcc_db" ]; then
+  # Check for input monitoring (kTCCServiceListenEvent) and screen capture (kTCCServiceScreenCapture)
+  for service in kTCCServiceListenEvent kTCCServiceScreenCapture kTCCServiceAccessibility; do
+    clients=$(sqlite3 "$tcc_db" "SELECT client FROM access WHERE service='$service' AND auth_value=2;" 2>/dev/null || true)
+    if [ -n "$clients" ]; then
+      while IFS= read -r client; do
+        info "TCC $service granted to: $client"
+      done <<< "$clients"
+    fi
+  done
+else
+  info "Cannot read TCC database (requires Full Disk Access). Run with sudo for deeper check."
+fi
+
+# --- Network monitoring (content filters / DNS proxies) ---
+section "Checking network content filters..."
+
+proxy_active=$(scutil --proxy 2>/dev/null | grep -E "HTTPEnable|HTTPSEnable|SOCKSEnable|ProxyAutoConfigEnable" | grep -v ": 0$" || true)
+if [ -n "$proxy_active" ]; then
+  info "Network proxy configured:"
+  scutil --proxy 2>/dev/null | grep -E "HTTP|HTTPS|SOCKS|PAC" | head -5 | while IFS= read -r line; do
+    echo "    $line"
+  done
+fi
+
+# Check for network extensions
+if systemextensionsctl list 2>/dev/null | grep -i "networkextension" | grep -qi "enabled"; then
+  while IFS= read -r line; do
+    info "Network extension: $line"
+  done < <(systemextensionsctl list 2>/dev/null | grep -i "networkextension")
+fi
+
+# --- DNS configuration ---
+section "Checking DNS configuration..."
+
+dns_servers=$(scutil --dns 2>/dev/null | grep "nameserver\[" | head -5 || true)
+if [ -n "$dns_servers" ]; then
+  info "DNS servers in use:"
+  echo "$dns_servers" | while IFS= read -r line; do
+    echo "    $line"
+  done
+fi
+
+# --- Certificate trust store ---
+section "Checking for custom CA certificates..."
+
+custom_certs=$(security find-certificate -a -p /Library/Keychains/System.keychain 2>/dev/null | \
+  grep -c "BEGIN CERTIFICATE" || true)
+custom_certs=$(echo "$custom_certs" | tr -d '[:space:]')
+custom_certs=${custom_certs:-0}
+if [ "$custom_certs" -gt 0 ]; then
+  info "$custom_certs certificate(s) in System keychain (could include TLS inspection certs)"
+  info "Run 'security dump-keychain /Library/Keychains/System.keychain' to inspect"
+fi
+
+# --- Summary ---
+echo ""
+echo -e "${BOLD}=========================================${RESET}"
+if [ "$found_count" -gt 0 ]; then
+  echo -e "${RED}${BOLD}  Found $found_count potential monitoring indicator(s)${RESET}"
+  echo -e "  Review the items above. Some may be standard"
+  echo -e "  enterprise security tools rather than activity trackers."
+else
+  echo -e "${GREEN}${BOLD}  No known monitoring software detected${RESET}"
+  echo -e "  Note: this scan is not exhaustive. Some monitoring"
+  echo -e "  can operate at the network level or via browser extensions."
+fi
+echo -e "${BOLD}=========================================${RESET}"
+echo ""
+
+exit 0

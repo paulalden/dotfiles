@@ -18,4 +18,9 @@ if ! command -v dotbot &>/dev/null; then
   brew install dotbot
 fi
 
+# Check for monitoring/tracking software
+echo ""
+echo "Running monitoring software detection..."
+"${BASEDIR}/scripts/detect-monitoring"
+
 dotbot -d "${BASEDIR}" -c "${CONFIG}" "${@}"
