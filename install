@@ -23,4 +23,18 @@ echo ""
 echo "Running monitoring software detection..."
 "${BASEDIR}/scripts/detect-monitoring"
 
+# Window management prompt
+echo ""
+echo "Window management tools (yabai, skhd, sketchybar, borders) require"
+echo "special macOS permissions and partial SIP disabling to work properly."
+echo ""
+read -rp "Install window management tools? (y/N) " install_wm
+
 dotbot -d "${BASEDIR}" -c "${CONFIG}" "${@}"
+
+if [[ "$install_wm" =~ ^[Yy]$ ]]; then
+  echo ""
+  echo "Installing window management tools..."
+  dotbot -d "${BASEDIR}" -c "install.wm.yaml" "${@}"
+  brew bundle --file="${BASEDIR}/homebrew/Brewfile.wm"
+fi

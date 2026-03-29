@@ -1,0 +1,8 @@
+- defaults:
+    link:
+      relink: true
+
+- link:
+    ~/.config/sketchybar: sketchybar
+    ~/.config/skhd: skhd
+    ~/.config/yabai: yabai
