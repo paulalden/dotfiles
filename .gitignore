@@ -28,8 +28,7 @@ neovim*/.lazy-lock.json
 neovim*/lazy-lock.json
 nvim-macos
 
-tmux/plugins/tmux-continuum
-tmux/plugins/**/*
+tmux/plugins/
 tmux/resurrect/**
 
 zsh/secrets.sh
