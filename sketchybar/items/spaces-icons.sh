@@ -10,14 +10,19 @@ do
     icon.padding_left=14
     icon.padding_right=14
     icon.align=center
-    label.drawing=off
+    label.font="sketchybar-app-font:Regular:14.0"
+    label.padding_left=2
+    label.padding_right=0
+    label.align=center
+    label.color="$GREEN"
+    label.y_offset=-1
     background.color="$TRANSPARENT"
     background.padding_left=0
     background.padding_right=5
     background.corner_radius=3
     background.height=22
     icon.font="$FONT:Bold:14.0"
-    script="$PLUGIN_DIR/space.sh"
+    script="$PLUGIN_DIR/space-icons.sh"
     click_script="yabai -m space --focus $sid"
   )
   sketchybar --add space space."$sid" left --set space."$sid" "${space[@]}" ignore_association=on
