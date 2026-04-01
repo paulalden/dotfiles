@@ -11,6 +11,23 @@ yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 yabai -m signal --add event=space_created action="sketchybar --reload"
 yabai -m signal --add event=space_destroyed action="sketchybar --reload"
 
+# Built-in display UUID — update if you replace your Mac
+# Check with: yabai -m query --displays | python3 -m json.tool
+BUILTIN_UUID="37D8832A-2D66-02CA-B9F7-8F30A301B230"
+BUILTIN_TOP_PADDING=25
+EXTERNAL_TOP_PADDING=55
+
+configure_padding() {
+  yabai -m query --displays 2>/dev/null | jq -r '.[] | [.index, .uuid] | @tsv' | \
+  while IFS=$(printf '\t') read -r index uuid; do
+    [ "$uuid" = "$BUILTIN_UUID" ] && top=$BUILTIN_TOP_PADDING || top=$EXTERNAL_TOP_PADDING
+    yabai -m config --display "$index" top_padding "$top"
+  done
+}
+
+yabai -m signal --add event=display_added   action="yabai -m query --displays | jq -r '.[] | [.index, .uuid] | @tsv' | while IFS=\$(printf '\t') read -r i u; do [ \"\$u\" = \"$BUILTIN_UUID\" ] && t=$BUILTIN_TOP_PADDING || t=$EXTERNAL_TOP_PADDING; yabai -m config --display \"\$i\" top_padding \"\$t\"; done"
+yabai -m signal --add event=display_removed action="yabai -m query --displays | jq -r '.[] | [.index, .uuid] | @tsv' | while IFS=\$(printf '\t') read -r i u; do [ \"\$u\" = \"$BUILTIN_UUID\" ] && t=$BUILTIN_TOP_PADDING || t=$EXTERNAL_TOP_PADDING; yabai -m config --display \"\$i\" top_padding \"\$t\"; done"
+
 # global settings
 yabai -m config \
   mouse_follows_focus off \
@@ -28,7 +45,7 @@ yabai -m config \
   split_ratio 0.50 \
   split_type auto \
   auto_balance off \
-  top_padding 65 \
+  top_padding $BUILTIN_TOP_PADDING \
   bottom_padding 15 \
   left_padding 15 \
   right_padding 15 \
@@ -38,6 +55,8 @@ yabai -m config \
   mouse_action1 move \
   mouse_action2 resize \
   mouse_drop_action swap
+
+configure_padding
 
 # apps to not manage (ignore)
 yabai -m rule --add app="^System Settings$" manage=off
