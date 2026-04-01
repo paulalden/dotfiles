@@ -14,8 +14,8 @@ yabai -m signal --add event=space_destroyed action="sketchybar --reload"
 # Built-in display UUID — update if you replace your Mac
 # Check with: yabai -m query --displays | python3 -m json.tool
 BUILTIN_UUID="37D8832A-2D66-02CA-B9F7-8F30A301B230"
-BUILTIN_TOP_PADDING=25
-EXTERNAL_TOP_PADDING=55
+BUILTIN_TOP_PADDING=20
+EXTERNAL_TOP_PADDING=50
 
 configure_padding() {
   yabai -m query --displays 2>/dev/null | jq -r '.[] | [.index, .uuid] | @tsv' | \

@@ -13,11 +13,11 @@ source "$CONFIG_DIR/scripts/config.sh"
 
 sketchybar --bar \
   position=top \
-  height=35 \
+  height=32 \
   color=$BG_80 \
   border_color=$TRANSPARENT \
   corner_radius=0 \
-  blur_radius=30 \
+  blur_radius=5 \
   border_width=0 \
   y_offset=0  \
   margin=0 \
