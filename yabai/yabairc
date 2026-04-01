@@ -12,9 +12,9 @@ yabai -m signal --add event=space_created action="sketchybar --reload"
 yabai -m signal --add event=space_destroyed action="sketchybar --reload"
 
 # Hostnames — run `scutil --get ComputerName` to check
-HOSTNAME_16INCH="Paul's Examtrack MacBook Pro"  # MacBook Pro 16" (notch)
-HOSTNAME_13INCH="M1MacBookPro"                   # MacBook Pro 13" (no notch)
-CURRENT_HOST="$(scutil --get ComputerName)"
+HOSTNAME_16INCH="Pauls-Examtrack-MacBook-Pro"  # MacBook Pro 16" (notch)
+HOSTNAME_13INCH="PaulM1"                 # MacBook Pro 13" (no notch)
+CURRENT_HOST="$(scutil --get LocalHostName)"
 
 EXTERNAL_TOP_PADDING=50  # external monitor
 TOP_PADDING_16INCH=20    # MacBook Pro 16" (notch)
