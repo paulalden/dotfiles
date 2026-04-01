@@ -37,4 +37,11 @@ if [[ "$install_wm" =~ ^[Yy]$ ]]; then
   echo "Installing window management tools..."
   dotbot -d "${BASEDIR}" -c "install.wm.yaml" "${@}"
   brew bundle --file="${BASEDIR}/homebrew/Brewfile.wm"
+
+  # Install sketchybar-app-font for app icons in sketchybar
+  if ! fc-list | grep -qi "sketchybar-app-font"; then
+    echo "Installing sketchybar-app-font..."
+    curl -L https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v2.0.5/sketchybar-app-font.ttf \
+      -o ~/Library/Fonts/sketchybar-app-font.ttf
+  fi
 fi
