@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.may-june-july.menu-bar-search</string>
+	<key>connections</key>
+	<dict>
+		<key>25DA0D72-264A-4CD8-9A6A-9FFD4B652DF1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>4BA1B2B0-486B-4D0B-A65F-F3C6133D4D93</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>3E7F6F28-F06A-4530-9248-3A6D3055FEAF</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>559999AD-235E-4285-9416-59CF7E409D05</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>4BA1B2B0-486B-4D0B-A65F-F3C6133D4D93</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>C8DFF277-2C74-48D3-B685-F304268DF007</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>3E7F6F28-F06A-4530-9248-3A6D3055FEAF</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>DBEB8FA7-B9B6-4232-A996-61B4E1B6D0A8</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>892B9EF8-E33C-4D32-BBEB-591DFBEFFFEC</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>25DA0D72-264A-4CD8-9A6A-9FFD4B652DF1</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>97A7A235-BF68-42FD-ABC3-3FBC1DC2381D</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>3E7F6F28-F06A-4530-9248-3A6D3055FEAF</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>DBEB8FA7-B9B6-4232-A996-61B4E1B6D0A8</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>CE6777D4-DFB9-460C-897D-EB6C45E6A769</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>C8DFF277-2C74-48D3-B685-F304268DF007</key>
+		<array/>
+		<key>CD061C82-1321-458D-B46E-3603B3DB27E0</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>97A7A235-BF68-42FD-ABC3-3FBC1DC2381D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Benzi Ahamed, May June July</string>
+	<key>description</key>
+	<string>Search through menu options for front-most application</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Menu Bar Search</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>4</integer>
+				<key>script</key>
+				<string>./menu/menu -click "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>C8DFF277-2C74-48D3-B685-F304268DF007</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>892B9EF8-E33C-4D32-BBEB-591DFBEFFFEC</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>4</integer>
+				<key>keyword</key>
+				<string>{var:main_keyword}</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>2</integer>
+				<key>runningsubtext</key>
+				<string>Loading menu items…</string>
+				<key>script</key>
+				<string># Check if menu executable exists
+if [ ! -f "./menu/menu" ]; then
+    # Output Alfred JSON to prompt user to compile
+    cat &lt;&lt; 'EOF'
+{
+  "items": [
+    {
+      "arg": "compile-script",
+      "title": "You need to compile the binary first",
+      "subtitle": "Press ↩ to compile. You will be notified when it’s done."
+    }
+  ]
+}
+EOF
+else
+    # Binary exists, run the menu executable with original parameters
+    ./menu/menu \
+    -cache 2 \
+    -max-children "$maxItemsPerMenu" \
+    -max-depth "$maxSubMenusToSearch" \
+    -show-disabled "$showDisabledItems" \
+    -show-apple-menu "$showAppleMenuItems" \
+    -async \
+    -recache "$recacheOnStartup" \
+    -query "$1"
+fi</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>skipuniversalaction</key>
+				<true/>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Menu Bar Search</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>25DA0D72-264A-4CD8-9A6A-9FFD4B652DF1</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>compile-script</string>
+						<key>outputlabel</key>
+						<string>Compile</string>
+						<key>uid</key>
+						<string>DBEB8FA7-B9B6-4232-A996-61B4E1B6D0A8</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>Click</string>
+				<key>hideelse</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>4BA1B2B0-486B-4D0B-A65F-F3C6133D4D93</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string># Save original working directory
+ORIGINAL_DIR="$(pwd)"
+
+# Create temporary directory for compilation
+TEMP_DIR="/tmp/alfred_menu_build_$$"
+
+# Copy source to temporary directory
+cp -r menu "$TEMP_DIR"
+cp -r swift-protobuf "$TEMP_DIR"
+
+# Build in temporary directory with output redirected to log
+cd "$TEMP_DIR"
+swift build -c release &gt; /tmp/alfred_menu_build.log 2&gt;&amp;1
+
+# Check if binary was created successfully
+if [ -f ".build/release/menu" ]; then
+    # Copy compiled binary back to workflow folder
+    cp .build/release/menu "$ORIGINAL_DIR/menu/menu"
+    
+    # Output build log to stderr for user debugging
+    cat /tmp/alfred_menu_build.log &gt;&amp;2
+    
+    # Return to original directory
+    cd "$ORIGINAL_DIR"
+    
+    # Check if binary exists in workflow folder
+    if [ -f "./menu/menu" ]; then
+        echo "Binary compiled successfully!"
+    else
+        echo "Failed to copy binary to workflow folder. Please open the Alfred debugger and try again. Report back with all the debugger output."
+    fi
+else
+    # Compilation failed
+    cat /tmp/alfred_menu_build.log &gt;&amp;2
+    cd "$ORIGINAL_DIR"
+    echo "Compilation failed! Please open the Alfred debugger and try again. Report back with all the debugger output."
+fi
+
+# Clean up temporary files
+rm -rf "$TEMP_DIR"
+rm -f /tmp/alfred_menu_build.log</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>11</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>3E7F6F28-F06A-4530-9248-3A6D3055FEAF</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>559999AD-235E-4285-9416-59CF7E409D05</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>path</key>
+				<string></string>
+				<key>sortBy</key>
+				<integer>0</integer>
+				<key>sortDirection</key>
+				<integer>0</integer>
+				<key>sortFoldersAtTop</key>
+				<false/>
+				<key>sortOverride</key>
+				<false/>
+				<key>stackBrowserView</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.browseinalfred</string>
+			<key>uid</key>
+			<string>CE6777D4-DFB9-460C-897D-EB6C45E6A769</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>menubarsearchshowfolders</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string># Check if menu executable exists
+if [ ! -f "./menu/menu" ]; then
+    # Output Alfred JSON to prompt user to compile
+    cat &lt;&lt; 'EOF'
+{
+  "items": [
+    {
+      "arg": "compile-script",
+      "title": "You need to compile the binary first",
+      "subtitle": "Press ↩ to compile. You will be notified when it’s done."
+    }
+  ]
+}
+EOF
+else
+    # Binary exists, run the show-folders command
+    ./menu/menu -show-folders
+fi</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>skipuniversalaction</key>
+				<true/>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Menu Bar Search Folders</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>CD061C82-1321-458D-B46E-3603B3DB27E0</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>compile-script</string>
+						<key>outputlabel</key>
+						<string>Compile</string>
+						<key>uid</key>
+						<string>DBEB8FA7-B9B6-4232-A996-61B4E1B6D0A8</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>Show</string>
+				<key>hideelse</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>97A7A235-BF68-42FD-ABC3-3FBC1DC2381D</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string># Menu Bar Search
+
+Search through menu options of the frontmost application. 
+
+## Usage
+
+Search menu bar items of the frontmost app via the `menu` keyword.
+
+![Searching through Xcode menu items](images/keyword-usage.png)
+
+* &lt;kbd&gt;↩&lt;/kbd&gt; Action the item.
+
+Configure the Hotkey for faster triggering.
+
+Prepend your query with `#` to search by keyboard shortcut.
+
+![Searching through Xcode menu items with shortcut](images/keyword-usage-search-with-shortcut.png)
+
+Fuzzy searches supported. For instance, `menu cw` will match the menu item ‘Close Window’.
+
+## Credits
+
+- This repo is a fork of [Benzi Ahamed](https://github.com/BenziAhamed)’s [Menu Bar Search](https://github.com/BenziAhamed/Menu-Bar-Search) ([abandoned](https://github.com/BenziAhamed/Menu-Bar-Search/pull/33)), including a [fix](https://github.com/occludedpixel/Menu-Bar-Search) from [occludedpixel](https://github.com/occludedpixel).
+- Based on the ctwise’s ObjC implementation of [Menu Bar Search](https://www.alfredforum.com/topic/1993-menu-search/), which Benzi Ahamed has ported over to Swift and added caching and per app configuration to speed things up.
+- Bundled with Apple’s [swift-protobuf](https://github.com/apple/swift-protobuf), licensed under [Apache License 2.0](https://github.com/apple/swift-protobuf/blob/main/LICENSE.txt).</string>
+	<key>uidata</key>
+	<dict>
+		<key>25DA0D72-264A-4CD8-9A6A-9FFD4B652DF1</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>8</integer>
+			<key>note</key>
+			<string>Search through menu bar</string>
+			<key>xpos</key>
+			<real>345</real>
+			<key>ypos</key>
+			<real>165</real>
+		</dict>
+		<key>3E7F6F28-F06A-4530-9248-3A6D3055FEAF</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>1</integer>
+			<key>note</key>
+			<string>Compile binary</string>
+			<key>xpos</key>
+			<real>675</real>
+			<key>ypos</key>
+			<real>245</real>
+		</dict>
+		<key>4BA1B2B0-486B-4D0B-A65F-F3C6133D4D93</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>3</integer>
+			<key>xpos</key>
+			<real>505</real>
+			<key>ypos</key>
+			<real>185</real>
+		</dict>
+		<key>559999AD-235E-4285-9416-59CF7E409D05</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>1</integer>
+			<key>xpos</key>
+			<real>1000</real>
+			<key>ypos</key>
+			<real>245</real>
+		</dict>
+		<key>892B9EF8-E33C-4D32-BBEB-591DFBEFFFEC</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>4</integer>
+			<key>xpos</key>
+			<real>125</real>
+			<key>ypos</key>
+			<real>165</real>
+		</dict>
+		<key>97A7A235-BF68-42FD-ABC3-3FBC1DC2381D</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>3</integer>
+			<key>xpos</key>
+			<real>505</real>
+			<key>ypos</key>
+			<real>340</real>
+		</dict>
+		<key>C8DFF277-2C74-48D3-B685-F304268DF007</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>8</integer>
+			<key>note</key>
+			<string>Click menu item</string>
+			<key>xpos</key>
+			<real>820</real>
+			<key>ypos</key>
+			<real>165</real>
+		</dict>
+		<key>CD061C82-1321-458D-B46E-3603B3DB27E0</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>11</integer>
+			<key>note</key>
+			<string>Utilities</string>
+			<key>xpos</key>
+			<real>345</real>
+			<key>ypos</key>
+			<real>320</real>
+		</dict>
+		<key>CE6777D4-DFB9-460C-897D-EB6C45E6A769</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>11</integer>
+			<key>xpos</key>
+			<real>820</real>
+			<key>ypos</key>
+			<real>320</real>
+		</dict>
+	</dict>
+	<key>userconfigurationconfig</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>menu</string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Keyword to search through menu items for the frontmost application</string>
+			<key>label</key>
+			<string>Main Keyword</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>main_keyword</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>defaultvalue</key>
+				<integer>40</integer>
+				<key>markercount</key>
+				<integer>20</integer>
+				<key>maxvalue</key>
+				<integer>200</integer>
+				<key>minvalue</key>
+				<integer>10</integer>
+				<key>onlystoponmarkers</key>
+				<true/>
+				<key>showmarkers</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Controls the maximum number of menu items loaded at each hierarchy level.
+
+Lower values improve performance but may miss items. Useful for limiting large menus like browser History that can contain many entries.</string>
+			<key>label</key>
+			<string>Maximum Items Per Menu</string>
+			<key>type</key>
+			<string>slider</string>
+			<key>variable</key>
+			<string>maxItemsPerMenu</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>defaultvalue</key>
+				<integer>10</integer>
+				<key>markercount</key>
+				<integer>10</integer>
+				<key>maxvalue</key>
+				<integer>10</integer>
+				<key>minvalue</key>
+				<integer>1</integer>
+				<key>onlystoponmarkers</key>
+				<false/>
+				<key>showmarkers</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Controls how deep to search in menu hierarchies.
+
+Depth is the number of menu levels to traverse. E.g., ‘File → Export → Export to PDF’ has a depth of 2 (‘File’ and ‘Export’).
+
+Lower values improve performance but may miss deeply nested items.</string>
+			<key>label</key>
+			<string>Maximum Sub-Menu Depth</string>
+			<key>type</key>
+			<string>slider</string>
+			<key>variable</key>
+			<string>maxSubMenusToSearch</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<false/>
+				<key>required</key>
+				<false/>
+				<key>text</key>
+				<string>Show Disabled Menu Items</string>
+			</dict>
+			<key>description</key>
+			<string>Shows disabled (grayed out) menu items in search results. Disabled items are prefixed with ❌ for clarity.
+
+Note: Some apps like BBEdit mark certain items as disabled when Alfred is active, but they can still be activated. This option ensures all menu items remain accessible for such apps.</string>
+			<key>label</key>
+			<string></string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>showDisabledItems</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<false/>
+				<key>required</key>
+				<false/>
+				<key>text</key>
+				<string>Show  Menu Items</string>
+			</dict>
+			<key>description</key>
+			<string>Include items from the Apple menu.</string>
+			<key>label</key>
+			<string></string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>showAppleMenuItems</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<true/>
+				<key>required</key>
+				<false/>
+				<key>text</key>
+				<string>Always Fetch Latest Items</string>
+			</dict>
+			<key>description</key>
+			<string>Fetch current menu items for every search. Uses cached items if disabled.</string>
+			<key>label</key>
+			<string></string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>recacheOnStartup</string>
+		</dict>
+	</array>
+	<key>version</key>
+	<string>2026.1</string>
+	<key>webaddress</key>
+	<string>https://github.com/April-June-August/Alfred--Menu-Bar-Search</string>
+</dict>
+</plist>
