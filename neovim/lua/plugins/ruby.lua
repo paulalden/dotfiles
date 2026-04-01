@@ -12,22 +12,11 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter",
+    dependencies = { "RRethy/nvim-treesitter-endwise" },
     opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "ruby",
-      })
+      vim.list_extend(opts.ensure_installed, { "ruby" })
+      opts.endwise = { enable = true }
     end,
-  },
-  {
-    "RRethy/nvim-treesitter-endwise",
-    event = "InsertEnter",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    opts = {
-      endwise = {
-        enable = true,
-      },
-    },
-    main = "nvim-treesitter.configs",
   },
   {
     "tpope/vim-projectionist",

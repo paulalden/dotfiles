@@ -53,12 +53,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end)
 
     -- Enable inlay hints when supported
-    if client.supports_method("textDocument/inlayHint") then
+    if client:supports_method("textDocument/inlayHint") then
       vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
     end
 
     -- Highlight references of symbol under cursor
-    if client.supports_method("textDocument/documentHighlight") then
+    if client:supports_method("textDocument/documentHighlight") then
       local highlight_group = vim.api.nvim_create_augroup("local_lsp_highlight_" .. ev.buf, { clear = true })
       vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
         buffer = ev.buf,
@@ -73,12 +73,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     -- Code lens refresh when server supports it
-    if client.supports_method("textDocument/codeLens") then
-      vim.lsp.codelens.refresh()
-      vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-        buffer = ev.buf,
-        callback = vim.lsp.codelens.refresh,
-      })
+    if client:supports_method("textDocument/codeLens") then
+      vim.lsp.codelens.enable(true, { bufnr = ev.buf })
     end
 
     local opts = { buffer = ev.buf, silent = true }
