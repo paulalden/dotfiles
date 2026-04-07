@@ -50,4 +50,6 @@
         defaults write NSGlobalDomain AppleShowAllExtensions -bool true
         defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
         defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+        # Notunes app 
+        defaults write digital.twisted.noTunes replacement /Applications/Spotify.app
         killall Dock Finder &>/dev/null || true
