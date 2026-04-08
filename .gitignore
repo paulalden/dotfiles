@@ -39,4 +39,4 @@ zsh/plugins
 zsh/.zcompcache
 neovim-lazy/lazyvim.json
 /.claude/settings.local.json
-claude/settings.local.json
+settings.local.json

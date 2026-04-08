@@ -39,8 +39,6 @@ autoload -Uz colors && colors
 
 autoload -Uz compinit
 
-fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
-
 zstyle ':completion:*' completer _complete
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
 zmodload zsh/complist
@@ -107,6 +105,6 @@ function _cached_eval() {
 source "$ZDOTDIR/user/prompt.sh"
 _cached_eval fzf fzf --zsh
 
-[ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ] && . /opt/homebrew/opt/asdf/libexec/asdf.sh
-
 eval "$(/opt/homebrew/bin/zsh-patina activate)"
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
