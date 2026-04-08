@@ -1,0 +1,82 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm *)",
+      "Bash(mv *)",
+      "Bash(cp *)",
+      "Bash(mkdir *)",
+      "Bash(touch *)",
+      "Bash(chmod *)",
+      "Bash(chown *)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git remote*)",
+      "Bash(git stash list*)",
+      "Bash(brew install*)",
+      "Bash(brew update*)",
+      "Bash(ruby *)",
+      "Bash(gem install*)",
+      "Bash(gem uninstall*)",
+      "Bash(bundle install*)",
+      "Bash(bundle update*)",
+      "Bash(rails *)",
+      "Bash(rake *)",
+      "Bash(rspec *)",
+      "Bash(rubocop *)",
+      "Bash(kill *)",
+      "Bash(killall *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(open *)",
+      "Bash(yabai *)",
+      "Bash(skhd *)",
+      "Bash(brew services*)",
+      "Bash(tmux *)",
+      "Bash(nvim *)",
+      "Bash(vim *)",
+      "Bash(ls*)",
+      "Bash(grep *)"
+    ],
+    "deny": [
+      "Bash(rm -rf*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git commit*)",
+      "Bash(git add*)",
+      "Bash(git checkout*)",
+      "Bash(git switch*)",
+      "Bash(git merge*)",
+      "Bash(git rebase*)",
+      "Bash(git stash*)",
+      "Bash(git fetch*)",
+      "Bash(git pull*)",
+      "Bash(git push*)",
+      "Bash(git tag*)",
+      "Bash(git reset*)",
+      "Bash(sudo *)",
+      "Bash(rm -r*)",
+      "Bash(rails destroy*)",
+      "Bash(rails db:drop*)",
+      "Bash(rails db:reset*)",
+      "Bash(rake db:drop*)",
+      "Bash(rake db:reset*)",
+      "Bash(rake db:purge*)"
+    ]
+  },
+  "autoUpdatesChannel": "stable",
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true,
+    "ruby-lsp@claude-plugins-official": true
+  },
+  "env": {
+    "ENABLE_LSP_TOOL": "1"
+  }
+}

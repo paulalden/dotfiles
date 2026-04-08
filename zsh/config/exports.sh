@@ -11,10 +11,12 @@ path=(
   /opt/homebrew/opt/python@3.13/bin
   /opt/homebrew/opt/yarn/bin
   /opt/homebrew/opt/postgresql@15/bin
+  ${ASDF_DATA_DIR:-$HOME/.asdf}/shims
   $HOME/.local/scripts
   $HOME/.local/bin
   $HOME/.bin
   /usr/local/bin
+  ./bin/
   $path
 )
 
@@ -34,12 +36,10 @@ export MANPAGER='nvim +Man!'
 
 # Mobile app
 export NODE_ENV=development
-# Cache JAVA_HOME to avoid subprocess on every shell start
-if [[ -z "$JAVA_HOME" ]] && [[ -x /usr/libexec/java_home ]]; then
-  export JAVA_HOME=$(/usr/libexec/java_home 2>/dev/null)
-fi
 
 # Increase the function nesting limit to 100 or higher
 export FUNCNEST=100
 
 export COLORTERM=truecolor
+
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@3)"
