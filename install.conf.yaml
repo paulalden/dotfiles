@@ -27,6 +27,8 @@
     ~/.zshenv: zshenv
     ~/.config/zsh: zsh
     ~/.asdfrc: asdfrc
+    ~/.claude/settings.json: claude/settings.json
+    ~/.claude/statusline-command.sh: claude/statusline-command.sh
 
 - shell:
     - [brew bundle --file=homebrew/Brewfile, Installing Homebrew packages]
