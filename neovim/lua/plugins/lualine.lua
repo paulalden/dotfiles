@@ -105,7 +105,7 @@ return {
         },
         lualine_x = { fname },
         lualine_y = { "diff" },
-        lualine_z = {},
+        lualine_z = { { "progress", color = { bg = colors.grey12, fg = colors.fg_dark } } },
       },
       inactive_sections = {
         lualine_a = {},
