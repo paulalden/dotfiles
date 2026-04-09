@@ -13,7 +13,7 @@ source "$CONFIG_DIR/scripts/config.sh"
 
 sketchybar --bar \
   position=top \
-  height=32 \
+  height=38 \
   color=$BG_80 \
   border_color=$TRANSPARENT \
   corner_radius=0 \
