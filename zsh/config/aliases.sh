@@ -62,9 +62,9 @@ alias brew:bundle="brew bundle --file ~/.Brewfile"
 alias brew:dump="brew bundle dump --force --file ~/Personal/Repos/dotfiles/homebrew/Brewfile"
 
 # Docker Compose
-alias dc="docker-compose"
-alias dcr="docker-compose run --rm"
-alias dce="docker-compose exec"
+alias dc="docker compose"
+alias dcr="docker compose run --rm"
+alias dce="docker compose exec"
 
 # DO NOT use ctrl+c or it will exit the container, instead use ctrl+q+p
 function docker-attach() {
