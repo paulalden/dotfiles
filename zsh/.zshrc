@@ -107,4 +107,4 @@ _cached_eval fzf fzf --zsh
 
 eval "$(/opt/homebrew/bin/zsh-patina activate)"
 
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+eval "$(rbenv init - zsh)"

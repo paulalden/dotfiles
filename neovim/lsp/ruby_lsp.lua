@@ -3,7 +3,7 @@ capabilities.general = capabilities.general or {}
 capabilities.general.positionEncodings = { "utf-8" }
 
 return {
-  cmd = { vim.fn.expand("~/.asdf/installs/ruby/4.0.2/bin/ruby-lsp") },
+  cmd = { vim.fn.trim(vim.fn.system("rbenv which ruby-lsp")) },
   cmd_env = {
     BUNDLE_GEMFILE = vim.fn.expand("~/.config/nvim/ruby-lsp/Gemfile"),
   },

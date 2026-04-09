@@ -11,7 +11,7 @@ path=(
   /opt/homebrew/opt/python@3.13/bin
   /opt/homebrew/opt/yarn/bin
   /opt/homebrew/opt/postgresql@15/bin
-  ${ASDF_DATA_DIR:-$HOME/.asdf}/shims
+  $HOME/.rbenv/shims
   $HOME/.local/scripts
   $HOME/.local/bin
   $HOME/.bin
