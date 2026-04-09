@@ -1,6 +1,10 @@
 {
+  "env": {
+    "ENABLE_LSP_TOOL": "1"
+  },
   "permissions": {
     "allow": [
+      "Bash(find *)",
       "Bash(rm *)",
       "Bash(mv *)",
       "Bash(cp *)",
@@ -66,7 +70,6 @@
       "Bash(rake db:purge*)"
     ]
   },
-  "autoUpdatesChannel": "stable",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -76,7 +79,5 @@
     "swift-lsp@claude-plugins-official": true,
     "ruby-lsp@claude-plugins-official": true
   },
-  "env": {
-    "ENABLE_LSP_TOOL": "1"
-  }
+  "autoUpdatesChannel": "stable"
 }
