@@ -15,11 +15,12 @@
 ################################################################################
 
 # Create a new bare repo setup
-# Usage: wt:create <remote-url> <folder-name>
+# Usage: wt:create <remote-url> [folder-name]
 function wt:create() {
-  mkdir "$2"
-  git clone --bare "$1" "$2/.bare"
-  cd "$2"
+  local folder="${2:-$(basename "$1" .git)}"
+  mkdir "$folder"
+  git clone --bare "$1" "$folder/.bare"
+  cd "$folder"
   git -C .bare config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
   git -C .bare fetch
 }
@@ -32,7 +33,7 @@ function wt:list() {
 # Add an existing remote branch as a worktree
 # Usage: wt:add <branch-name>
 function wt:add() {
-  git -C .bare worktree add "../$1" -b "$1" --track "origin/$1"
+  git -C .bare worktree add "../$1" "$1"
   cd "$1" && git submodule update --init --recursive
 }
 
