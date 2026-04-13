@@ -1,6 +1,6 @@
 [user]
-	name = Paul Danelli
-	email = prdanelli@gmail.com
+	name = Paul Alden
+	email = paulrichardalden@gmail.com
 [core]
 	excludesfile = /Users/paul/.gitignore_global
 	editor = nvim
