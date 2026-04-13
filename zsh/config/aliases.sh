@@ -11,6 +11,8 @@ alias lazygit="lazygit -ucd ~/.config/lazygit/"
 alias grep="grep --color=auto"
 alias editdots="nvim ~/Personal/Repos/dotfiles"
 
+alias git_unlock="rm -f .git/index.lock"
+
 # Vim
 alias vimdiff='nvim -d'
 alias vim="nvim"
