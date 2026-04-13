@@ -10,6 +10,8 @@
 	<true/>
 	<key>nativedarkmode</key>
 	<true/>
+	<key>saveposition</key>
+	<true/>
 	<key>showscrollbar</key>
 	<false/>
 </dict>
