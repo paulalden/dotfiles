@@ -25,14 +25,25 @@ function wt:create() {
   git -C .bare fetch
 }
 
+function _wt:require_bare() {
+  if [[ ! -d ".bare" ]]; then
+    echo "Error: no .bare found in $(pwd). Navigate to project root first."
+    return 1
+  fi
+}
+
 # List all worktrees
 function wt:list() {
+  _wt:require_bare || return 1
+
   git -C .bare worktree list
 }
 
 # Add an existing remote branch as a worktree
 # Usage: wt:add <branch-name>
 function wt:add() {
+  _wt:require_bare || return 1
+
   git -C .bare worktree add "../$1" "$1"
   cd "$1" && git submodule update --init --recursive
 }
@@ -40,6 +51,8 @@ function wt:add() {
 # Create a new worktree with a new branch
 # Usage: wt:new <branch-name> [base=sprint_ee]
 function wt:new() {
+  _wt:require_bare || return 1
+
   local base="${2:-sprint_ee}"
   git -C .bare worktree add "../$1" -b "$1" "$base"
   cd "$1" && git submodule update --init --recursive
@@ -48,5 +61,7 @@ function wt:new() {
 # Remove a worktree
 # Usage: wt:remove <branch-name>
 function wt:remove() {
+  _wt:require_bare || return 1
+
   git -C .bare worktree remove "$1"
 }
