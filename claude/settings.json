@@ -42,22 +42,27 @@
       "Bash(nvim *)",
       "Bash(vim *)",
       "Bash(ls*)",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git branch *)",
+      "Bash(git status *)",
+      "Bash(git status *)",
+      "Bash(cd * && git show *)",
+      "Bash(cd * && git log *)",
+      "Bash(cd * && git diff *)",
+      "Bash(cd * && git branch *)",
+      "Bash(cd * && git status *)",
+      "Bash(ls *)",
+      "Bash(ls)",
+      "Bash(cd * && ls *)"
     ],
     "deny": [
       "Bash(rm -rf*)",
       "Bash(git push --force*)",
       "Bash(git push -f*)",
-      "Bash(git commit*)",
-      "Bash(git add*)",
-      "Bash(git checkout*)",
-      "Bash(git switch*)",
-      "Bash(git merge*)",
-      "Bash(git rebase*)",
       "Bash(git stash*)",
-      "Bash(git fetch*)",
       "Bash(git pull*)",
-      "Bash(git push*)",
       "Bash(git tag*)",
       "Bash(git reset*)",
       "Bash(sudo *)",
@@ -77,7 +82,30 @@
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "ruby-lsp@claude-plugins-official": true
+    "ruby-lsp@claude-plugins-official": true,
+    "caveman@caveman": true
   },
-  "autoUpdatesChannel": "stable"
+  "extraKnownMarketplaces": {
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    }
+  },
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(jq -r '.tool_input.command'); if echo \"$cmd\" | grep -qE 'git (show|log|diff|branch|status|remote|describe)'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PermissionRequest\",\"permissionDecision\":\"allow\",\"permissionDecisionReason\":\"Git read operation\"}}'; fi"
+          }
+        ]
+      }
+    ]
+  },
+  "autoUpdatesChannel": "stable",
+  "model": "sonnet"
 }
