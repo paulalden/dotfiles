@@ -15,8 +15,8 @@
 ################################################################################
 
 # Create a new bare repo setup
-# Usage: wt:create <remote-url> [folder-name]
-function wt:create() {
+# Usage: wt:init <remote-url> [folder-name]
+function wt:init() {
   local folder="${2:-$(basename "$1" .git)}"
   mkdir "$folder"
   git clone --bare "$1" "$folder/.bare"
@@ -49,8 +49,8 @@ function wt:add() {
 }
 
 # Create a new worktree with a new branch
-# Usage: wt:new <branch-name> [base=sprint_ee]
-function wt:new() {
+# Usage: wt:create <branch-name> [base=sprint_ee]
+function wt:create() {
   _wt:require_bare || return 1
 
   local base="${2:-sprint_ee}"
