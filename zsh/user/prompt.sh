@@ -113,6 +113,17 @@ _prompt_async_callback() {
   zle reset-prompt
 }
 
+# -- Directory shortener ------------------------------------------------------
+_prompt_short_dir() {
+  local full="${PWD/#$HOME/~}"
+  local parts=("${(@s:/:)full}")
+  if (( ${#full} <= 40 || ${#parts} <= 3 )); then
+    print "$full"
+  else
+    print "${parts[1]}/${parts[2]}/.../${parts[-1]}"
+  fi
+}
+
 # -- Build prompt -------------------------------------------------------------
 _prompt_precmd() {
   # Async git + language versions (non-blocking)
@@ -123,7 +134,7 @@ _prompt_precmd() {
   [[ -n "$SSH_TTY" ]] && host="%m "
 
   # Directory (full path, bold grey)
-  local dir="${_prompt_grey}%B%~%b${_prompt_reset}"
+  local dir="${_prompt_grey}%B$(_prompt_short_dir)%b${_prompt_reset}"
 
   # Prompt character (red on error)
   local char="%(?:%F{white}:%F{red})❯${_prompt_reset}"
