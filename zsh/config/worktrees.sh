@@ -11,7 +11,8 @@
 #   wt:init <remote-url> [folder-name]
 #   wt:add <branch>
 #
-# Run all commands from the project root (the directory containing .bare/)
+# Most commands must be run from the project root (containing .bare/).
+# wt:list and wt:info can be run from any worktree folder.
 ################################################################################
 
 # ── Private helpers ─────────────────────────────────────────────────
@@ -23,11 +24,11 @@ function _wt:require_bare() {
   fi
 }
 
-# Find the project root (directory containing .bare/)
-function _wt:project_root() {
+# Find the closest .bare directory by walking up from $PWD
+function _wt:bare() {
   local dir=$PWD
   while [[ "$dir" != "/" ]]; do
-    [[ -d "$dir/.bare" ]] && { echo "$dir"; return 0; }
+    [[ -d "$dir/.bare" ]] && { echo "$dir/.bare"; return 0; }
     dir="${dir:h}"
   done
   return 1
@@ -38,14 +39,14 @@ function _wt:project_root() {
 function _wt:next_port() {
   local base=$1 key=$2
   local max=$base
-  local root
-  root=$(_wt:project_root) || { echo "$base"; return; }
+  local bare
+  bare=$(_wt:bare) || { echo "$base"; return; }
 
   local port
   while IFS= read -r env_file; do
     port=$(grep -m1 "^${key}=" "$env_file" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]')
     [[ -n "$port" ]] && (( port >= max )) && max=$(( port + 1 ))
-  done < <(find "$root" -name .env -not -path "*/.bare/*" 2>/dev/null)
+  done < <(find "${bare:h}" -name .env -not -path "*/.bare/*" 2>/dev/null)
 
   echo "$max"
 }
@@ -95,9 +96,124 @@ function wt:init() {
 #
 # wt:list
 function wt:list() {
-  _wt:require_bare || return 1
+  local bare
+  bare=$(_wt:bare) || { echo "Error: no .bare found in or above $(pwd)."; return 1; }
 
-  git -C .bare worktree list
+  git -C "$bare" worktree list --porcelain | while IFS= read -r line; do
+    [[ "$line" == "branch "* ]] && echo "${line#branch refs/heads/}"
+  done
+}
+
+# Show detailed worktree info in a table
+#
+# wt:info
+function wt:info() {
+  local bare
+  bare=$(_wt:bare) || { echo "Error: no .bare found in or above $(pwd)."; return 1; }
+
+  local -a wt_branches wt_hashes wt_dates wt_ahead wt_dirty wt_docker wt_ports
+  local wt_branch wt_hash wt_date_str wt_counts wt_behind wt_a wt_ahead_str
+  local wt_path_str wt_port_str p_app p_db p_redis
+  local max_br=6 max_date=16 max_ahead=9 max_port=14
+
+  # First pass: collect data and find max branch length
+  git -C "$bare" worktree list --porcelain | while IFS= read -r line; do
+    if [[ "$line" == "worktree "* ]]; then
+      wt_path_str="${line#worktree }"
+    elif [[ "$line" == "HEAD "* ]]; then
+      wt_hash="${line#HEAD }"
+      wt_hash="${wt_hash[1,7]}"
+    elif [[ "$line" == "branch "* ]]; then
+      wt_branch="${line#branch refs/heads/}"
+    elif [[ "$line" == "bare" ]]; then
+      wt_branch="" wt_hash="" wt_path_str=""
+    elif [[ -z "$line" && -n "$wt_branch" ]]; then
+      wt_branches+=("$wt_branch")
+      wt_hashes+=("$wt_hash")
+
+      wt_date_str=$(git -C "$bare" log -1 --format='%cd' --date=format:'%Y-%m-%d %H:%M' "$wt_branch" 2>/dev/null || echo "unknown")
+      wt_dates+=("$wt_date_str")
+      (( ${#wt_date_str} > max_date )) && max_date=${#wt_date_str}
+
+      wt_counts=$(git -C "$bare" rev-list --left-right --count "master...$wt_branch" 2>/dev/null)
+      wt_behind=${wt_counts%%	*} wt_a=${wt_counts##*	}
+      wt_ahead_str="↑${wt_a:-0} ↓${wt_behind:-0}"
+      wt_ahead+=("$wt_ahead_str")
+      (( ${#wt_ahead_str} > max_ahead )) && max_ahead=${#wt_ahead_str}
+
+      # Dirty status
+      if [[ -d "$wt_path_str" ]]; then
+        if [[ -n $(git -C "$wt_path_str" status --porcelain 2>/dev/null) ]]; then
+          wt_dirty+=("✗")
+        else
+          wt_dirty+=("✓")
+        fi
+      else
+        wt_dirty+=("?")
+      fi
+
+      # Docker status
+      if [[ -f "$wt_path_str/docker-compose.yml" && -f "$wt_path_str/.env" ]]; then
+        if docker compose -f "$wt_path_str/docker-compose.yml" --env-file "$wt_path_str/.env" ps --status running 2>/dev/null | grep -q .; then
+          wt_docker+=("●")
+        else
+          wt_docker+=("○")
+        fi
+      else
+        wt_docker+=("─")
+      fi
+
+      # Ports from .env
+      if [[ -f "$wt_path_str/.env" ]]; then
+        p_app=$(grep -m1 '^APP_PORT=' "$wt_path_str/.env" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]')
+        p_db=$(grep -m1 '^DB_PORT=' "$wt_path_str/.env" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]')
+        p_redis=$(grep -m1 '^REDIS_PORT=' "$wt_path_str/.env" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]')
+        if [[ -n "$p_app" || -n "$p_db" || -n "$p_redis" ]]; then
+          wt_port_str="${p_app:-─}:${p_db:-─}:${p_redis:-─}"
+        else
+          wt_port_str="─"
+        fi
+      else
+        wt_port_str="─"
+      fi
+      wt_ports+=("$wt_port_str")
+      (( ${#wt_port_str} > max_port )) && max_port=${#wt_port_str}
+
+      (( ${#wt_branch} > max_br )) && max_br=${#wt_branch}
+      wt_branch="" wt_hash="" wt_path_str=""
+    fi
+  done
+
+  local hash_len=7
+  local br_col=$(( max_br + 2 )) ha_col=$(( hash_len + 2 ))
+  local da_col=$(( max_date + 2 )) ah_col=$(( max_ahead + 2 ))
+  local po_col=$(( max_port + 2 ))
+
+  # Border parts
+  local br_line ha_line da_line ah_line st_line po_line
+  printf -v br_line '%*s' "$br_col" '' && br_line="${br_line// /─}"
+  printf -v ha_line '%*s' "$ha_col" '' && ha_line="${ha_line// /─}"
+  printf -v da_line '%*s' "$da_col" '' && da_line="${da_line// /─}"
+  printf -v ah_line '%*s' "$ah_col" '' && ah_line="${ah_line// /─}"
+  printf -v st_line '%*s' 5 '' && st_line="${st_line// /─}"
+  printf -v po_line '%*s' "$po_col" '' && po_line="${po_line// /─}"
+
+  # Table
+  printf '┌%s┬%s┬%s┬%s┬%s┬%s┬%s┐\n' "$br_line" "$st_line" "$st_line" "$po_line" "$ha_line" "$da_line" "$ah_line"
+  printf '│ %-*s │ %s │ %s │ %-*s │ %-*s │ %-*s │ %-*s │\n' \
+    "$max_br" "Branch" "Git" "Doc" "$max_port" "App:Db:Redis" "$hash_len" "Hash" "$max_date" "Last Committed" "$max_ahead" "vs master"
+  printf '├%s┼%s┼%s┼%s┼%s┼%s┼%s┤\n' "$br_line" "$st_line" "$st_line" "$po_line" "$ha_line" "$da_line" "$ah_line"
+  for (( i=1; i<=${#wt_branches}; i++ )); do
+    printf '│ %-*s │  %s  │  %s  │ %-*s │ %-*s │ %-*s │ %-*s │\n' \
+      "$max_br" "${wt_branches[$i]}" \
+      "${wt_dirty[$i]}" \
+      "${wt_docker[$i]}" \
+      "$max_port" "${wt_ports[$i]}" \
+      "$hash_len" "${wt_hashes[$i]}" \
+      "$max_date" "${wt_dates[$i]}" \
+      "$max_ahead" "${wt_ahead[$i]}"
+  done
+  printf '└%s┴%s┴%s┴%s┴%s┴%s┴%s┘\n' "$br_line" "$st_line" "$st_line" "$po_line" "$ha_line" "$da_line" "$ah_line"
 }
 
 # Add an existing remote branch as a worktree
@@ -110,6 +226,7 @@ function wt:add() {
     return 1
   fi
 
+  git -C .bare worktree prune
   git -C .bare worktree add "../$1" "$1" || return 1
   cd "$1" && git submodule update --init --recursive && _wt:write_ports
 }
@@ -125,6 +242,7 @@ function wt:create() {
   fi
 
   local base="${2:-master}"
+  git -C .bare worktree prune
   git -C .bare worktree add "../$1" -b "$1" "$base" || return 1
   cd "$1" && git submodule update --init --recursive && _wt:write_ports
 }
@@ -205,8 +323,11 @@ function wt:remove() {
   [[ "$2" == "--force" ]] && force=true
 
   if [[ ! -d "$branch" ]]; then
-    echo "Error: worktree directory '$branch' not found."
-    return 1
+    # Directory gone but git may still track it — prune stale entry and clean up branch
+    git -C .bare worktree prune
+    git -C .bare branch -d "$branch" 2>/dev/null || true
+    echo "Pruned stale worktree entry for '$branch'."
+    return 0
   fi
 
   if [[ "$force" != true ]]; then
@@ -224,18 +345,46 @@ function wt:remove() {
   }
 }
 
+# Rebase a worktree's branch onto a new parent
+#
+# wt:rebase <branch> <new-parent> [old-parent]
+function wt:rebase() {
+  _wt:require_bare || return 1
+  if [[ -z "$1" || -z "$2" ]]; then
+    echo "Usage: wt:rebase <branch> <new-parent> [old-parent]"
+    return 1
+  fi
+
+  local branch="$1" new_parent="$2" old_parent="$3"
+
+  if [[ ! -d "$branch" ]]; then
+    echo "Error: worktree directory '$branch' not found."
+    return 1
+  fi
+
+  git -C .bare fetch origin
+  if [[ -n "$old_parent" ]]; then
+    git -C "$branch" rebase --onto "$new_parent" "$old_parent"
+  else
+    git -C "$branch" rebase "$new_parent"
+  fi
+}
+
 # Show available commands
 #
 # wt:help
 function wt:help() {
   cat <<'HELP'
-Worktree commands (run from project root containing .bare/):
+Worktree commands (most require project root containing .bare/):
+  * = also works from any worktree folder
 
   wt:init <remote-url> [folder]   Clone a repo as a bare repo ready for worktrees
   wt:add <branch>                 Check out an existing remote branch as a worktree
   wt:create <branch> [base]       Create a new branch and worktree (base defaults to master)
-  wt:list                         List all worktrees
+  wt:list                       * List worktree branch names
+  wt:info                       * Show detailed worktree info table
   wt:rename <old> <new>            Rename worktree directory and branch
+  wt:rebase <branch> <new> [old]  Rebase branch onto new parent (fetch first)
   wt:remove <branch> [--force]    Stop containers, remove worktree, prune refs (confirms first)
   wt:help                         Show this help
 HELP
@@ -244,10 +393,10 @@ HELP
 # ── Tab completion ──────────────────────────────────────────────────
 
 function _wt:branches() {
-  local root
-  root=$(_wt:project_root) || return
-  local branches=(${(f)"$(git -C "$root/.bare" branch --format='%(refname:short)' 2>/dev/null)"})
+  local bare
+  bare=$(_wt:bare) || return
+  local branches=(${(f)"$(git -C "$bare" branch --format='%(refname:short)' 2>/dev/null)"})
   compadd -a branches
 }
 
-compdef _wt:branches wt:add wt:rename wt:remove
+compdef _wt:branches wt:add wt:rebase wt:rename wt:remove
