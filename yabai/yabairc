@@ -21,7 +21,7 @@ HOSTNAME_13INCH="PaulM1"                        # MacBook Pro 13" (no notch)
 CURRENT_HOST="$(scutil --get LocalHostName)"
 
 EXTERNAL_TOP_PADDING=57 # external monitor
-TOP_PADDING_16INCH=25    # MacBook Pro 16" (notch)
+TOP_PADDING_16INCH=20    # MacBook Pro 16" (notch)
 TOP_PADDING_13INCH=65    # MacBook Pro 13"
 
 case "$CURRENT_HOST" in
