@@ -2,6 +2,10 @@
   "env": {
     "ENABLE_LSP_TOOL": "1"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Bash(find *)",
@@ -55,15 +59,16 @@
       "Bash(cd * && git status *)",
       "Bash(ls *)",
       "Bash(ls)",
-      "Bash(cd * && ls *)"
+      "Bash(cd * && ls *)",
+      "Bash(cat *)",
+      "Bash(cd * && cat *)",
+      "Bash(cd * && find *)",
+      "Bash(cd * && grep *)"
     ],
     "deny": [
       "Bash(rm -rf*)",
       "Bash(git push --force*)",
       "Bash(git push -f*)",
-      "Bash(git stash*)",
-      "Bash(git pull*)",
-      "Bash(git tag*)",
       "Bash(git reset*)",
       "Bash(sudo *)",
       "Bash(rm -r*)",
@@ -73,6 +78,19 @@
       "Bash(rake db:drop*)",
       "Bash(rake db:reset*)",
       "Bash(rake db:purge*)"
+    ]
+  },
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(jq -r '.tool_input.command'); if echo \"$cmd\" | grep -qE 'git (show|log|diff|branch|status|remote|describe)'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PermissionRequest\",\"permissionDecision\":\"allow\",\"permissionDecisionReason\":\"Git read operation\"}}'; fi"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -93,19 +111,6 @@
       }
     }
   },
-  "hooks": {
-    "PermissionRequest": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cmd=$(jq -r '.tool_input.command'); if echo \"$cmd\" | grep -qE 'git (show|log|diff|branch|status|remote|describe)'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PermissionRequest\",\"permissionDecision\":\"allow\",\"permissionDecisionReason\":\"Git read operation\"}}'; fi"
-          }
-        ]
-      }
-    ]
-  },
-  "autoUpdatesChannel": "stable",
-  "model": "sonnet"
+  "effortLevel": "medium",
+  "autoUpdatesChannel": "stable"
 }
