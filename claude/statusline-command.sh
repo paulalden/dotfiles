@@ -50,6 +50,7 @@ if branch=$(git --git-dir="$cwd/.git" --work-tree="$cwd" symbolic-ref --short HE
   fi
 fi
 
+
 # -- Assemble output (ANSI: Nord palette, dimmed-friendly) ---------------------
 # Grey  = \e[2;37m  (dim white, close to #4C566A feel in terminals)
 # Blue  = \e[34m    (branch, close to #5E81AC)
@@ -73,6 +74,7 @@ parts+=("${GREY}${dir}${RESET}")
 
 # Model
 [[ -n "$model" ]] && parts+=("${MAGENTA}${model}${RESET}")
+
 
 # -- Combined context + rate-limit segment ------------------------------------
 # Format: "Context:X% · Usage:5h:X%"

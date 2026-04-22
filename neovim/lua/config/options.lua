@@ -173,3 +173,36 @@ vim.cmd([[
   cnoreabbrev W w
   cnoreabbrev Q q
 ]])
+
+-- UI2
+vim.o.cmdheight = 0
+require("vim._core.ui2").enable({
+  enable = true,
+  msg = {
+    targets = {
+      [""] = "msg",
+      empty = "cmd",
+      bufwrite = "msg",
+      confirm = "cmd",
+      emsg = "pager",
+      echo = "msg",
+      echomsg = "msg",
+      echoerr = "pager",
+      completion = "cmd",
+      list_cmd = "pager",
+      lua_error = "pager",
+      lua_print = "msg",
+      progress = "pager",
+      search_cmd = "cmd",
+      search_count = "cmd",
+      shell_out = "pager",
+      shell_err = "pager",
+      undo = "msg",
+      wildlist = "cmd",
+      wmsg = "msg",
+    },
+    cmd = { height = 0.5 },
+    msg = { height = 0.3, timeout = 5000 },
+    pager = { height = 0.5 },
+  },
+})

@@ -42,7 +42,8 @@
       "Bash(nvim *)",
       "Bash(vim *)",
       "Bash(ls*)",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Bash(caveman-state *)"
     ],
     "deny": [
       "Bash(rm -rf*)",
@@ -70,14 +71,23 @@
       "Bash(rake db:purge*)"
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
-  },
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "ruby-lsp@claude-plugins-official": true
+    "ruby-lsp@claude-plugins-official": true,
+    "caveman@caveman": true
+  },
+  "extraKnownMarketplaces": {
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
   },
   "autoUpdatesChannel": "stable"
 }
