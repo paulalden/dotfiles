@@ -2,6 +2,10 @@
   "env": {
     "ENABLE_LSP_TOOL": "1"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Bash(find *)",
@@ -43,23 +47,28 @@
       "Bash(vim *)",
       "Bash(ls*)",
       "Bash(grep *)",
-      "Bash(caveman-state *)"
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git branch *)",
+      "Bash(git status *)",
+      "Bash(git status *)",
+      "Bash(cd * && git show *)",
+      "Bash(cd * && git log *)",
+      "Bash(cd * && git diff *)",
+      "Bash(cd * && git branch *)",
+      "Bash(cd * && git status *)",
+      "Bash(ls *)",
+      "Bash(ls)",
+      "Bash(cd * && ls *)",
+      "Bash(cat *)",
+      "Bash(cd * && cat *)",
+      "Bash(cd * && find *)",
+      "Bash(cd * && grep *)"
     ],
     "deny": [
       "Bash(rm -rf*)",
       "Bash(git push --force*)",
       "Bash(git push -f*)",
-      "Bash(git commit*)",
-      "Bash(git add*)",
-      "Bash(git checkout*)",
-      "Bash(git switch*)",
-      "Bash(git merge*)",
-      "Bash(git rebase*)",
-      "Bash(git stash*)",
-      "Bash(git fetch*)",
-      "Bash(git pull*)",
-      "Bash(git push*)",
-      "Bash(git tag*)",
       "Bash(git reset*)",
       "Bash(sudo *)",
       "Bash(rm -r*)",
@@ -70,6 +79,23 @@
       "Bash(rake db:reset*)",
       "Bash(rake db:purge*)"
     ]
+  },
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(jq -r '.tool_input.command'); if echo \"$cmd\" | grep -qE 'git (show|log|diff|branch|status|remote|describe)'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PermissionRequest\",\"permissionDecision\":\"allow\",\"permissionDecisionReason\":\"Git read operation\"}}'; fi"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
@@ -85,9 +111,6 @@
       }
     }
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
-  },
+  "effortLevel": "medium",
   "autoUpdatesChannel": "stable"
 }

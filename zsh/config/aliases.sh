@@ -11,6 +11,8 @@ alias lazygit="lazygit -ucd ~/.config/lazygit/"
 alias grep="grep --color=auto"
 alias editdots="nvim ~/Personal/Repos/dotfiles"
 
+alias git_unlock="rm -f .git/index.lock"
+
 # Vim
 alias vimdiff='nvim -d'
 alias vim="nvim"
@@ -65,10 +67,21 @@ alias brew:dump="brew bundle dump --force --file ~/Personal/Repos/dotfiles/homeb
 alias dc="docker compose"
 alias dcr="docker compose run --rm"
 alias dce="docker compose exec"
+alias dcw="docker compose watch"
 
 # DO NOT use ctrl+c or it will exit the container, instead use ctrl+q+p
 function docker-attach() {
   docker attach $(docker-compose ps -q $1)
+}
+
+# Start app detached + run file watcher in background + attach.
+# Watcher stops when you exit the attached session.
+function dc-dev() {
+  dc up -d app || return 1
+  dcw &
+  local watch_pid=$!
+  trap "kill $watch_pid 2>/dev/null" EXIT INT TERM
+  docker-attach app
 }
 
 # Rails
