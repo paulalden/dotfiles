@@ -5,14 +5,15 @@
 #
 #   ProjectName/
 #     .bare/          <- bare clone (git internals)
-#     branch-name/    <- worktrees (folder name matches branch name)
+#     branch-name/    <- worktrees (folder name usually matches branch name,
+#                        but may differ after wt:rename — wt:remove accepts either)
 #
 # Initial setup:
 #   wt:init <remote-url> [folder-name]
 #   wt:add <branch>
 #
 # Most commands must be run from the project root (containing .bare/).
-# wt:list and wt:info can be run from any worktree folder.
+# wt:list, wt:info, and wt:update can be run from any worktree folder.
 ################################################################################
 
 # ── Private helpers ─────────────────────────────────────────────────
@@ -34,21 +35,60 @@ function _wt:bare() {
   return 1
 }
 
-# Find the next available port by taking the highest in use + 1, or base if none found
-# Usage: _wt:next_port <base> <ENV_KEY>
-function _wt:next_port() {
-  local base=$1 key=$2
-  local max=$base
+# Collect all ports assigned across worktrees for a given ENV key (one per line)
+function _wt:used_ports() {
+  local key=$1
   local bare
-  bare=$(_wt:bare) || { echo "$base"; return; }
+  bare=$(_wt:bare) || return
 
   local port
   while IFS= read -r env_file; do
     port=$(grep -m1 "^${key}=" "$env_file" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]')
-    [[ -n "$port" ]] && (( port >= max )) && max=$(( port + 1 ))
+    [[ -n "$port" ]] && echo "$port"
   done < <(find "${bare:h}" -name .env -not -path "*/.bare/*" 2>/dev/null)
+}
 
-  echo "$max"
+# Read default port from .env.example (falls back to hardcoded default)
+function _wt:default_port() {
+  local key=$1 fallback=$2
+  local bare
+  bare=$(_wt:bare) || { echo "$fallback"; return; }
+
+  local val
+  val=$(grep -m1 "^${key}=" "${bare:h}/.env.example" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]')
+  echo "${val:-$fallback}"
+}
+
+# Find first available APP_PORT starting from defaults where app/db/redis all avoid conflicts
+function _wt:next_app_port() {
+  local bare
+  bare=$(_wt:bare) || { echo "3000"; return; }
+
+  local base_app=$(_wt:default_port APP_PORT 3000)
+  local base_db=$(_wt:default_port DB_PORT 3306)
+  local base_redis=$(_wt:default_port REDIS_PORT 6379)
+
+  # Build set of ALL assigned ports (app, db, redis)
+  local -A taken
+  local port
+  for key in APP_PORT DB_PORT REDIS_PORT; do
+    while IFS= read -r port; do
+      taken[$port]=1
+    done < <(_wt:used_ports "$key")
+  done
+
+  # Start from default, find first offset where all three ports are free
+  local offset=0
+  while true; do
+    local app_port=$(( base_app + offset ))
+    local db_port=$(( base_db + offset ))
+    local redis_port=$(( base_redis + offset ))
+    if [[ -z "${taken[$app_port]}" && -z "${taken[$db_port]}" && -z "${taken[$redis_port]}" ]]; then
+      echo "$app_port"
+      return
+    fi
+    (( offset++ ))
+  done
 }
 
 # Write port assignments to .env, preserving any existing non-port variables
@@ -56,10 +96,14 @@ function _wt:write_ports() {
   local existing_app_port
   existing_app_port=$(grep -m1 '^APP_PORT=' .env 2>/dev/null | cut -d= -f2)
 
-  local app_port=${existing_app_port:-$(_wt:next_port 3000 APP_PORT)}
-  local offset=$(( app_port - 3000 ))
-  local db_port=$(( 3306 + offset ))
-  local redis_port=$(( 6379 + offset ))
+  local base_app=$(_wt:default_port APP_PORT 3000)
+  local base_db=$(_wt:default_port DB_PORT 3306)
+  local base_redis=$(_wt:default_port REDIS_PORT 6379)
+
+  local app_port=${existing_app_port:-$(_wt:next_app_port)}
+  local offset=$(( app_port - base_app ))
+  local db_port=$(( base_db + offset ))
+  local redis_port=$(( base_redis + offset ))
 
   local other_vars=""
   if [[ -f .env ]]; then
@@ -310,64 +354,87 @@ function wt:rename() {
 
 # Remove a worktree
 #
-# wt:remove <branch-name> [--force]
+# wt:remove <branch-or-path> [--force]
 function wt:remove() {
   _wt:require_bare || return 1
   if [[ -z "$1" ]]; then
-    echo "Usage: wt:remove <branch-name> [--force]"
+    echo "Usage: wt:remove <branch-or-path> [--force]"
     return 1
   fi
 
-  local branch="$1"
+  local arg="$1"
   local force=false
   [[ "$2" == "--force" ]] && force=true
 
-  if [[ ! -d "$branch" ]]; then
-    # Directory gone but git may still track it — prune stale entry and clean up branch
+  local root=$PWD
+
+  # Resolve arg → (wt_path, branch). Accepts branch name OR directory path
+  # (relative to root or absolute). Names can diverge after a partial wt:rename.
+  local wt_path="" branch=""
+  local cur_path="" cur_branch="" cur_rel=""
+  while IFS= read -r line; do
+    if [[ "$line" == "worktree "* ]]; then
+      cur_path="${line#worktree }"
+    elif [[ "$line" == "branch refs/heads/"* ]]; then
+      cur_branch="${line#branch refs/heads/}"
+      cur_rel="${cur_path#$root/}"
+      if [[ "$cur_branch" == "$arg" || "$cur_rel" == "$arg" || "$cur_path" == "$arg" ]]; then
+        wt_path="$cur_path"
+        branch="$cur_branch"
+        break
+      fi
+    fi
+  done < <(git -C .bare worktree list --porcelain)
+
+  # No matching worktree — may be a stale entry, or a branch with no worktree
+  if [[ -z "$wt_path" ]]; then
     git -C .bare worktree prune
-    git -C .bare branch -d "$branch" 2>/dev/null || true
-    echo "Pruned stale worktree entry for '$branch'."
+    if git -C .bare show-ref --verify --quiet "refs/heads/$arg"; then
+      git -C .bare branch -d "$arg" 2>/dev/null && {
+        echo "Removed orphan branch '$arg'."
+      } || {
+        echo "Warning: branch '$arg' has unmerged changes. Use 'git -C .bare branch -D $arg' to force delete."
+      }
+    else
+      echo "No matching worktree or branch for '$arg'. Pruned any stale entries."
+    fi
     return 0
   fi
 
+  local display="${wt_path#$root/}"
+
   if [[ "$force" != true ]]; then
-    echo "This will remove worktree '$branch', stop its containers, and delete the local branch."
+    if [[ "$display" == "$branch" ]]; then
+      echo "This will remove worktree '$display', stop its containers, and delete the local branch."
+    else
+      echo "This will remove worktree '$display' (branch '$branch'), stop its containers, and delete the branch."
+    fi
     read -q "REPLY?Continue? [y/N] " || { echo "\nAborted."; return 1; }
     echo
   fi
 
-  docker compose -f "$branch/docker-compose.yml" --env-file "$branch/.env" down &>/dev/null || true
-  git -C "$branch" submodule deinit --all -f 2>/dev/null
-  rm -rf "$branch"
+  if [[ -d "$wt_path" ]]; then
+    docker compose -f "$wt_path/docker-compose.yml" --env-file "$wt_path/.env" down &>/dev/null || true
+    git -C "$wt_path" submodule deinit --all -f 2>/dev/null
+    rm -rf "$wt_path"
+  fi
+
   git -C .bare worktree prune
   git -C .bare branch -d "$branch" 2>/dev/null || {
     echo "Warning: branch '$branch' has unmerged changes. Use 'git -C .bare branch -D $branch' to force delete."
   }
 }
 
-# Rebase a worktree's branch onto a new parent
+# Fetch latest changes from origin into the bare repo
 #
-# wt:rebase <branch> <new-parent> [old-parent]
-function wt:rebase() {
-  _wt:require_bare || return 1
-  if [[ -z "$1" || -z "$2" ]]; then
-    echo "Usage: wt:rebase <branch> <new-parent> [old-parent]"
-    return 1
-  fi
+# wt:update
+function wt:update() {
+  local bare
+  bare=$(_wt:bare) || { echo "Error: no .bare found in or above $(pwd)."; return 1; }
 
-  local branch="$1" new_parent="$2" old_parent="$3"
-
-  if [[ ! -d "$branch" ]]; then
-    echo "Error: worktree directory '$branch' not found."
-    return 1
-  fi
-
-  git -C .bare fetch origin
-  if [[ -n "$old_parent" ]]; then
-    git -C "$branch" rebase --onto "$new_parent" "$old_parent"
-  else
-    git -C "$branch" rebase "$new_parent"
-  fi
+  echo "Fetching into ${bare}…"
+  git -C "$bare" fetch --all --prune || return 1
+  echo "Done."
 }
 
 # Show available commands
@@ -383,9 +450,10 @@ Worktree commands (most require project root containing .bare/):
   wt:create <branch> [base]       Create a new branch and worktree (base defaults to master)
   wt:list                       * List worktree branch names
   wt:info                       * Show detailed worktree info table
+  wt:update                     * Fetch latest changes from origin into .bare
   wt:rename <old> <new>            Rename worktree directory and branch
-  wt:rebase <branch> <new> [old]  Rebase branch onto new parent (fetch first)
-  wt:remove <branch> [--force]    Stop containers, remove worktree, prune refs (confirms first)
+  wt:remove <branch-or-path> [--force]
+                                  Stop containers, remove worktree, prune refs (confirms first)
   wt:help                         Show this help
 HELP
 }
@@ -399,4 +467,4 @@ function _wt:branches() {
   compadd -a branches
 }
 
-compdef _wt:branches wt:add wt:rebase wt:rename wt:remove
+compdef _wt:branches wt:add wt:rename wt:remove
