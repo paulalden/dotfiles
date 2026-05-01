@@ -122,7 +122,5 @@
   "effortLevel": "xhigh",
   "autoUpdatesChannel": "stable",
   "skipAutoPermissionPrompt": true,
-  "additionalDirectories": [
-    "/Users/paul/Personal/repos/dotfiles"
-  ]
+  "additionalDirectories": ["/Users/paul/Personal/repos/dotfiles"]
 }
