@@ -8,6 +8,7 @@
   },
   "permissions": {
     "allow": [
+      "Bash(git push -f)",
       "Bash(find *)",
       "Bash(rm *)",
       "Bash(mv *)",
@@ -63,7 +64,8 @@
       "Bash(cat *)",
       "Bash(cd * && cat *)",
       "Bash(cd * && find *)",
-      "Bash(cd * && grep *)"
+      "Bash(cd * && grep *)",
+      "Bash(git:*)"
     ],
     "deny": [
       "Bash(rm -rf*)",
@@ -78,7 +80,8 @@
       "Bash(rake db:drop*)",
       "Bash(rake db:reset*)",
       "Bash(rake db:purge*)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "hooks": {
     "PermissionRequest": [
@@ -100,8 +103,7 @@
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "ruby-lsp@claude-plugins-official": true,
-    "caveman@caveman": true
+    "ruby-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "caveman": {
@@ -109,8 +111,18 @@
         "source": "github",
         "repo": "JuliusBrussee/caveman"
       }
+    },
+    "ombulabs-ai": {
+      "source": {
+        "source": "github",
+        "repo": "ombulabs/claude-skills"
+      }
     }
   },
-  "effortLevel": "medium",
-  "autoUpdatesChannel": "stable"
+  "effortLevel": "xhigh",
+  "autoUpdatesChannel": "stable",
+  "skipAutoPermissionPrompt": true,
+  "additionalDirectories": [
+    "/Users/paul/Personal/repos/dotfiles"
+  ]
 }
