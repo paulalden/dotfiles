@@ -119,6 +119,27 @@ function _wt:write_ports() {
   echo "Ports — app: $app_port, db: $db_port, redis: $redis_port"
 }
 
+# Stop containers, remove worktree directory, prune refs, delete branch.
+# force=true → git branch -D (drops unmerged); force=false → git branch -d.
+function _wt:destroy() {
+  local wt_path=$1 branch=$2 force=$3
+
+  if [[ -d "$wt_path" ]]; then
+    docker compose -f "$wt_path/docker-compose.yml" --env-file "$wt_path/.env" down &>/dev/null || true
+    git -C "$wt_path" submodule deinit --all -f 2>/dev/null
+    rm -rf "$wt_path"
+  fi
+
+  git -C .bare worktree prune
+
+  if [[ "$force" == true ]]; then
+    git -C .bare branch -D "$branch" 2>/dev/null
+  else
+    git -C .bare branch -d "$branch" 2>/dev/null || \
+      echo "Warning: branch '$branch' has unmerged changes. Re-run with F to force delete."
+  fi
+}
+
 # ── Public commands ─────────────────────────────────────────────────
 
 # Create a new bare repo setup
@@ -413,16 +434,146 @@ function wt:remove() {
     echo
   fi
 
-  if [[ -d "$wt_path" ]]; then
-    docker compose -f "$wt_path/docker-compose.yml" --env-file "$wt_path/.env" down &>/dev/null || true
-    git -C "$wt_path" submodule deinit --all -f 2>/dev/null
-    rm -rf "$wt_path"
+  _wt:destroy "$wt_path" "$branch" false
+}
+
+# Iterate worktrees in a table; per-row prompt fills the Result cell as you go
+#
+# wt:cleanup
+function wt:cleanup() {
+  _wt:require_bare || return 1
+
+  local -a wt_paths wt_branches wt_hashes wt_dates wt_dirties wt_dirty_counts wt_unpushed
+  local cur_path="" cur_branch="" cur_hash=""
+  local date_str dirty_count status_str unpushed_str ahead commits
+
+  while IFS= read -r line; do
+    if [[ "$line" == "worktree "* ]]; then
+      cur_path="${line#worktree }"
+    elif [[ "$line" == "HEAD "* ]]; then
+      cur_hash="${line#HEAD }"
+      cur_hash="${cur_hash[1,7]}"
+    elif [[ "$line" == "branch refs/heads/"* ]]; then
+      cur_branch="${line#branch refs/heads/}"
+    elif [[ "$line" == "bare" ]]; then
+      cur_path="" cur_branch="" cur_hash=""
+    elif [[ -z "$line" && -n "$cur_branch" ]]; then
+      wt_paths+=("$cur_path")
+      wt_branches+=("$cur_branch")
+      wt_hashes+=("$cur_hash")
+
+      if [[ -d "$cur_path" ]]; then
+        date_str=$(git -C "$cur_path" log -1 --format='%cd' --date=format:'%Y-%m-%d %H:%M' "$cur_branch" 2>/dev/null || echo "unknown")
+        dirty_count=$(git -C "$cur_path" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+        if (( dirty_count > 0 )); then
+          status_str="dirty: $dirty_count"
+        else
+          status_str="clean"
+        fi
+        if git -C "$cur_path" rev-parse --abbrev-ref --symbolic-full-name '@{u}' &>/dev/null; then
+          ahead=$(git -C "$cur_path" rev-list --count '@{u}..HEAD' 2>/dev/null)
+          if (( ahead > 0 )); then
+            unpushed_str="$ahead unpushed"
+          else
+            unpushed_str="up-to-date"
+          fi
+        else
+          commits=$(git -C "$cur_path" rev-list --count HEAD 2>/dev/null)
+          unpushed_str="no upstream (${commits:-0})"
+        fi
+      else
+        date_str="missing"
+        status_str="stale"
+        unpushed_str="—"
+        dirty_count=0
+      fi
+      wt_dates+=("$date_str")
+      wt_dirties+=("$status_str")
+      wt_dirty_counts+=("$dirty_count")
+      wt_unpushed+=("$unpushed_str")
+
+      cur_path="" cur_branch="" cur_hash=""
+    fi
+  done < <(git -C .bare worktree list --porcelain)
+
+  if (( ${#wt_branches} == 0 )); then
+    echo "No worktrees found."
+    return 0
   fi
 
-  git -C .bare worktree prune
-  git -C .bare branch -d "$branch" 2>/dev/null || {
-    echo "Warning: branch '$branch' has unmerged changes. Use 'git -C .bare branch -D $branch' to force delete."
-  }
+  local max_br=6 max_ha=7 max_da=14 max_st=8 max_un=14 max_re=7
+  local i
+  for (( i=1; i<=${#wt_branches}; i++ )); do
+    (( ${#wt_branches[$i]} > max_br )) && max_br=${#wt_branches[$i]}
+    (( ${#wt_dates[$i]}    > max_da )) && max_da=${#wt_dates[$i]}
+    (( ${#wt_dirties[$i]}  > max_st )) && max_st=${#wt_dirties[$i]}
+    (( ${#wt_unpushed[$i]} > max_un )) && max_un=${#wt_unpushed[$i]}
+  done
+
+  local br_line ha_line da_line st_line un_line re_line
+  printf -v br_line '%*s' $((max_br + 2)) '' && br_line="${br_line// /─}"
+  printf -v ha_line '%*s' $((max_ha + 2)) '' && ha_line="${ha_line// /─}"
+  printf -v da_line '%*s' $((max_da + 2)) '' && da_line="${da_line// /─}"
+  printf -v st_line '%*s' $((max_st + 2)) '' && st_line="${st_line// /─}"
+  printf -v un_line '%*s' $((max_un + 2)) '' && un_line="${un_line// /─}"
+  printf -v re_line '%*s' $((max_re + 2)) '' && re_line="${re_line// /─}"
+
+  printf '┌%s┬%s┬%s┬%s┬%s┬%s┐\n' "$br_line" "$ha_line" "$da_line" "$st_line" "$un_line" "$re_line"
+  printf '│ %-*s │ %-*s │ %-*s │ %-*s │ %-*s │ %-*s │\n' \
+    $max_br "Branch" $max_ha "Hash" $max_da "Last Committed" $max_st "Status" $max_un "Unpushed" $max_re "Result"
+  printf '├%s┼%s┼%s┼%s┼%s┼%s┤\n' "$br_line" "$ha_line" "$da_line" "$st_line" "$un_line" "$re_line"
+
+  local -a actions
+  local action result_label reply prompt_text row_prefix
+  local wt_path branch hash date dirty dc unpushed
+
+  for (( i=1; i<=${#wt_branches}; i++ )); do
+    wt_path="${wt_paths[$i]}"
+    branch="${wt_branches[$i]}"
+    hash="${wt_hashes[$i]}"
+    date="${wt_dates[$i]}"
+    dirty="${wt_dirties[$i]}"
+    dc="${wt_dirty_counts[$i]}"
+    unpushed="${wt_unpushed[$i]}"
+
+    row_prefix=$(printf '│ %-*s │ %-*s │ %-*s │ %-*s │ %-*s │ ' \
+      $max_br "$branch" $max_ha "$hash" $max_da "$date" $max_st "$dirty" $max_un "$unpushed")
+
+    prompt_text="Delete? |  [y/N/f] "
+    action=""
+    while true; do
+      printf '\r\033[K%s%s' "$row_prefix" "$prompt_text"
+      read -sk 1 reply
+      case "$reply" in
+        y|Y)
+          if (( dc > 0 )); then
+            prompt_text="Delete? | [f] to force "
+            continue
+          fi
+          action=delete; result_label="deleted"; break ;;
+        f|F)
+          action=force; result_label="forced"; break ;;
+        *)
+          action=skip; result_label="skipped"; break ;;
+      esac
+    done
+
+    printf '\r\033[K%s%-*s │\n' "$row_prefix" $max_re "$result_label"
+    actions+=("$action")
+  done
+
+  printf '└%s┴%s┴%s┴%s┴%s┴%s┘\n' "$br_line" "$ha_line" "$da_line" "$st_line" "$un_line" "$re_line"
+
+  local deleted=0 skipped=0
+  for (( i=1; i<=${#wt_branches}; i++ )); do
+    case "${actions[$i]}" in
+      delete) _wt:destroy "${wt_paths[$i]}" "${wt_branches[$i]}" false; (( deleted++ )) ;;
+      force)  _wt:destroy "${wt_paths[$i]}" "${wt_branches[$i]}" true;  (( deleted++ )) ;;
+      skip)   (( skipped++ )) ;;
+    esac
+  done
+
+  echo "Cleanup complete: $deleted deleted, $skipped skipped."
 }
 
 # Fetch latest changes from origin into the bare repo
@@ -454,6 +605,7 @@ Worktree commands (most require project root containing .bare/):
   wt:rename <old> <new>            Rename worktree directory and branch
   wt:remove <branch-or-path> [--force]
                                   Stop containers, remove worktree, prune refs (confirms first)
+  wt:cleanup                      Iterate worktrees and prompt per-branch to delete (Y/N/F)
   wt:help                         Show this help
 HELP
 }
