@@ -343,6 +343,17 @@ function wt:rename() {
   # Update the .git link inside the worktree (path may have changed relative to .bare)
   echo "gitdir: $wt_git_dir" > "$new/.git"
 
+  # Update submodule worktree= paths in .bare/worktrees/<id>/modules/**/config
+  # Each submodule's git internal config has a worktree= line pointing back at the
+  # working copy; without this, every submodule call fails with "cannot chdir to
+  # ../../../../../../<old-name>/...". The worktree-name appears nowhere else in
+  # these configs, so a scoped sed is safe.
+  if [[ -d "$wt_git_dir/modules" ]]; then
+    while IFS= read -r cfg; do
+      sed -i.bak "s|/$old/|/$new/|g" "$cfg" && rm -f "$cfg.bak"
+    done < <(find "$wt_git_dir/modules" -name config -type f)
+  fi
+
   git -C .bare branch -m "$old" "$new" 2>/dev/null && {
     echo "Renamed branch '$old' → '$new'"
   } || {

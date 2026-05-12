@@ -81,7 +81,7 @@
       "Bash(rake db:reset*)",
       "Bash(rake db:purge*)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "plan"
   },
   "hooks": {
     "PermissionRequest": [
@@ -91,6 +91,16 @@
           {
             "type": "command",
             "command": "cmd=$(jq -r '.tool_input.command'); if echo \"$cmd\" | grep -qE 'git (show|log|diff|branch|status|remote|describe)'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PermissionRequest\",\"permissionDecision\":\"allow\",\"permissionDecisionReason\":\"Git read operation\"}}'; fi"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/paul/.claude/hooks/context-mode-cache-heal.mjs\""
           }
         ]
       }
@@ -117,10 +127,22 @@
         "source": "github",
         "repo": "ombulabs/claude-skills"
       }
+    },
+    "context-mode": {
+      "source": {
+        "source": "github",
+        "repo": "mksglu/context-mode"
+      }
     }
   },
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "autoUpdatesChannel": "stable",
+  "editorMode": "normal",
+  "preferredNotifChannel": "kitty",
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "additionalDirectories": ["/Users/paul/Personal/repos/dotfiles"]
+  "additionalDirectories": [
+    "/Users/paul/Personal/repos/dotfiles"
+  ],
+  "verbose": false
 }
