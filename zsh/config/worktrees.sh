@@ -158,9 +158,59 @@ function _wt:destroy() {
 
 # ── Public commands ─────────────────────────────────────────────────
 
-# Create a new bare repo setup
+# Read or write wt.* config on the bare repo. Stored via `git config` in the
+# bare repo, scoped to a single project clone.
 #
-# wt:init <remote-url> [folder-name]
+# Usage:
+#   wt:config                       List all wt.* values
+#   wt:config <key>                 Print one value
+#   wt:config <key> <value>         Set a value
+#   wt:config <key> --unset         Remove a value
+#
+# Examples:
+#   wt:config defaultBase sprint_ee     # set sprint_ee as the wt:create base
+#   wt:config defaultBase               # → sprint_ee
+#   wt:config                           # → wt.defaultbase sprint_ee
+#   wt:config defaultBase --unset       # remove the override; wt:create falls back to master
+#
+# Known keys:
+#   defaultBase    Branch used as the base when wt:create is called without one
+function wt:config() {
+  local bare
+  bare=$(_wt:bare) || { echo "Error: no .bare found in or above $(pwd)."; return 1; }
+
+  if [[ -z "$1" ]]; then
+    git -C "$bare" config --get-regexp '^wt\.' 2>/dev/null || echo "(no wt.* config set)"
+    return 0
+  fi
+
+  local key="wt.$1"
+
+  if [[ "$2" == "--unset" ]]; then
+    git -C "$bare" config --unset "$key"
+    return $?
+  fi
+
+  if [[ -z "$2" ]]; then
+    git -C "$bare" config "$key"
+    return $?
+  fi
+
+  git -C "$bare" config "$key" "$2"
+}
+
+# Create a new bare repo setup. Clones the remote as a bare repo into
+# <folder>/.bare, sets up the usual refspec so all remote branches fetch,
+# and cd's into <folder>.
+#
+# Usage:
+#   wt:init <remote-url> [folder-name]
+#
+# Examples:
+#   wt:init git@github.com:ExamTrack/DemoSystem.git
+#       # → creates DemoSystem/.bare and cd's into DemoSystem
+#   wt:init git@github.com:ExamTrack/DemoSystem.git demo
+#       # → uses "demo" as the folder name instead of the repo name
 function wt:init() {
   if [[ -z "$1" ]]; then
     echo "Usage: wt:init <remote-url> [folder-name]"
@@ -173,9 +223,18 @@ function wt:init() {
   git -C .bare fetch
 }
 
-# List all worktrees
+# List all worktree branch names, one per line. Useful for scripting.
+# Works from any worktree folder.
 #
-# wt:list
+# Usage:
+#   wt:list
+#
+# Examples:
+#   wt:list
+#       # → master
+#       #   sprint_ee
+#       #   misc/worktree-postcreate-hook
+#   wt:list | wc -l    # count worktrees
 function wt:list() {
   local bare
   bare=$(_wt:bare) || { echo "Error: no .bare found in or above $(pwd)."; return 1; }
@@ -185,9 +244,20 @@ function wt:list() {
   done
 }
 
-# Show detailed worktree info in a table
+# Show detailed worktree info in a table: git dirty state, docker status,
+# assigned ports, HEAD hash, last commit date, ahead/behind master.
+# Works from any worktree folder.
 #
-# wt:info
+# Usage:
+#   wt:info
+#
+# Examples:
+#   wt:info
+#       # ┌──────────────────┬─────┬─────┬────────────────┬─────────┬──────────────────┬───────────┐
+#       # │ Branch           │ Git │ Doc │ App:Db:Redis   │ Hash    │ Last Committed   │ vs master │
+#       # ├──────────────────┼─────┼─────┼────────────────┼─────────┼──────────────────┼───────────┤
+#       # │ feature/my-thing │  ✓  │  ●  │ 3005:3311:6384 │ a1b2c3d │ 2026-05-14 09:01 │ ↑12 ↓0    │
+#       # └──────────────────┴─────┴─────┴────────────────┴─────────┴──────────────────┴───────────┘
 function wt:info() {
   local bare
   bare=$(_wt:bare) || { echo "Error: no .bare found in or above $(pwd)."; return 1; }
@@ -297,9 +367,18 @@ function wt:info() {
   printf '└%s┴%s┴%s┴%s┴%s┴%s┴%s┘\n' "$br_line" "$st_line" "$st_line" "$po_line" "$ha_line" "$da_line" "$ah_line"
 }
 
-# Add an existing remote branch as a worktree
+# Add an existing remote branch as a worktree. Creates the worktree directory
+# from the branch name, initialises submodules, writes .env with unique ports,
+# and runs .wt-postcreate if present.
 #
-# wt:add <branch-name>
+# Usage:
+#   wt:add <branch-name>
+#
+# Examples:
+#   wt:add sprint_ee
+#       # → checks out origin/sprint_ee at ./sprint_ee
+#   wt:add feature/my-feature
+#       # → checks out origin/feature/my-feature at ./feature/my-feature
 function wt:add() {
   _wt:require_bare || return 1
   if [[ -z "$1" ]]; then
@@ -312,14 +391,24 @@ function wt:add() {
   cd "$1" && git submodule update --init --recursive && _wt:write_ports && _wt:run_postcreate
 }
 
-# Create a new worktree with a new branch
+# Create a new worktree with a new branch. After creation: initialises
+# submodules, writes .env with unique ports, runs .wt-postcreate if present.
 #
-# wt:create <branch-name> [base]
+# Usage:
+#   wt:create <branch-name> [base]
 #
 # Base resolution:
 #   1. The [base] argument if provided.
-#   2. `git -C .bare config wt.defaultBase` if set (per-project override).
+#   2. `wt:config defaultBase` if set (per-project override).
 #   3. "master" as the final fallback.
+#
+# Examples:
+#   wt:create feature/cool-thing
+#       # → new branch from the configured default base (or master)
+#   wt:create feature/cool-thing sprint_ee
+#       # → new branch from sprint_ee (overrides defaultBase)
+#   wt:config defaultBase sprint_ee && wt:create feature/cool-thing
+#       # → set default once, then every wt:create branches from sprint_ee
 function wt:create() {
   _wt:require_bare || return 1
   if [[ -z "$1" ]]; then
@@ -336,9 +425,19 @@ function wt:create() {
   cd "$1" && git submodule update --init --recursive && _wt:write_ports && _wt:run_postcreate
 }
 
-# Rename a worktree directory (and optionally its branch)
+# Rename a worktree directory and its branch. Updates the worktree's gitdir
+# pointer, the .git link, and any submodule worktree= paths. If the branch
+# rename fails (e.g. unmerged changes blocking branch -m), the directory move
+# still proceeds and the branch keeps its old name.
 #
-# wt:rename <old-name> <new-name>
+# Usage:
+#   wt:rename <old-name> <new-name>
+#
+# Examples:
+#   wt:rename improvements-questions worktree-postcreate-hook
+#       # → renames both the directory and the branch
+#   wt:rename misc/old-thing feature/new-thing
+#       # → moves across subdirectory layouts (mkdir -p handles parents)
 function wt:rename() {
   _wt:require_bare || return 1
   if [[ -z "$1" || -z "$2" ]]; then
@@ -408,9 +507,21 @@ function wt:rename() {
   echo "Worktree moved: $old → $new"
 }
 
-# Remove a worktree
+# Remove a worktree. Stops its docker containers, removes the directory,
+# prunes the worktree refs, and deletes the local branch. Accepts either
+# a branch name or a worktree path (relative or absolute). Confirms before
+# acting unless --force is given.
 #
-# wt:remove <branch-or-path> [--force]
+# Usage:
+#   wt:remove <branch-or-path> [--force]
+#
+# Examples:
+#   wt:remove feature/old-thing
+#       # → prompts for confirmation, then tears down
+#   wt:remove feature/old-thing --force
+#       # → skips the confirmation prompt
+#   wt:remove ./feature/old-thing
+#       # → also accepts the directory path (helpful if dir != branch name)
 function wt:remove() {
   _wt:require_bare || return 1
   if [[ -z "$1" ]]; then
@@ -472,9 +583,17 @@ function wt:remove() {
   _wt:destroy "$wt_path" "$branch" false
 }
 
-# Iterate worktrees in a table; per-row prompt fills the Result cell as you go
+# Iterate worktrees in a table; per-row prompt fills the Result cell as you go.
+# For each worktree press Y to delete (blocks if dirty), F to force-delete
+# (drops unmerged changes), or any other key to skip.
 #
-# wt:cleanup
+# Usage:
+#   wt:cleanup
+#
+# Examples:
+#   wt:cleanup
+#       # → walks every worktree with status, deciding inline:
+#       #   y → deleted (clean only), f → forced, anything else → skipped
 function wt:cleanup() {
   _wt:require_bare || return 1
 
@@ -611,9 +730,17 @@ function wt:cleanup() {
   echo "Cleanup complete: $deleted deleted, $skipped skipped."
 }
 
-# Fetch latest changes from origin into the bare repo
+# Fetch latest changes from origin into the bare repo (with --prune so deleted
+# remote branches disappear locally). Does not touch any worktree's working
+# tree. Works from any worktree folder.
 #
-# wt:update
+# Usage:
+#   wt:update
+#
+# Examples:
+#   wt:update
+#       # → Fetching into /path/to/Project/.bare…
+#       #   Done.
 function wt:update() {
   local bare
   bare=$(_wt:bare) || { echo "Error: no .bare found in or above $(pwd)."; return 1; }
@@ -634,7 +761,9 @@ Worktree commands (most require project root containing .bare/):
   wt:init <remote-url> [folder]   Clone a repo as a bare repo ready for worktrees
   wt:add <branch>                 Check out an existing remote branch as a worktree
   wt:create <branch> [base]       Create a new branch and worktree
-                                  base = arg > git config wt.defaultBase > master
+                                  base = arg > wt:config defaultBase > master
+  wt:config [<key> [<value>|--unset]]
+                                  Read or write wt.* config on the bare repo
   wt:list                       * List worktree branch names
   wt:info                       * Show detailed worktree info table
   wt:update                     * Fetch latest changes from origin into .bare
@@ -650,13 +779,13 @@ After wt:add / wt:create the new worktree is also set up with:
   - ./.wt-postcreate executed if present and executable — see below.
 
 Default base branch for wt:create:
-  Override the "master" default per-project by setting a git config value
-  on the bare repo. From the project root:
+  Override the "master" default per-project with wt:config:
 
-    git -C .bare config wt.defaultBase sprint_ee
+    wt:config defaultBase sprint_ee
 
   After that, "wt:create my-branch" branches from sprint_ee. Pass a base
-  argument explicitly to override on a single call.
+  argument explicitly to override on a single call. `wt:config` with no
+  args lists all configured wt.* values.
 
 Project post-create hook (./.wt-postcreate):
   An optional executable script committed at the repo root. wt:add / wt:create
