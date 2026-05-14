@@ -314,7 +314,12 @@ function wt:add() {
 
 # Create a new worktree with a new branch
 #
-# wt:create <branch-name> [base=master]
+# wt:create <branch-name> [base]
+#
+# Base resolution:
+#   1. The [base] argument if provided.
+#   2. `git -C .bare config wt.defaultBase` if set (per-project override).
+#   3. "master" as the final fallback.
 function wt:create() {
   _wt:require_bare || return 1
   if [[ -z "$1" ]]; then
@@ -322,7 +327,10 @@ function wt:create() {
     return 1
   fi
 
-  local base="${2:-master}"
+  local configured_base
+  configured_base=$(git -C .bare config wt.defaultBase 2>/dev/null)
+  local base="${2:-${configured_base:-master}}"
+
   git -C .bare worktree prune
   git -C .bare worktree add "../$1" -b "$1" "$base" || return 1
   cd "$1" && git submodule update --init --recursive && _wt:write_ports && _wt:run_postcreate
@@ -625,7 +633,8 @@ Worktree commands (most require project root containing .bare/):
 
   wt:init <remote-url> [folder]   Clone a repo as a bare repo ready for worktrees
   wt:add <branch>                 Check out an existing remote branch as a worktree
-  wt:create <branch> [base]       Create a new branch and worktree (base defaults to master)
+  wt:create <branch> [base]       Create a new branch and worktree
+                                  base = arg > git config wt.defaultBase > master
   wt:list                       * List worktree branch names
   wt:info                       * Show detailed worktree info table
   wt:update                     * Fetch latest changes from origin into .bare
@@ -639,6 +648,15 @@ After wt:add / wt:create the new worktree is also set up with:
   - submodules initialised (git submodule update --init --recursive)
   - .env written with unique APP_PORT / DB_PORT / REDIS_PORT (see _wt:write_ports)
   - ./.wt-postcreate executed if present and executable — see below.
+
+Default base branch for wt:create:
+  Override the "master" default per-project by setting a git config value
+  on the bare repo. From the project root:
+
+    git -C .bare config wt.defaultBase sprint_ee
+
+  After that, "wt:create my-branch" branches from sprint_ee. Pass a base
+  argument explicitly to override on a single call.
 
 Project post-create hook (./.wt-postcreate):
   An optional executable script committed at the repo root. wt:add / wt:create
