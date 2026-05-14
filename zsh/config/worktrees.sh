@@ -14,6 +14,12 @@
 #
 # Most commands must be run from the project root (containing .bare/).
 # wt:list, wt:info, and wt:update can be run from any worktree folder.
+#
+# Post-create hook:
+#   If a worktree contains an executable .wt-postcreate at its root, wt:add
+#   and wt:create run it after submodules and .env are set up. Use it for
+#   project-specific setup (writing secrets, running installers, etc.).
+#   See `wt:help` for an example.
 ################################################################################
 
 # ── Private helpers ─────────────────────────────────────────────────
@@ -117,6 +123,16 @@ function _wt:write_ports() {
   } > .env
 
   echo "Ports — app: $app_port, db: $db_port, redis: $redis_port"
+}
+
+# Run the project's post-create hook if it exists. Anything project-specific
+# (Rails master.key, npm install, copying envs, …) belongs here, not in the
+# generic helpers. The hook is run from the new worktree's root and inherits
+# the current shell's environment.
+function _wt:run_postcreate() {
+  [[ -x .wt-postcreate ]] || return 0
+  echo "Running .wt-postcreate…"
+  ./.wt-postcreate
 }
 
 # Stop containers, remove worktree directory, prune refs, delete branch.
@@ -293,7 +309,7 @@ function wt:add() {
 
   git -C .bare worktree prune
   git -C .bare worktree add "../$1" "$1" || return 1
-  cd "$1" && git submodule update --init --recursive && _wt:write_ports
+  cd "$1" && git submodule update --init --recursive && _wt:write_ports && _wt:run_postcreate
 }
 
 # Create a new worktree with a new branch
@@ -309,7 +325,7 @@ function wt:create() {
   local base="${2:-master}"
   git -C .bare worktree prune
   git -C .bare worktree add "../$1" -b "$1" "$base" || return 1
-  cd "$1" && git submodule update --init --recursive && _wt:write_ports
+  cd "$1" && git submodule update --init --recursive && _wt:write_ports && _wt:run_postcreate
 }
 
 # Rename a worktree directory (and optionally its branch)
@@ -618,6 +634,37 @@ Worktree commands (most require project root containing .bare/):
                                   Stop containers, remove worktree, prune refs (confirms first)
   wt:cleanup                      Iterate worktrees and prompt per-branch to delete (Y/N/F)
   wt:help                         Show this help
+
+After wt:add / wt:create the new worktree is also set up with:
+  - submodules initialised (git submodule update --init --recursive)
+  - .env written with unique APP_PORT / DB_PORT / REDIS_PORT (see _wt:write_ports)
+  - ./.wt-postcreate executed if present and executable — see below.
+
+Project post-create hook (./.wt-postcreate):
+  An optional executable script committed at the repo root. wt:add / wt:create
+  run it from the new worktree's root, with the shell's environment inherited,
+  after submodules and .env are in place. Use it for anything project-specific:
+  bootstrap secrets, copy config templates, run package installs, seed dev data.
+
+  Keep secrets OUT of the script — read them from env vars users export
+  wherever their shell sources them (e.g. ~/secrets.sh). Convention for
+  per-project secret env vars: WT_<PURPOSE>_<PROJECT>, e.g.
+  WT_MASTER_KEY_DEMOSYSTEM.
+
+  Example .wt-postcreate (Rails: bootstrap config/master.key):
+
+    #!/usr/bin/env bash
+    set -euo pipefail
+    key="${WT_MASTER_KEY_DEMOSYSTEM:-}"
+    if [[ -n "$key" && -d config ]]; then
+      if [[ ! -f config/master.key || "$(<config/master.key)" != "$key" ]]; then
+        printf '%s' "$key" > config/master.key
+        chmod 600 config/master.key
+        echo "master.key written from \$WT_MASTER_KEY_DEMOSYSTEM"
+      fi
+    fi
+
+  Make it executable: chmod +x .wt-postcreate, then commit it.
 HELP
 }
 
