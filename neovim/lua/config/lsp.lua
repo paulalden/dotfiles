@@ -82,6 +82,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 
+    vim.keymap.set("n", "K", function()
+      vim.lsp.buf.hover({ border = "rounded", max_width = 80, max_height = 20 })
+    end, opts)
+
     -- - grr — references
     -- - gra — code actions
     -- - grn — rename
