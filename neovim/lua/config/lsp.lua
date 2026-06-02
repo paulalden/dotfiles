@@ -40,6 +40,16 @@ end
 disable_semantic_highlights()
 vim.api.nvim_create_autocmd("ColorScheme", { callback = disable_semantic_highlights })
 
+-- Green border/title on LSP hover and other float popups
+local colors = require("config.colors").colors
+local function style_floats()
+  vim.api.nvim_set_hl(0, "FloatBorder", { fg = colors.green })
+  vim.api.nvim_set_hl(0, "FloatTitle", { fg = colors.green, bold = true })
+end
+
+style_floats()
+vim.api.nvim_create_autocmd("ColorScheme", { callback = style_floats })
+
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -83,7 +93,52 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 
     vim.keymap.set("n", "K", function()
-      vim.lsp.buf.hover({ border = "rounded", max_width = 80, max_height = 20 })
+      vim.lsp.buf.hover({
+        border = "rounded",
+        max_width = 80,
+        max_height = 20,
+        title = " docs · <C-d>/<C-u> scroll · K focus · q close ",
+        title_pos = "left",
+      })
+    end, opts)
+
+    vim.keymap.set("n", "q", function()
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local cfg = vim.api.nvim_win_get_config(win)
+        if cfg.relative ~= "" then
+          local buf = vim.api.nvim_win_get_buf(win)
+          local ft = vim.bo[buf].filetype
+          if ft == "markdown" or ft == "lsp-hover" then
+            vim.api.nvim_win_close(win, true)
+            return
+          end
+        end
+      end
+      vim.api.nvim_feedkeys("q", "n", false)
+    end, opts)
+
+    local function scroll_hover_or(default_key)
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local cfg = vim.api.nvim_win_get_config(win)
+        if cfg.relative ~= "" then
+          local buf = vim.api.nvim_win_get_buf(win)
+          local ft = vim.bo[buf].filetype
+          if ft == "markdown" or ft == "lsp-hover" then
+            vim.api.nvim_win_call(win, function()
+              vim.cmd("normal! " .. vim.api.nvim_replace_termcodes(default_key, true, false, true))
+            end)
+            return
+          end
+        end
+      end
+      vim.cmd("normal! " .. vim.api.nvim_replace_termcodes(default_key, true, false, true))
+    end
+
+    vim.keymap.set("n", "<C-d>", function()
+      scroll_hover_or("<C-d>")
+    end, opts)
+    vim.keymap.set("n", "<C-u>", function()
+      scroll_hover_or("<C-u>")
     end, opts)
 
     -- - grr — references
