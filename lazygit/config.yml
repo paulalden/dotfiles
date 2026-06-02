@@ -174,7 +174,7 @@ keybinding:
     pasteCommits: 'v'
     tagCommit: 'T'
     checkoutCommit: '<space>'
-    resetCherryPick: '<c-R>'
+    resetCherryPick: '<c-x>'
     copyCommitMessageToClipboard: '<c-y>'
   stash:
     popStash: 'g'
