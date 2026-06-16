@@ -27,6 +27,7 @@
     ~/.zshenv: zshenv
     ~/.config/zsh: zsh
     ~/.asdfrc: asdfrc
+    ~/.claude/CLAUDE.md: claude/CLAUDE.md
     ~/.claude/settings.json: claude/settings.json
     ~/.claude/statusline-command.sh: claude/statusline-command.sh
 

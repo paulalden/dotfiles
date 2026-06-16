@@ -5,3 +5,5 @@ tags
 .DS_Store
 */**/.~lock*
 .irb_history
+
+**/.claude/settings.local.json

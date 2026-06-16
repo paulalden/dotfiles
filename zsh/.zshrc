@@ -39,6 +39,10 @@ autoload -Uz colors && colors
 
 autoload -Uz compinit
 
+# User-installed completion scripts (e.g. wt). Must precede `compinit` so it
+# indexes them on the first run.
+fpath=("${ZDOTDIR:-$HOME}/completions" $fpath)
+
 zstyle ':completion:*' completer _complete
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
 zmodload zsh/complist
@@ -67,7 +71,6 @@ zsh_add_plugin "zsh-users/zsh-syntax-highlighting" # Must be last
 zsh_add_config "config/vim-mode.sh"
 zsh_add_config "config/exports.sh"
 zsh_add_config "config/aliases.sh"
-zsh_add_config "config/worktrees.sh"
 zsh_add_config "config/fzf.sh"
 
 ################################################################################

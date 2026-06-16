@@ -50,10 +50,29 @@ _prompt_async_worker() {
     git_result="${branch}${status_str}"
   fi
 
-  # Language versions (only check if relevant files exist)
+  # Language versions: prefer version files (fast, no rbenv/node startup);
+  # fall back to runtime only when the project advertises the language another way.
   local ruby_ver="" node_ver=""
-  [[ -f Gemfile || -f .ruby-version ]] && ruby_ver=$(ruby -e 'print RUBY_VERSION' 2>/dev/null)
-  [[ -f package.json || -f .node-version || -f .nvmrc ]] && node_ver=$(node --version 2>/dev/null) && node_ver="${node_ver#v}"
+
+  if [[ -f .ruby-version ]]; then
+    ruby_ver=$(<.ruby-version)
+    ruby_ver="${ruby_ver//[[:space:]]/}"
+  elif [[ -f Gemfile ]]; then
+    ruby_ver=$(ruby -e 'print RUBY_VERSION' 2>/dev/null)
+  fi
+
+  if [[ -f .node-version ]]; then
+    node_ver=$(<.node-version)
+    node_ver="${node_ver//[[:space:]]/}"
+    node_ver="${node_ver#v}"
+  elif [[ -f .nvmrc ]]; then
+    node_ver=$(<.nvmrc)
+    node_ver="${node_ver//[[:space:]]/}"
+    node_ver="${node_ver#v}"
+  elif [[ -f package.json ]]; then
+    node_ver=$(node --version 2>/dev/null)
+    node_ver="${node_ver#v}"
+  fi
 
   # Output all results on one line, tab-separated
   print "${git_result}\t${ruby_ver}\t${node_ver}"
@@ -77,8 +96,8 @@ _prompt_format_git() {
 _prompt_format_langs() {
   local ruby=$1 node=$2
   _prompt_lang_info=""
-  [[ -n "$ruby" ]] && _prompt_lang_info+="${_prompt_magenta}${ruby}${_prompt_reset} "
-  [[ -n "$node" ]] && _prompt_lang_info+="${_prompt_magenta}${node}${_prompt_reset} "
+  [[ -n "$ruby" ]] && _prompt_lang_info+="${_prompt_magenta} ${ruby}${_prompt_reset} "
+  [[ -n "$node" ]] && _prompt_lang_info+="${_prompt_magenta} ${node}${_prompt_reset} "
 }
 
 _prompt_async_start() {

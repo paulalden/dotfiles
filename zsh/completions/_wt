@@ -1,0 +1,31 @@
+#compdef wt
+_wt() {
+  local -a verbs
+  verbs=(new ls list info rm remove add create switch sw sync rename rn cleanup doctor dr update fetch config init help completion)
+  if (( CURRENT == 2 )); then
+    _describe 'wt verb' verbs
+    return
+  fi
+  # Walk up from $PWD to find .bare/.
+  local dir=$PWD bare=""
+  while [[ "$dir" != "/" ]]; do
+    if [[ -d "$dir/.bare" ]]; then bare="$dir/.bare"; break; fi
+    dir="${dir:h}"
+  done
+  [[ -z "$bare" ]] && return
+
+  local -a branches worktree_branches
+  case "$words[2]" in
+    new)
+      # All local + remote branches (without origin/ prefix), for attaching.
+      branches=(${(f)"$(git -C "$bare" branch -a --format='%(refname:short)' 2>/dev/null \
+        | sed 's|^origin/||' | grep -v '^HEAD$' | sort -u)"})
+      _describe 'branch' branches ;;
+    rm|rename|rn|switch|sw|sync)
+      # Only branches with an attached worktree.
+      worktree_branches=(${(f)"$(git -C "$bare" worktree list --porcelain 2>/dev/null \
+        | awk '/^branch refs\/heads\//{sub(/^branch refs\/heads\//,""); print}')"})
+      _describe 'worktree branch' worktree_branches ;;
+  esac
+}
+compdef _wt wt
