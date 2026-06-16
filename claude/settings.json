@@ -113,7 +113,9 @@
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "ruby-lsp@claude-plugins-official": true
+    "ruby-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "understand-anything@understand-anything": true
   },
   "extraKnownMarketplaces": {
     "caveman": {
@@ -133,16 +135,23 @@
         "source": "github",
         "repo": "mksglu/context-mode"
       }
+    },
+    "understand-anything": {
+      "source": {
+        "source": "github",
+        "repo": "Lum1104/Understand-Anything"
+      }
     }
   },
   "effortLevel": "high",
   "autoUpdatesChannel": "stable",
+  "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
+  "verbose": false,
   "preferredNotifChannel": "kitty",
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "additionalDirectories": [
     "/Users/paul/Personal/repos/dotfiles"
-  ],
-  "verbose": false
+  ]
 }
