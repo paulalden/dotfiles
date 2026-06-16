@@ -83,6 +83,7 @@
     ],
     "defaultMode": "plan"
   },
+  "model": "opus",
   "hooks": {
     "PermissionRequest": [
       {
@@ -151,7 +152,6 @@
   "preferredNotifChannel": "kitty",
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "additionalDirectories": [
-    "/Users/paul/Personal/repos/dotfiles"
-  ]
+  "verbose": false,
+  "additionalDirectories": ["/Users/paul/Personal/repos/dotfiles"]
 }

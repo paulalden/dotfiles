@@ -1,94 +1,73 @@
--- There are additional nvim-treesitter modules that you can use to interact
--- with nvim-treesitter. You should go explore a few and see what interests you:
---
--- Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
--- Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
--- Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 return {
   "nvim-treesitter/nvim-treesitter",
-  dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+  branch = "main",
+  lazy = false,
   build = ":TSUpdate",
-  main = "nvim-treesitter.configs",
   opts = {
-    auto_install = true,
+    install_dir = vim.fn.stdpath("data") .. "/site",
     ensure_installed = {
       "bash",
       "diff",
       "http",
-      "kulala_http",
+      "javascript",
       "lua",
       "markdown",
+      "markdown_inline",
       "regex",
+      "ruby",
       "sql",
+      "tsx",
+      "typescript",
       "vim",
       "vimdoc",
     },
-    highlight = {
-      enable = true,
-      disable = { "qf" },
-      additional_vim_regex_highlighting = { "ruby" },
-    },
-    fold = {
-      enabled = true,
-    },
-    indent = {
-      enable = true,
-      disable = { "ruby" },
-    },
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = "<C-space>",
-        node_incremental = "<C-space>",
-        scope_incremental = false,
-        node_decremental = "<bs>",
-      },
-    },
-    textobjects = {
-      move = {
-        enable = true,
-        set_jumps = true, -- whether to set jumps in the jumplist
-        goto_next_start = {
-          ["]f"] = "@function.outer",
-          ["]c"] = "@class.outer",
-          ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-          ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-        },
-        goto_next_end = {
-          ["]F"] = "@function.outer",
-          ["]C"] = "@class.outer",
-        },
-        goto_previous_start = {
-          ["[f"] = "@function.outer",
-          ["[c"] = "@class.outer",
-        },
-        goto_previous_end = {
-          ["[F"] = "@function.outer",
-          ["[C"] = "@class.outer",
-        },
-      },
-      swap = {
-        enable = true,
-        swap_next = {
-          ["]a"] = "@parameter.inner",
-        },
-        swap_previous = {
-          ["[a"] = "@parameter.inner",
-        },
-      },
-      select = {
-        enable = true,
-        lookahead = true,
-        keymaps = {
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["ac"] = "@class.outer",
-          ["ic"] = "@class.inner",
-          ["ab"] = "@block.outer",
-          ["ib"] = "@block.inner",
-        },
-        include_surrounding_whitespace = true,
-      },
-    },
   },
+  config = function(_, opts)
+    require("nvim-treesitter").setup({ install_dir = opts.install_dir })
+    require("nvim-treesitter").install(opts.ensure_installed)
+
+    -- Highlight: enable for any filetype with a parser; keep regex highlight for ruby
+    vim.api.nvim_create_autocmd("FileType", {
+      group = vim.api.nvim_create_augroup("treesitter_highlight", { clear = true }),
+      callback = function(ev)
+        local ft = vim.bo[ev.buf].filetype
+        if ft == "qf" then
+          return
+        end
+        local ok = pcall(vim.treesitter.start, ev.buf)
+        if ok and ft == "ruby" then
+          vim.bo[ev.buf].syntax = "ON"
+        end
+      end,
+    })
+
+    -- Folds: treesitter foldexpr where a parser is available
+    vim.api.nvim_create_autocmd("FileType", {
+      group = vim.api.nvim_create_augroup("treesitter_folds", { clear = true }),
+      callback = function(ev)
+        if not vim.treesitter.language.get_lang(vim.bo[ev.buf].filetype) then
+          return
+        end
+        vim.api.nvim_buf_call(ev.buf, function()
+          vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+          vim.wo[0][0].foldmethod = "expr"
+        end)
+      end,
+    })
+
+    -- Indent: treesitter indentexpr, excluding ruby
+    vim.api.nvim_create_autocmd("FileType", {
+      group = vim.api.nvim_create_augroup("treesitter_indent", { clear = true }),
+      callback = function(ev)
+        local ft = vim.bo[ev.buf].filetype
+        if ft == "ruby" then
+          return
+        end
+        if not vim.treesitter.language.get_lang(ft) then
+          return
+        end
+        vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end,
+    })
+  end,
 }

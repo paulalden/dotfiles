@@ -123,14 +123,17 @@ autocmd("BufDelete", {
   group = augroup("dashboard_on_empty"),
   callback = function()
     vim.schedule(function()
-      local bufs = vim.tbl_filter(function(bufnr)
-        return vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted and vim.api.nvim_buf_get_name(bufnr) ~= ""
-      end, vim.api.nvim_list_bufs())
-      if #bufs == 0 then
-        pcall(function()
-          Snacks.dashboard.open()
-        end)
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local name = vim.api.nvim_buf_get_name(buf)
+        local ft = vim.bo[buf].filetype
+        if name ~= "" or (ft ~= "" and ft ~= "snacks_dashboard") then
+          return
+        end
       end
+      pcall(function()
+        Snacks.dashboard.open()
+      end)
     end)
   end,
 })
