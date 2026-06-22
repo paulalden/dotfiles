@@ -29,6 +29,12 @@ export LANG=en_GB.UTF-8
 # Disable homebrew post-install messages
 export HOMEBREW_NO_ENV_HINTS=1
 
+# Skip upgrade/install confirmation prompts (Ask mode is default in Homebrew 6+)
+export HOMEBREW_NO_ASK=1
+
+# Skip tap-trust warnings for installed taps
+export HOMEBREW_NO_REQUIRE_TAP_TRUST=1
+
 # Preferred programs
 export EDITOR=nvim
 export TERMINAL=kitty
