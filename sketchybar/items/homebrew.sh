@@ -4,6 +4,8 @@ source "$CONFIG_DIR/scripts/config.sh"
 
 POPUP_CLICK_SCRIPT='sketchybar --set $NAME popup.drawing=toggle'
 
+sketchybar --add event brew_update
+
 sketchybar --add item homebrew right \
   --set homebrew \
   icon= \
@@ -16,4 +18,4 @@ sketchybar --add item homebrew right \
   popup.background.corner_radius=4 \
   click_script="$POPUP_CLICK_SCRIPT" \
   script="$CONFIG_DIR/plugins/homebrew.sh" \
-  --subscribe homebrew mouse.clicked
+  --subscribe homebrew mouse.clicked brew_update
