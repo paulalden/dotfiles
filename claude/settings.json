@@ -116,7 +116,8 @@
     "swift-lsp@claude-plugins-official": true,
     "ruby-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
-    "understand-anything@understand-anything": true
+    "understand-anything@understand-anything": true,
+    "pyright-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "caveman": {
@@ -144,7 +145,7 @@
       }
     }
   },
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "autoUpdatesChannel": "stable",
   "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
@@ -152,6 +153,8 @@
   "preferredNotifChannel": "kitty",
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "verbose": false,
-  "additionalDirectories": ["/Users/paul/Personal/repos/dotfiles"]
+  "additionalDirectories": [
+    "/Users/paul/Personal/repos/dotfiles"
+  ],
+  "tui": "fullscreen"
 }
