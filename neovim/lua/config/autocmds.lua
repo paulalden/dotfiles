@@ -58,6 +58,23 @@ autocmd({ "BufWritePre" }, {
   end,
 })
 
+-- Guard against a deleted/inaccessible working directory.
+-- When the cwd is gone, vim.uv.cwd() returns nil and any relative-path
+-- resolution hard-errors (e.g. render-markdown's code-block icon lookup:
+-- vim.filetype.match -> vim.fs.abspath -> assert(uv.cwd())). Restore a valid cwd.
+autocmd({ "BufEnter", "WinEnter", "VimResized", "WinResized", "FocusGained" }, {
+  group = augroup("cwd_guard"),
+  callback = function()
+    if vim.uv.cwd() then
+      return
+    end
+    local home = vim.fn.expand("~")
+    pcall(vim.cmd.cd, home)
+    vim.notify("cwd was invalid; restored to " .. home, vim.log.levels.WARN, { title = "nvim" })
+  end,
+  desc = "Restore a valid cwd if the current one is deleted",
+})
+
 -------------------------------------------------------------------------------
 -- VISUAL FEEDBACK
 -------------------------------------------------------------------------------
