@@ -105,6 +105,16 @@
           }
         ]
       }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/scripts/claude-notify.sh"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
