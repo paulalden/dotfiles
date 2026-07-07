@@ -19,7 +19,7 @@ fmt+="#{pane_title}"
 
 rows=$(tmux list-panes -a -f '#{==:#{pane_current_command},claude}' -F "$fmt" \
   | sort -k1,1 \
-  | awk -F'\t' '{ t = $4; sub(/^[^A-Za-z0-9]+ +/, "", t); printf "%-14s %s  %s\n", $2, $3, t }')
+  | awk -F'\t' 'BEGIN{e=sprintf("%c",27)} { c=($1==0)?"91":($1==1)?"92":"93"; dot=e"["c"m●"e"[0m"; t=$4; sub(/^[^A-Za-z0-9]+ +/,"",t); printf "%-14s %s  %s\n", $2, dot, t }')
 
 # Nothing running: show a note instead of flashing an empty popup.
 if [ -z "$rows" ]; then
@@ -45,7 +45,7 @@ if [ "$(printf '%s\n' "$rows" | grep -c .)" -eq 1 ]; then
 fi
 
 sel=$(printf '%s\n' "$rows" \
-  | fzf --no-tmux +m --reverse --exit-0 --no-preview \
-    --header "Enter: switch  •  ● needs you   ○ done   · working") || exit 0
+  | fzf --no-tmux --ansi +m --reverse --exit-0 --no-preview \
+    --header "Enter: switch  •  red blocked   yellow working   green done") || exit 0
 
 switch_to "$sel"
