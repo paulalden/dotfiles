@@ -19,7 +19,7 @@ fmt+="#{pane_title}"
 
 rows=$(tmux list-panes -a -f '#{==:#{pane_current_command},claude}' -F "$fmt" \
   | sort -k1,1 \
-  | awk -F'\t' 'BEGIN{e=sprintf("%c",27)} { c=($1==0)?"91":($1==1)?"92":"93"; dot=e"["c"m●"e"[0m"; t=$4; sub(/^[^A-Za-z0-9]+ +/,"",t); printf "%-14s %s  %s\n", $2, dot, t }')
+  | awk -F'\t' 'BEGIN{e=sprintf("%c",27)} { c=($1==0)?"91":($1==1)?"94":"93"; dot=e"["c"m●"e"[0m"; t=$4; sub(/^[^A-Za-z0-9]+ +/,"",t); printf "%-14s %s  %s\n", $2, dot, t }')
 
 # Nothing running: show a note instead of flashing an empty popup.
 if [ -z "$rows" ]; then
@@ -45,7 +45,7 @@ if [ "$(printf '%s\n' "$rows" | grep -c .)" -eq 1 ]; then
 fi
 
 esc=$(printf '\033')
-legend="Enter: switch   ${esc}[91m●${esc}[0m blocked   ${esc}[93m●${esc}[0m working   ${esc}[92m●${esc}[0m done"
+legend="Enter: switch   ${esc}[91m●${esc}[0m blocked   ${esc}[93m●${esc}[0m working   ${esc}[94m●${esc}[0m done"
 
 sel=$(printf '%s\n' "$rows" \
   | fzf --no-tmux --ansi +m --reverse --exit-0 --no-preview \
