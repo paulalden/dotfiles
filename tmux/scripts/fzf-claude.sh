@@ -18,7 +18,8 @@ fmt+="#{?#{==:#{@claude_alert},urgent},●,#{?#{==:#{@claude_alert},done},○,·
 fmt+="#{pane_title}"
 
 rows=$(tmux list-panes -a -f '#{==:#{pane_current_command},claude}' -F "$fmt" \
-  | sort -k1,1 | cut -f2-)
+  | sort -k1,1 \
+  | awk -F'\t' '{ printf "%-14s %s  %s\n", $2, $3, $4 }')
 
 # Nothing running: show a note instead of flashing an empty popup.
 if [ -z "$rows" ]; then
