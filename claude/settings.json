@@ -102,6 +102,10 @@
           {
             "type": "command",
             "command": "\"/Users/paul/.claude/hooks/context-mode-cache-heal.mjs\""
+          },
+          {
+            "type": "command",
+            "command": "~/.config/tmux/scripts/claude-notify.sh working"
           }
         ]
       }
@@ -122,6 +126,56 @@
           {
             "type": "command",
             "command": "~/.config/tmux/scripts/claude-notify.sh done"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/scripts/claude-notify.sh done"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/scripts/claude-notify.sh working"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/scripts/claude-notify.sh working"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/scripts/claude-notify.sh working"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/tmux/scripts/claude-notify.sh clear"
           }
         ]
       }

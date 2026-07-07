@@ -17,7 +17,7 @@ fmt+="#{session_name}:#{window_index}.#{pane_index}$tab"
 fmt+="#{?#{==:#{@claude_alert},urgent},●,#{?#{==:#{@claude_alert},done},○,·}}$tab"
 fmt+="#{pane_title}"
 
-rows=$(tmux list-panes -a -f '#{==:#{pane_current_command},claude}' -F "$fmt" \
+rows=$(tmux list-panes -a -f '#{||:#{&&:#{!=:#{@claude_alert},},#{pane_active}},#{==:#{pane_current_command},claude}}' -F "$fmt" \
   | sort -k1,1 \
   | awk -F'\t' 'BEGIN{e=sprintf("%c",27)} { c=($1==0)?"91":($1==1)?"94":"93"; dot=e"["c"m●"e"[0m"; t=$4; sub(/^[^A-Za-z0-9]+ +/,"",t); printf "%-14s %s  %s\n", $2, dot, t }')
 

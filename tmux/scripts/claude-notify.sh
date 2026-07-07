@@ -1,21 +1,26 @@
 #!/usr/bin/env bash
 
-# Claude Code `Notification` hook -> flag the Claude window in the tmux status
-# bar. The tier is passed as $1, chosen by the matcher in claude/settings.json:
+# Claude Code hook -> record this window's Claude state as the @claude_alert
+# tmux window option. State is passed as $1 and drives the status-bar dot
+# (theme.conf) and the session switcher (fzf-claude.sh):
 #
-#   urgent = needs a click  (permission prompt / question)  -> red ●
-#   done   = finished/idle   (waiting for your next message) -> dim ○
+#   working  -> yellow ●   (processing)
+#   urgent   -> red ●      (needs a click: permission / question)
+#   done     -> blue ●     (finished, waiting for you)
+#   clear    -> no dot     (session ended)
 #
-# The marker is rendered by window-status-format (theme.conf) and cleared on
-# view by the pane-focus-in hook (options.conf).
+# Wired in claude/settings.json:
+#   SessionStart/UserPromptSubmit/Pre+PostToolUse -> working
+#   Notification permission/elicitation            -> urgent
+#   Notification idle / Stop                       -> done
+#   SessionEnd                                     -> clear
 
 [ -n "$TMUX_PANE" ] || exit 0
 
-level="${1:-done}"
+state="${1:-working}"
 
-# Don't badge a window you're already looking at — you can see it needs you.
-watching=$(tmux display-message -p -t "$TMUX_PANE" \
-  '#{&&:#{window_active},#{session_attached}}' 2>/dev/null)
-[ "$watching" = 1 ] && exit 0
-
-tmux set-option -w -t "$TMUX_PANE" @claude_alert "$level" 2>/dev/null || true
+if [ "$state" = clear ]; then
+  tmux set-option -uw -t "$TMUX_PANE" @claude_alert 2>/dev/null || true
+else
+  tmux set-option -w -t "$TMUX_PANE" @claude_alert "$state" 2>/dev/null || true
+fi
