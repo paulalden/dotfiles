@@ -1,31 +1,21 @@
 #!/usr/bin/env bash
 
-# Claude Code `Notification` hook -> set a per-window tmux marker by urgency.
+# Claude Code `Notification` hook -> flag the Claude window in the tmux status
+# bar. The tier is passed as $1, chosen by the matcher in claude/settings.json:
 #
-#   urgent  = needs a click  (permission prompt / question)  -> red  ●
-#   done    = finished/idle   (waiting for your next message) -> dim  ○
+#   urgent = needs a click  (permission prompt / question)  -> red ●
+#   done   = finished/idle   (waiting for your next message) -> dim ○
 #
-# The marker is rendered by window-status-format in theme.conf and cleared
-# on view by the pane-focus-in hook in options.conf.
+# The marker is rendered by window-status-format (theme.conf) and cleared on
+# view by the pane-focus-in hook (options.conf).
 
 [ -n "$TMUX_PANE" ] || exit 0
 
-input=$(cat)
-ntype=$(printf '%s' "$input" | jq -r '.notification_type // empty')
-msg=$(printf '%s' "$input" | jq -r '.message // empty')
+level="${1:-done}"
 
-case "$ntype" in
-  permission_prompt | elicitation_dialog | agent_needs_input)
-    level=urgent ;;
-  idle_prompt | agent_completed)
-    level=done ;;
-  *)
-    # Fall back to the message text if the type is missing or unknown.
-    case "$msg" in
-      *permission* | *approve*) level=urgent ;;
-      *waiting* | *finished* | *complete*) level=done ;;
-      *) exit 0 ;;
-    esac ;;
-esac
+# Don't badge a window you're already looking at — you can see it needs you.
+watching=$(tmux display-message -p -t "$TMUX_PANE" \
+  '#{&&:#{window_active},#{session_attached}}' 2>/dev/null)
+[ "$watching" = 1 ] && exit 0
 
-tmux set-option -w -t "$TMUX_PANE" @claude_alert "$level"
+tmux set-option -w -t "$TMUX_PANE" @claude_alert "$level" 2>/dev/null || true

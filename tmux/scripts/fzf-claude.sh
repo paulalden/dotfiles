@@ -1,21 +1,50 @@
 #!/usr/bin/env bash
 
-# Fuzzy find tmux windows where Claude is waiting (bell flag set).
-# Enter: switch to that session + window.
+# Switch between Claude Code sessions running in tmux.
+#
+# Lists every pane whose foreground process is `claude`, tagged with the
+# attention state set by scripts/claude-notify.sh (the @claude_alert window
+# option):
+#   ●  needs a click  (permission / question)
+#   ○  finished, waiting for you
+#   ·  working
+# Sorted attention-first. Enter jumps to that session / window / pane.
 
-windows=$(tmux list-windows -a -f '#{@claude_alert}' -F '#{session_name}:#{window_index}  [#{@claude_alert}] #{window_name}')
+tab=$(printf '\t')
 
-# Nothing waiting: show a friendly note instead of flashing an empty popup.
-if [ -z "$windows" ]; then
-  printf '(no Claude sessions waiting — press Esc)\n' \
-    | fzf --no-tmux +m --reverse --no-preview --header "Claude Waiting"
+fmt="#{?#{==:#{@claude_alert},urgent},0,#{?#{==:#{@claude_alert},done},1,2}}$tab"
+fmt+="#{session_name}:#{window_index}.#{pane_index}$tab"
+fmt+="#{?#{==:#{@claude_alert},urgent},●,#{?#{==:#{@claude_alert},done},○,·}}$tab"
+fmt+="#{pane_title}"
+
+rows=$(tmux list-panes -a -f '#{==:#{pane_current_command},claude}' -F "$fmt" \
+  | sort -k1,1 | cut -f2-)
+
+# Nothing running: show a note instead of flashing an empty popup.
+if [ -z "$rows" ]; then
+  printf '(no Claude sessions running — press Esc)\n' \
+    | fzf --no-tmux +m --reverse --no-preview --header "Claude Sessions"
   exit 0
 fi
 
-target=$(printf '%s\n' "$windows" \
-  | fzf --no-tmux +m --reverse --exit-0 --no-preview \
-    --header "Enter: switch to the waiting Claude") || exit 0
+switch_to() {
+  local tgt session win
+  tgt=$(printf '%s' "$1" | awk '{print $1}')   # session:window.pane
+  session="${tgt%%:*}"
+  win="${tgt#*:}"; win="${win%%.*}"
+  tmux switch-client -t "$session"
+  tmux select-window -t "$session:$win"
+  tmux select-pane -t "$tgt"
+}
 
-session_window=$(echo "$target" | awk '{print $1}')
-tmux switch-client -t "${session_window%%:*}"
-tmux select-window -t "$session_window"
+# Exactly one session: jump straight there, no menu.
+if [ "$(printf '%s\n' "$rows" | grep -c .)" -eq 1 ]; then
+  switch_to "$rows"
+  exit 0
+fi
+
+sel=$(printf '%s\n' "$rows" \
+  | fzf --no-tmux +m --reverse --exit-0 --no-preview \
+    --header "Enter: switch  •  ● needs you   ○ done   · working") || exit 0
+
+switch_to "$sel"
