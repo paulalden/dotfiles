@@ -44,8 +44,11 @@ if [ "$(printf '%s\n' "$rows" | grep -c .)" -eq 1 ]; then
   exit 0
 fi
 
+esc=$(printf '\033')
+legend="Enter: switch   ${esc}[91m●${esc}[0m blocked   ${esc}[93m●${esc}[0m working   ${esc}[92m●${esc}[0m done"
+
 sel=$(printf '%s\n' "$rows" \
   | fzf --no-tmux --ansi +m --reverse --exit-0 --no-preview \
-    --header "Enter: switch  •  red blocked   yellow working   green done") || exit 0
+    --header "$legend") || exit 0
 
 switch_to "$sel"
