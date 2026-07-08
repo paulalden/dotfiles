@@ -11,4 +11,4 @@ count=$(printf '%s\n' "$names" | grep -c .)
 name=$(printf '%s\n' "$names" | head -1 | sed 's/^[^A-Za-z0-9]* *//' | cut -c1-28)
 [ "$count" -gt 1 ] && name="$name +$((count - 1))"
 
-printf '#[bg=#bf616a,fg=#ECEFF4,bold] 🔔 %s needs you #[bg=default,fg=default]  ' "$name"
+printf '#[bg=#d08770,fg=#2e3440,bold] 🔔 %s needs you #[bg=default,fg=default]  ' "$name"
