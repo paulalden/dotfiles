@@ -119,15 +119,6 @@
             "command": "~/.config/tmux/scripts/claude-notify.sh urgent"
           }
         ]
-      },
-      {
-        "matcher": "idle_prompt|agent_completed",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.config/tmux/scripts/claude-notify.sh done"
-          }
-        ]
       }
     ],
     "Stop": [
