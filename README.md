@@ -97,6 +97,7 @@ All bindings use the tmux prefix (`Ctrl+Space`). Popup windows display a centere
 | `prefix + t g` | Live ripgrep search (Enter: in popup, Ctrl-S: in pane)                   |
 | `prefix + t p` | Switch to another tmux pane across windows                               |
 | `prefix + t e` | Sessionizer - find a project directory and open/switch to a tmux session |
+| `prefix + t a` | Switch between running Claude Code sessions (colour-coded by status)      |
 | `prefix + t t` | Toggle the status bar                                                    |
 
 **Git** (prefix + g, then second key)
@@ -258,3 +259,49 @@ echo "sk-........."
 and make it executable with:
 
 chmod +x ~/.claude/anthropic_key.sh
+
+### Session status in tmux
+
+When Claude Code runs inside a tmux window, a coloured dot appears at the end of
+that window's name in the status bar, showing what the session is doing. A popup
+(`prefix + t a`) lists every running session so you can jump between them.
+
+**Status dot** (end of the window title):
+
+| Dot       | Meaning                                          |
+| --------- | ------------------------------------------------ |
+| 🔴 red    | Blocked — needs a click (permission / question)  |
+| 🟡 yellow | Working — Claude is processing                   |
+| 🔵 blue   | Done — finished, waiting for your next message    |
+| _(none)_  | No Claude session in that window                 |
+
+**Session switcher** — `prefix + t a` opens a popup of every running Claude
+session, colour-coded by the same states and sorted with the ones needing you
+first. Enter switches to that session/window/pane. Requires `fzf`.
+
+**How it works**
+
+State is stored per-window in the `@claude_alert` tmux option, driven by Claude
+Code hooks. Each hook calls `claude-notify.sh <state>` for the window it fires in:
+
+| Hook                                            | State     |
+| ----------------------------------------------- | --------- |
+| SessionStart, UserPromptSubmit, Pre/PostToolUse | `working` |
+| Notification (permission / question)            | `urgent`  |
+| Notification (idle), Stop                       | `done`    |
+| SessionEnd                                      | _cleared_ |
+
+Components:
+
+- `claude/settings.json` — registers the hooks (symlinked to `~/.claude/settings.json`).
+- `tmux/scripts/claude-notify.sh` — sets `@claude_alert` on the firing hook's window.
+- `tmux/config/theme.conf` — `window-status-format` renders the dot from `@claude_alert`.
+- `tmux/scripts/fzf-claude.sh` — the switcher popup.
+- `tmux/config/keybindings.conf` — the `prefix + t a` binding (in the `tmux-popup` table).
+
+**Notes**
+
+- Hooks load at session start, so only Claude sessions started _after_ the hooks
+  are in place show a dot — restart existing sessions to pick it up.
+- Requires `fzf`, and Claude must be running inside a tmux pane.
+- Outside tmux, desktop notifications still work via `preferredNotifChannel: kitty`.
