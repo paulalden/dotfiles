@@ -279,6 +279,11 @@ that window's name in the status bar, showing what the session is doing. A popup
 session, colour-coded by the same states and sorted with the ones needing you
 first. Enter switches to that session/window/pane. Requires `fzf`.
 
+**Blocked banner** — while any window is blocked, the bottom-right status bar
+shows `🔔 <name> needs you`. It's non-blocking (you can keep typing) and clears
+itself once resolved. Rendered by `tmux/scripts/claude-blocked-banner.sh` in
+`status-right`.
+
 **How it works**
 
 State is stored per-window in the `@claude_alert` tmux option, driven by Claude
