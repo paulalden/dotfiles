@@ -1,25 +1,49 @@
 #!/usr/bin/env bash
 
-# Switch between Claude Code sessions running in tmux.
+# Switch between Claude Code sessions running in tmux.  (prefix t a)
 #
-# Lists every pane whose foreground process is `claude`, tagged with the
-# attention state set by scripts/claude-notify.sh (the @claude_alert window
-# option):
-#   ●  needs a click  (permission / question)
-#   ○  finished, waiting for you
-#   ·  working
-# Sorted attention-first. Enter jumps to that session / window / pane.
+# Lists every pane running claude, tagged with the attention state set by
+# claude-notify.sh (the per-pane @claude_pane_state option) and how long it has
+# been in that state:
+#   ●  urgent   needs a click   (red)
+#   ○  done     finished        (blue)
+#   ·  working                  (yellow)
+# Sorted attention-first, then oldest-first. Dead panes are dropped on read.
+# Enter jumps to that session / window / pane; a live preview shows each pane.
 
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$dir/claude-lib.sh"
+
+now=$(date +%s)
 tab=$(printf '\t')
+us=$(printf '\037')   # field sep for tmux -F: non-whitespace, so empty fields survive `read`
+esc=$(printf '\033')
 
-fmt="#{?#{==:#{@claude_alert},urgent},0,#{?#{==:#{@claude_alert},done},1,2}}$tab"
-fmt+="#{session_name}:#{window_index}.#{pane_index}$tab"
-fmt+="#{?#{==:#{@claude_alert},urgent},●,#{?#{==:#{@claude_alert},done},○,·}}$tab"
-fmt+="#{pane_title}"
+# state  since  tty  target  title
+fmt="#{@claude_pane_state}$us#{@claude_since}$us#{pane_tty}$us"
+fmt+="#{session_name}:#{window_index}.#{pane_index}$us#{pane_title}"
 
-rows=$(tmux list-panes -a -f '#{||:#{&&:#{!=:#{@claude_alert},},#{pane_active}},#{==:#{pane_current_command},claude}}' -F "$fmt" \
-  | sort -k1,1 \
-  | awk -F'\t' 'BEGIN{e=sprintf("%c",27)} { c=($1==0)?"91":($1==1)?"94":"93"; dot=e"["c"m●"e"[0m"; t=$4; sub(/^[^A-Za-z0-9]+ +/,"",t); printf "%-14s %s  %s\n", $2, dot, t }')
+rows=""
+while IFS="$us" read -r state since tty tgt title; do
+  claude_alive "$tty" || continue    # reconcile-on-read: drop dead panes
+  case "$state" in
+    urgent)  rank=0; color=91; glyph='●' ;;
+    done)    rank=1; color=94; glyph='○' ;;
+    working) rank=2; color=93; glyph='·' ;;
+    *)       rank=3; color=90; glyph='·' ;;
+  esac
+  age=""
+  [ -n "$since" ] && age=$(fmt_age $((now - since)))
+  t=$(printf '%s' "$title" | sed 's/^[^A-Za-z0-9]* *//')   # strip Claude's ✳ glyph
+  dot="${esc}[${color}m${glyph}${esc}[0m"
+  line=$(printf '%-16s %s  %-4s %s' "$tgt" "$dot" "$age" "$t")
+  rows+="$rank$tab${since:-0}$tab$line"$'\n'
+done < <(tmux list-panes -a \
+  -f '#{||:#{!=:#{@claude_pane_state},},#{==:#{pane_current_command},claude}}' \
+  -F "$fmt" 2>/dev/null)
+
+# Sort by rank, then oldest-first; drop the two hidden sort columns.
+rows=$(printf '%s' "$rows" | sed '/^$/d' | sort -t"$tab" -k1,1n -k2,2n | cut -f3-)
 
 # Nothing running: show a note instead of flashing an empty popup.
 if [ -z "$rows" ]; then
@@ -38,17 +62,12 @@ switch_to() {
   tmux select-pane -t "$tgt"
 }
 
-# Exactly one session: jump straight there, no menu.
-if [ "$(printf '%s\n' "$rows" | grep -c .)" -eq 1 ]; then
-  switch_to "$rows"
-  exit 0
-fi
-
-esc=$(printf '\033')
 legend="Enter: switch   ${esc}[91m●${esc}[0m blocked   ${esc}[93m●${esc}[0m working   ${esc}[94m●${esc}[0m done"
 
 sel=$(printf '%s\n' "$rows" \
-  | fzf --no-tmux --ansi +m --reverse --exit-0 --no-preview \
-    --header "$legend") || exit 0
+  | fzf --no-tmux --ansi +m --reverse --exit-0 \
+    --header "$legend" \
+    --preview 'tmux capture-pane -pe -t {1}' \
+    --preview-window=right,60%) || exit 0
 
 switch_to "$sel"

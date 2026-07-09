@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# Claude Code hook -> record this window's Claude state as the @claude_alert
-# tmux window option. State is passed as $1 and drives the status-bar dot
-# (theme.conf) and the session switcher (fzf-claude.sh):
+# Claude Code hook -> record this PANE's Claude state. State is passed as $1 and
+# drives the status-bar dot (theme.conf), the switcher (fzf-claude.sh) and the
+# banner/escalation (claude-tick.sh):
 #
 #   working  -> yellow ●   (processing)
 #   urgent   -> red ●      (needs a click: permission / question)
@@ -17,7 +17,11 @@
 
 [ -n "$TMUX_PANE" ] || exit 0
 
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$dir/claude-lib.sh"
+
 state="${1:-working}"
+pane="$TMUX_PANE"
 
 # A `Stop` fires when the turn ends -> "done". But if the turn ended while a
 # run_in_background task is still going, the session isn't really idle. The Stop
@@ -36,7 +40,18 @@ if [ "$state" = done ] && [ ! -t 0 ]; then
 fi
 
 if [ "$state" = clear ]; then
-  tmux set-option -uw -t "$TMUX_PANE" @claude_alert 2>/dev/null || true
+  tmux set-option -up -t "$pane" @claude_pane_state 2>/dev/null || true
+  tmux set-option -up -t "$pane" @claude_since 2>/dev/null || true
+  tmux set-option -up -t "$pane" @claude_notified 2>/dev/null || true
 else
-  tmux set-option -w -t "$TMUX_PANE" @claude_alert "$state" 2>/dev/null || true
+  prev=$(tmux show-options -qvp -t "$pane" @claude_pane_state 2>/dev/null)
+  if [ "$prev" != "$state" ]; then
+    tmux set-option -p -t "$pane" @claude_since "$(date +%s)" 2>/dev/null || true
+    # Leaving urgent -> allow a fresh desktop alert next time it blocks.
+    [ "$prev" = urgent ] && tmux set-option -up -t "$pane" @claude_notified 2>/dev/null || true
+  fi
+  tmux set-option -p -t "$pane" @claude_pane_state "$state" 2>/dev/null || true
 fi
+
+# Refresh the window dot from this window's panes.
+claude_rollup "$pane"

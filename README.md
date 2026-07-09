@@ -262,9 +262,10 @@ chmod +x ~/.claude/anthropic_key.sh
 
 ### Session status in tmux
 
-When Claude Code runs inside a tmux window, a coloured dot appears at the end of
-that window's name in the status bar, showing what the session is doing. A popup
-(`prefix + t a`) lists every running session so you can jump between them.
+When Claude Code runs inside a tmux pane, a coloured dot appears at the end of
+that window's name in the status bar, showing what the session is doing. Two
+keys let you jump to a session that needs you, and a banner plus an optional
+desktop notification make sure you don't miss a blocked one.
 
 **Status dot** (end of the window title):
 
@@ -275,34 +276,64 @@ that window's name in the status bar, showing what the session is doing. A popup
 | 🔵 blue   | Done — finished, waiting for your next message    |
 | _(none)_  | No Claude session in that window                 |
 
-**Session switcher** — `prefix + t a` opens a popup of every running Claude
-session, colour-coded by the same states and sorted with the ones needing you
-first. Enter switches to that session/window/pane. Requires `fzf`.
+State is tracked **per pane**, so two Claudes split in one window keep separate
+dots; the window shows the most urgent of its panes. A blocked window also
+renders its title in **bold**. The blue "done" dot clears the moment you focus
+that pane.
 
-**Blocked banner** — while any window is blocked, the bottom-right status bar
-shows `🔔 <name> needs you`. It's non-blocking (you can keep typing) and clears
-itself once resolved. Rendered by `tmux/scripts/claude-blocked-banner.sh` in
-`status-right`.
+**Session switcher** — `prefix + t a` opens a popup of every running Claude
+session, colour-coded by the same states and sorted attention-first, then
+oldest-first. Each row shows how long it's been in that state, and a live
+preview of the pane appears on the right. Enter switches to that
+session/window/pane. Requires `fzf`.
+
+**Jump to blocked** — `prefix + t A` skips the popup and switches you straight
+to the oldest blocked session. Shows a message if nothing is blocked.
+
+**Blocked banner** — while any pane is blocked, the bottom-right status bar
+shows `🔔 <name> needs you (<age>)`, oldest first, with `+N` when several are
+waiting. It's non-blocking (you can keep typing) and clears itself once resolved.
+
+**Desktop escalation** — if a session stays blocked and off-screen for 60
+seconds, a macOS notification fires once (via `osascript`; no dependency). Grant
+the terminal Notifications permission the first time it fires.
 
 **How it works**
 
-State is stored per-window in the `@claude_alert` tmux option, driven by Claude
-Code hooks. Each hook calls `claude-notify.sh <state>` for the window it fires in:
+State lives in per-pane tmux options driven by Claude Code hooks, plus a
+per-window rollup that draws the dot:
+
+| Option              | Scope  | Meaning                                     |
+| ------------------- | ------ | ------------------------------------------- |
+| `@claude_pane_state`| pane   | `working` / `urgent` / `done` (source)      |
+| `@claude_since`     | pane   | epoch the current state began (for ages)    |
+| `@claude_notified`  | pane   | set once the desktop alert fired            |
+| `@claude_alert`     | window | max-severity rollup that renders the dot    |
+
+Each hook calls `claude-notify.sh <state>` for the pane it fires in:
 
 | Hook                                            | State     |
 | ----------------------------------------------- | --------- |
 | SessionStart, UserPromptSubmit, Pre/PostToolUse | `working` |
 | Notification (permission / question)            | `urgent`  |
-| Notification (idle), Stop                       | `done`    |
+| Stop                                            | `done`    |
 | SessionEnd                                      | _cleared_ |
+
+A crashed or `kill -9`'d Claude never fires `SessionEnd`, so `claude-tick.sh`
+(run every 2s from `status-right`) clears any pane whose tty no longer has a
+`claude` process, and the switcher drops dead panes on read. Nothing gets stuck.
 
 Components:
 
 - `claude/settings.json` — registers the hooks (symlinked to `~/.claude/settings.json`).
-- `tmux/scripts/claude-notify.sh` — sets `@claude_alert` on the firing hook's window.
-- `tmux/config/theme.conf` — `window-status-format` renders the dot from `@claude_alert`.
+- `tmux/scripts/claude-lib.sh` — shared helpers (liveness, rollup, age formatting).
+- `tmux/scripts/claude-notify.sh` — the hook target; sets the per-pane state.
+- `tmux/scripts/claude-tick.sh` — 2s sweep: cleanup, rollup, escalation, banner.
+- `tmux/scripts/claude-jump.sh` — `prefix + t A` jump to the oldest blocked session.
+- `tmux/scripts/claude-clear-done.sh` — clears a `done` marker on `pane-focus-in`.
 - `tmux/scripts/fzf-claude.sh` — the switcher popup.
-- `tmux/config/keybindings.conf` — the `prefix + t a` binding (in the `tmux-popup` table).
+- `tmux/config/theme.conf` — renders the dot and the banner.
+- `tmux/config/keybindings.conf` — the `prefix + t a` / `prefix + t A` bindings.
 
 **Notes**
 
