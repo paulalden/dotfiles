@@ -221,5 +221,5 @@
   "additionalDirectories": [
     "/Users/paul/Personal/repos/dotfiles"
   ],
-  "tui": "fullscreen"
+  "tui": "default"
 }
