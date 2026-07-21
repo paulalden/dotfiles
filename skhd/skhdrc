@@ -29,7 +29,7 @@ alt - t : yabai -m window --toggle float; yabai -m window --grid 4:4:1:1:2:2
 alt - e : yabai -m window --toggle split
 
 # Toggle borders
-alt - b : sh $HOME/Personal/Repos/dotfiles/skhd/toggle_borders.sh
+alt - b : sh $HOME/.config/skhd/toggle_borders.sh
 
 # balance size of windows
 shift + alt - 0 : yabai -m space --balance

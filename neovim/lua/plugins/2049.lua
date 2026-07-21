@@ -1,6 +1,6 @@
 -- 2049.nvim: locally developed colorscheme, currently disabled
 return {
-  dir = "~/Personal/Repos/2049.nvim",
+  dir = "~/Personal/repos/2049.nvim",
   lazy = false,
   priority = 1000,
   enabled = false,
