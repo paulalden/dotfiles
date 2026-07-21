@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bash syntax (bash -n)
+        run: |
+          git ls-files '*.sh' install uninstall \
+            | grep -vE '^zsh/' \
+            | while IFS= read -r f; do bash -n "$f" || exit 1; done
+
+      - name: Zsh syntax (zsh -n)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq zsh
+          git ls-files 'zsh/*.sh' zsh/.zshrc zsh/.zshenv \
+            | grep -v '^zsh/plugins/' \
+            | while IFS= read -r f; do zsh -n "$f" || exit 1; done
+
+      - name: ShellCheck (error severity)
+        run: |
+          git ls-files '*.sh' install uninstall \
+            | grep -vE '^zsh/' \
+            | xargs shellcheck --severity=error
+
+      - name: Stylua check (neovim/lua)
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check neovim/lua/
+
+      - name: Palette single source of truth
+        run: ./scripts/check-palette.sh
