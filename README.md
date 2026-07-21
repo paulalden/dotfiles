@@ -58,7 +58,7 @@ cd ~/Personal/repos/dotfiles
 
 * ZSH
 * FZF
-* Starship Prompt
+* Pure ZSH prompt
 * LazyGit
 
 ## Screenshots
