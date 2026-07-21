@@ -47,13 +47,26 @@ esac
 # sketchybar, straight from $THEME_FILE), so switching never dirties a tracked
 # file. $sketchybar_config is unused here — config.sh self-resolves.
 
+# nord is the base default already loaded by kitty.conf / tmux.conf, so an
+# override that re-loaded it would double-include (kitty treats that as an
+# error). For nord we remove the override — a missing one is tolerated
+# (kitty ignores it, tmux uses source-file -q); other themes get written.
+
 # --- Kitty --- untracked include override (themes/active.conf)
-printf 'include %s\n' "$kitty_theme" > "$DOTFILES/kitty/themes/active.conf"
+if [ "$new_theme" = "nord" ]; then
+  rm -f "$DOTFILES/kitty/themes/active.conf"
+else
+  printf 'include %s\n' "$kitty_theme" > "$DOTFILES/kitty/themes/active.conf"
+fi
 kill -SIGUSR1 $(pgrep -f kitty) 2>/dev/null
 
 # --- Tmux --- untracked source override (config/theme-active.conf)
-printf 'source-file ~/.config/tmux/config/%s\n' "$tmux_theme" \
-  > "$DOTFILES/tmux/config/theme-active.conf"
+if [ "$new_theme" = "nord" ]; then
+  rm -f "$DOTFILES/tmux/config/theme-active.conf"
+else
+  printf 'source-file ~/.config/tmux/config/%s\n' "$tmux_theme" \
+    > "$DOTFILES/tmux/config/theme-active.conf"
+fi
 tmux source-file "$HOME/.config/tmux/tmux.conf" 2>/dev/null
 
 # --- Neovim ---
