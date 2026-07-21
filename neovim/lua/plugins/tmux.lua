@@ -1,3 +1,4 @@
+-- vim-tmux + tmux-navigator: seamless <C-hjkl> pane navigation with tmux
 return {
   { "tmux-plugins/vim-tmux" },
   {

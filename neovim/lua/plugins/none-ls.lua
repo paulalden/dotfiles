@@ -1,3 +1,4 @@
+-- none-ls: formatters (sql, prettierd, rubocop, stylua) with format on save
 return {
   "nvimtools/none-ls.nvim",
   dependencies = {

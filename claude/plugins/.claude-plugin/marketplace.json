@@ -1,0 +1,13 @@
+{
+  "name": "dotfiles",
+  "owner": {
+    "name": "Paul Alden"
+  },
+  "plugins": [
+    {
+      "name": "timestamps",
+      "source": "./timestamps",
+      "description": "Dim inline timestamps on Claude messages, plus a /timestamps session timeline. Everything stays local."
+    }
+  ]
+}

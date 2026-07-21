@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Nord palette — canonical values live in tmux/config/nord.conf. Change a
+# color there: mirror it here.
 
 export FONT="Hack Nerd Font Mono"
 

@@ -1,3 +1,4 @@
+-- nvim-colorizer: highlight colour codes in lua/sh; detaches from lazy buffers
 return {
   "catgoose/nvim-colorizer.lua",
   ft = { "lua", "sh" },

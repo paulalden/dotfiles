@@ -2,6 +2,9 @@
 
 # Usage:
 #   tmux-sessionizer.sh [directory]
+# Degrade gracefully when fzf is missing.
+command -v fzf >/dev/null 2>&1 || { echo 'fzf not installed'; sleep 2; exit 1; }
+
 if [[ $# -eq 1 ]]; then
   selected=$1
 else

@@ -1,3 +1,4 @@
+-- blink.cmp: completion engine; custom menu draw, Codeium and LazyDev sources
 return {
   "saghen/blink.cmp",
   event = { "InsertEnter", "CmdlineEnter" },

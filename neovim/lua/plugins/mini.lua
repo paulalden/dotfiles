@@ -1,3 +1,4 @@
+-- mini.nvim modules: ai textobjects, jump, splitjoin, bracketed, icons
 return {
   {
     "nvim-mini/mini.ai",

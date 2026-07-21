@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 source "$CONFIG_DIR/scripts/config.sh"
 source "$CONFIG_DIR/scripts/icon_map_fn.sh"

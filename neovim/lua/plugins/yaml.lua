@@ -1,3 +1,4 @@
+-- nvim-treesitter + SchemaStore: yaml parser and JSON/YAML schema support
 return {
   {
     "nvim-treesitter/nvim-treesitter",

@@ -1,0 +1,9 @@
+{
+  "name": "timestamps",
+  "description": "Dim inline timestamps on Claude messages as they stream, plus a /timestamps command that prints a timestamped timeline of the current session. All local, no network, jq-only.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Paul Alden"
+  },
+  "keywords": ["timestamps", "timeline", "transcript", "time", "session", "hooks"]
+}

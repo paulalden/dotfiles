@@ -1,3 +1,4 @@
+-- ts-comments: treesitter-aware commentstring tweaks (nvim 0.10+)
 return {
   "folke/ts-comments.nvim",
   opts = {},

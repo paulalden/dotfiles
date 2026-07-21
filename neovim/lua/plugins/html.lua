@@ -1,3 +1,4 @@
+-- nvim-treesitter: add html parser to ensure_installed
 return {
   {
     "nvim-treesitter/nvim-treesitter",

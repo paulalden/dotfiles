@@ -1,3 +1,4 @@
+-- nvim-treesitter: parsers, highlight, folds, indent; ruby keeps regex syntax
 return {
   "nvim-treesitter/nvim-treesitter",
   branch = "main",

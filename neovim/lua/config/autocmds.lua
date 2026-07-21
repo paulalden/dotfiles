@@ -280,7 +280,11 @@ autocmd("FocusGained", {
   callback = function()
     if vim.g._normal_bg then
       local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
-      vim.api.nvim_set_hl(0, "Normal", vim.tbl_extend("force", normal, { bg = vim.g._normal_bg, fg = vim.g._normal_fg }))
+      vim.api.nvim_set_hl(
+        0,
+        "Normal",
+        vim.tbl_extend("force", normal, { bg = vim.g._normal_bg, fg = vim.g._normal_fg })
+      )
     end
   end,
 })

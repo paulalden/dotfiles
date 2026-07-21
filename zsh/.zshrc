@@ -111,4 +111,4 @@ function _cached_eval() {
 source "$ZDOTDIR/user/prompt.sh"
 _cached_eval fzf fzf --zsh
 
-eval "$(/opt/homebrew/bin/zsh-patina activate)"
+[ -x /opt/homebrew/bin/zsh-patina ] && eval "$(/opt/homebrew/bin/zsh-patina activate)"

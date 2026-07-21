@@ -10,14 +10,10 @@ This is a comprehensive macOS development environment dotfiles repository focuse
 
 ### Initial Setup
 ```bash
-# Install dotfiles using dotbot
+# Install dotfiles: installs Homebrew/dotbot if missing, symlinks everything,
+# installs Brewfile packages and tmux plugins, prompts before the window
+# management extras (yabai/skhd/sketchybar need SIP changes).
 ./install
-
-# Install Homebrew packages
-brew bundle --file homebrew/Brewfile
-
-# Install Ruby gems
-bundle install
 ```
 
 ### Development Commands
@@ -30,6 +26,9 @@ editdots  # Alias that opens dotfiles in nvim
 
 # Update tmux plugins
 tmux source ~/.config/tmux/tmux.conf
+
+# Update a zsh plugin (they are git clones under zsh/plugins/)
+git -C zsh/plugins/<name> pull
 
 # Reload yabai configuration
 yabai --restart-service
@@ -48,6 +47,7 @@ yabai --restart-service
 - `zsh/`: ZSH configuration with modular loading (exports, aliases, functions)
 - `yabai/`: Window manager configuration requiring special macOS permissions
 - `sketchybar/`: Status bar configuration with custom plugins and scripts
+- `claude/`: Claude Code settings, hooks, statusline, and local plugins (marketplace + timestamps)
 
 ### Neovim Configuration
 - **Plugin Manager**: Lazy.nvim with lazy loading enabled
@@ -73,7 +73,6 @@ yabai --restart-service
 ### Ruby Development Focus
 - LSP configured for Ruby, Rails, and related tools
 - Specific aliases for Rails commands and Ruby tools
-- Gemfile management for Ruby utilities
 
 ### AI-Assisted Development
 - CodeCompanion plugin integrated with multiple AI providers
@@ -90,7 +89,7 @@ yabai --restart-service
 ### macOS Specific Requirements
 - Yabai setup requires disabling System Integrity Protection partially
 - Homebrew installation path optimized for Apple Silicon (`/opt/homebrew/`)
-- Terminal applications configured for macOS (Kitty, Ghostty)
+- Terminal applications configured for macOS (Kitty)
 
 ### Plugin Management
 - Neovim plugins auto-install on first run via Lazy.nvim

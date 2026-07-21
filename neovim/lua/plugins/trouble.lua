@@ -1,3 +1,4 @@
+-- trouble: diagnostics/symbols lists; [q/]q fall back to quickfix when closed
 return {
   "folke/trouble.nvim",
   cmd = { "Trouble" },

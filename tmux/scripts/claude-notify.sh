@@ -28,7 +28,7 @@ pane="$TMUX_PANE"
 # payload carries a `background_tasks` array; if any task is still "running",
 # stay "working". Claude fires another Stop with an empty array when the task
 # finishes, which then marks done. (Older Claude versions omit the field -> done.)
-if [ "$state" = done ] && [ ! -t 0 ]; then
+if [ "$state" = done ] && [ ! -t 0 ] && command -v jq >/dev/null 2>&1; then
   input=$(cat 2>/dev/null)
   running=$(printf '%s' "$input" \
     | jq -r '[.background_tasks[]? | select(.status == "running")] | length' 2>/dev/null)
@@ -40,15 +40,15 @@ if [ "$state" = done ] && [ ! -t 0 ]; then
 fi
 
 if [ "$state" = clear ]; then
-  tmux set-option -up -t "$pane" @claude_pane_state 2>/dev/null || true
-  tmux set-option -up -t "$pane" @claude_since 2>/dev/null || true
-  tmux set-option -up -t "$pane" @claude_notified 2>/dev/null || true
+  claude_clear_pane "$pane"
 else
   prev=$(tmux show-options -qvp -t "$pane" @claude_pane_state 2>/dev/null)
   if [ "$prev" != "$state" ]; then
     tmux set-option -p -t "$pane" @claude_since "$(date +%s)" 2>/dev/null || true
     # Leaving urgent -> allow a fresh desktop alert next time it blocks.
     [ "$prev" = urgent ] && tmux set-option -up -t "$pane" @claude_notified 2>/dev/null || true
+    # A new spell ends any park: parking defers the current state only.
+    tmux set-option -up -t "$pane" @claude_parked 2>/dev/null || true
   fi
   tmux set-option -p -t "$pane" @claude_pane_state "$state" 2>/dev/null || true
 fi

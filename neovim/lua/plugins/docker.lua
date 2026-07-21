@@ -1,3 +1,4 @@
+-- nvim-treesitter: add dockerfile parser to ensure_installed
 return {
   {
     "nvim-treesitter/nvim-treesitter",

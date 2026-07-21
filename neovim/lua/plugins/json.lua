@@ -1,3 +1,4 @@
+-- nvim-treesitter: add json/jsonc parsers to ensure_installed
 return {
   {
     "nvim-treesitter/nvim-treesitter",

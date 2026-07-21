@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 THEME_FILE="$HOME/.config/theme"
 CURRENT=$(cat "$THEME_FILE" 2>/dev/null || echo "nord")

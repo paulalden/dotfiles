@@ -1,3 +1,4 @@
+-- render-markdown: pretty in-buffer markdown rendering, also for codecompanion
 return {
   "MeanderingProgrammer/render-markdown.nvim",
   ft = { "markdown", "codecompanion" },

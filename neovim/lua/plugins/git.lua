@@ -1,3 +1,4 @@
+-- git-conflict + gitsigns: conflict resolution keymaps and git sign column
 return {
   {
     "akinsho/git-conflict.nvim",

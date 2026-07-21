@@ -4,6 +4,9 @@
 
 input=$(cat)
 
+# No jq -> no statusline, quietly (it is a display nicety, not a dependency).
+command -v jq >/dev/null 2>&1 || exit 0
+
 # -- Extract fields from JSON --------------------------------------------------
 cwd=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // empty')
 model=$(echo "$input" | jq -r '.model.display_name // empty')

@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 # Fuzzy find and switch to a tmux pane
+# Degrade gracefully when fzf is missing.
+command -v fzf >/dev/null 2>&1 || { echo 'fzf not installed'; sleep 2; exit 1; }
+
 panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
 current_pane=$(tmux display-message -p '#I:#P')
 

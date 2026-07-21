@@ -1,3 +1,4 @@
+-- diffview: git diff viewer; 'dv' toggles the Diffview window
 return {
   {
     "sindrets/diffview.nvim",

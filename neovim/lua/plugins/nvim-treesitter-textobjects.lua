@@ -1,3 +1,4 @@
+-- treesitter-textobjects: select/move/swap keymaps for functions, classes etc.
 return {
   "nvim-treesitter/nvim-treesitter-textobjects",
   branch = "main",

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 SPACE_COUNT=$(yabai -m query --spaces 2>/dev/null | jq 'length')
 

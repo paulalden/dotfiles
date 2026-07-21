@@ -1,3 +1,4 @@
+-- onenord: main colorscheme with extensive custom highlight overrides
 return {
   "rmehri01/onenord.nvim",
   enabled = true,

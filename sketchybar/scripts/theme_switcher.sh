@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-DOTFILES="$HOME/Personal/Repos/dotfiles"
+DOTFILES="$HOME/Personal/repos/dotfiles"
 THEME_FILE="$HOME/.config/theme"
 
 # Read current theme, default to nord

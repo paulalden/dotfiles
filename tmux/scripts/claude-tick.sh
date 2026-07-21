@@ -17,25 +17,27 @@ now=$(date +%s)
 tab=$(printf '\t')
 us=$(printf '\037')   # field sep for tmux -F: non-whitespace, so empty fields survive `read`
 
-# pane  window  tty  state  since  notified  on-screen
+# pane  window  tty  state  since  notified  parked  on-screen
 fmt="#{pane_id}$us#{window_id}$us#{pane_tty}$us#{@claude_pane_state}$us"
-fmt+="#{@claude_since}$us#{@claude_notified}$us"
+fmt+="#{@claude_since}$us#{@claude_notified}$us#{@claude_parked}$us"
 fmt+="#{&&:#{session_attached},#{window_active}}"   # window is on an attached client's screen
 
 dirty=""          # windows we cleaned, recomputed after the sweep
 urgent_lines=""   # "since<TAB>name" per live urgent pane, for the banner
 
-while IFS="$us" read -r pane win tty state since notified onscreen; do
+while IFS="$us" read -r pane win tty state since notified parked onscreen; do
   [ -n "$state" ] || continue
 
   # 1. Clean: claude gone from this pane -> drop its state, mark the window.
   if ! claude_alive "$tty"; then
-    tmux set-option -up -t "$pane" @claude_pane_state 2>/dev/null || true
-    tmux set-option -up -t "$pane" @claude_since 2>/dev/null || true
-    tmux set-option -up -t "$pane" @claude_notified 2>/dev/null || true
+    claude_clear_pane "$pane"
     dirty+="$win"$'\n'
     continue
   fi
+
+  # Parked panes are a conscious "not now": no banner, no escalation. The
+  # flag clears on the pane's next state transition (claude-notify.sh).
+  [ "$parked" = 1 ] && continue
 
   [ "$state" = urgent ] || continue
 
@@ -71,4 +73,4 @@ name=$(printf '%s' "$first" | cut -f2- | cut -c1-28)
 age=$(fmt_age $((now - since)))
 [ -n "$age" ] && name="$name ($age)"
 [ "$count" -gt 1 ] && name="$name +$((count - 1))"
-printf '#[bg=#d08770,fg=#2e3440,bold] 🔔 %s needs you #[bg=default,fg=default]  ' "$name"
+printf '#[bg=%s,fg=%s,bold] 🔔 %s needs you #[bg=default,fg=default]  ' "$orange" "$bg" "$name"

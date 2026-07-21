@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # https://snelson.us/2024/09/determining-a-macs-ssid-like-an-animal/
 

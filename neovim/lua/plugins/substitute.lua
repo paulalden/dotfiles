@@ -1,3 +1,4 @@
+-- substitute: exchange/replace operator mapped to s/ss in normal and visual
 return {
   "gbprod/substitute.nvim",
   config = function()

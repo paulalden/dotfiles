@@ -83,7 +83,7 @@
     ],
     "defaultMode": "plan"
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "hooks": {
     "PermissionRequest": [
       {
@@ -101,7 +101,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"/Users/paul/.claude/hooks/context-mode-cache-heal.mjs\""
+            "command": "\"$HOME/.claude/hooks/context-mode-cache-heal.mjs\""
           },
           {
             "type": "command",
@@ -182,7 +182,8 @@
     "ruby-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "understand-anything@understand-anything": true,
-    "pyright-lsp@claude-plugins-official": true
+    "pyright-lsp@claude-plugins-official": true,
+    "timestamps@dotfiles": true
   },
   "extraKnownMarketplaces": {
     "caveman": {
@@ -208,10 +209,17 @@
         "source": "github",
         "repo": "Lum1104/Understand-Anything"
       }
+    },
+    "dotfiles": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/paul/Personal/repos/dotfiles/claude/plugins"
+      }
     }
   },
   "effortLevel": "xhigh",
   "autoUpdatesChannel": "stable",
+  "tui": "default",
   "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
   "verbose": false,
@@ -220,6 +228,5 @@
   "skipAutoPermissionPrompt": true,
   "additionalDirectories": [
     "/Users/paul/Personal/repos/dotfiles"
-  ],
-  "tui": "default"
+  ]
 }

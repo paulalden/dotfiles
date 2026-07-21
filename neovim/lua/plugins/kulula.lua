@@ -1,3 +1,4 @@
+-- kulala: HTTP/REST client for .http files under <leader>r keymaps
 return {
   "mistweaverco/kulala.nvim",
   ft = { "http", "rest" },

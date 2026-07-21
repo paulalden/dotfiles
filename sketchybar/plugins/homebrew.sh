@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source "$CONFIG_DIR/scripts/config.sh"
 

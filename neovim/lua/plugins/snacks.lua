@@ -1,3 +1,4 @@
+-- snacks: dashboard, pickers, notifier, indent guides, <leader>s keymaps
 return {
   "folke/snacks.nvim",
   priority = 1000,

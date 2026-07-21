@@ -1,3 +1,4 @@
+-- nvim-treesitter: add css/scss parsers to ensure_installed
 return {
   {
     "nvim-treesitter/nvim-treesitter",

@@ -4,6 +4,9 @@
 # Respects .gitignore (fd default). Hidden files are off by default —
 # press Ctrl-H inside fzf to toggle them on/off.
 # Enter: edit in popup, Ctrl-S: edit in caller pane
+# Degrade gracefully when fzf is missing.
+command -v fzf >/dev/null 2>&1 || { echo 'fzf not installed'; sleep 2; exit 1; }
+
 RESULT_FILE=/tmp/tmux-fzf-result
 
 FD_BASE="fd --type f --strip-cwd-prefix --follow --exclude .git --exclude node_modules"

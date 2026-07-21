@@ -1,3 +1,4 @@
+-- catppuccin: alternative colorscheme, mocha flavour, lazy-loaded
 return {
   "catppuccin/nvim",
   name = "catppuccin",

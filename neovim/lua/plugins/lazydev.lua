@@ -1,3 +1,4 @@
+-- lazydev: Lua LSP setup for Neovim config and plugin development
 return {
   {
     "folke/lazydev.nvim",

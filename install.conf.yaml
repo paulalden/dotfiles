@@ -30,6 +30,7 @@
     ~/.claude/CLAUDE.md: claude/CLAUDE.md
     ~/.claude/settings.json: claude/settings.json
     ~/.claude/statusline-command.sh: claude/statusline-command.sh
+    ~/.claude/hooks/context-mode-cache-heal.mjs: claude/hooks/context-mode-cache-heal.mjs
 
 - shell:
     - [brew bundle --file=homebrew/Brewfile, Installing Homebrew packages]

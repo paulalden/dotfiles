@@ -1,3 +1,4 @@
+-- ranger: floating ranger file explorer replacing netrw (<leader>se)
 return {
   "kelly-lin/ranger.nvim",
   config = function()

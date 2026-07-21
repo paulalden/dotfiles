@@ -1,3 +1,4 @@
+-- ruby: vim-ruby, endwise, rails, projectionist and neotest-rspec test keymaps
 return {
   {
     "vim-ruby/vim-ruby",

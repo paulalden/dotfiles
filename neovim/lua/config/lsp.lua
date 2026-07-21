@@ -9,6 +9,7 @@ vim.lsp.enable({
   "jsonls",
   "dockerls",
   "eslint",
+  "marksman",
 })
 
 -- Diagnostic display configuration

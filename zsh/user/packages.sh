@@ -17,7 +17,8 @@ function zsh_add_file() {
 # Usage:
 # zsh_add_plugin "zsh-users/zsh-autosuggestions"
 function zsh_add_plugin() {
-  PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
+  local PLUGIN_NAME
+  PLUGIN_NAME=$(echo "$1" | cut -d "/" -f 2)
 
   if [ -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then
     zsh_add_config "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || zsh_add_config "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"

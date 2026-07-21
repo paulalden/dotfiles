@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Source the active theme
 # To switch themes, use the theme_switcher.sh script

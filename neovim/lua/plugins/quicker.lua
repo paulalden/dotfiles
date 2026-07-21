@@ -1,3 +1,4 @@
+-- quicker: improved editable quickfix window with treesitter highlighting
 return {
   "stevearc/quicker.nvim",
   event = "FileType qf",

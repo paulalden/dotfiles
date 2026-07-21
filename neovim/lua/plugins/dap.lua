@@ -1,3 +1,4 @@
+-- nvim-dap: Ruby debugging via rdbg (Rails attach, RSpec) with dap-ui layouts
 return {
   {
     "mfussenegger/nvim-dap",

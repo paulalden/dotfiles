@@ -1,3 +1,4 @@
+-- Jumppack: jumplist picker replacing <C-o>/<C-i>, cwd-only, floating window
 return {
   "suliatis/Jumppack.nvim",
   config = function()

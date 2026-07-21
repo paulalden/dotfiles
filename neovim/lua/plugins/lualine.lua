@@ -1,3 +1,4 @@
+-- lualine: statusline with custom filename component showing save state
 return {
   "nvim-lualine/lualine.nvim",
   config = function()

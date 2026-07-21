@@ -1,3 +1,4 @@
+-- windsurf.nvim: Codeium AI completion; cmp source disabled (used via blink)
 return {
   {
     "Exafunction/windsurf.nvim",

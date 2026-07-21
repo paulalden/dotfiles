@@ -1,3 +1,4 @@
+-- overlook: peek definitions in stacked floating popups (<leader>p keymaps)
 return {
   "WilliamHsieh/overlook.nvim",
   opts = {},

@@ -2,6 +2,9 @@
 
 # Fuzzy find tmux sessions - Enter to switch, Ctrl-X to kill
 
+# Degrade gracefully when fzf is missing.
+command -v fzf >/dev/null 2>&1 || { echo 'fzf not installed'; sleep 2; exit 1; }
+
 current_session=$(tmux display-message -p '#S')
 
 reload_cmd="tmux list-sessions -F '#S (#{session_windows} windows) #{?session_attached, attached,}'"

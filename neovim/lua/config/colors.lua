@@ -1,3 +1,5 @@
+-- Nord palette — canonical values live in tmux/config/nord.conf (lua cannot
+-- source shell/tmux files). Change a color there: mirror it here.
 local M = {}
 
 M.colors = {

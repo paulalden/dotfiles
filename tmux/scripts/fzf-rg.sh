@@ -2,6 +2,10 @@
 
 # Live interactive ripgrep with file preview
 # Type to search, Enter to edit in popup, Ctrl-S to edit in caller pane
+# Degrade gracefully when a dependency is missing.
+command -v fzf >/dev/null 2>&1 || { echo 'fzf not installed'; sleep 2; exit 1; }
+command -v rg >/dev/null 2>&1 || { echo 'rg not installed'; sleep 2; exit 1; }
+
 RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case"
 
 RESULT_FILE=/tmp/tmux-fzf-result
