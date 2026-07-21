@@ -8,7 +8,7 @@ path=(
   /opt/homebrew/opt/rustup/bin
   /opt/homebrew/bin
   /opt/homebrew/sbin
-  /opt/homebrew/opt/python@3.13/bin
+  /opt/homebrew/opt/python@3.9/bin
   /opt/homebrew/opt/yarn/bin
   /opt/homebrew/opt/postgresql@15/bin
   $HOME/.asdf/shims
