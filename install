@@ -8,7 +8,10 @@ BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Install Homebrew if not present
 if ! command -v brew &>/dev/null; then
   echo "Installing Homebrew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+    echo "Homebrew install failed — aborting." >&2
+    exit 1
+  fi
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
