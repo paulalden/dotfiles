@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# wifi — Wi-Fi status item; wifi.sh plugin on wifi_change and mouse clicks
 
 wifi=(
   padding_right=7

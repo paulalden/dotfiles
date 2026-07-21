@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# now_playing — shows artist/title via nowplaying-cli; 3s timer + media_change
 
 source "$CONFIG_DIR/scripts/config.sh"
 

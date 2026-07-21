@@ -165,7 +165,7 @@ Custom macOS status bar replacing the system menu bar. Config lives in `sketchyb
 ### Theming
 
 - **`scripts/config.sh`** sources the active palette, currently `config-nord.sh`.
-- **Nord palette** mirrors the canonical colours in `tmux/config/nord.conf`.
+- **Nord palette** is sourced from the canonical `tmux/config/nord.conf` — no copied values.
 - **`scripts/theme_switcher.sh toggle`** switches themes across Sketchybar, Kitty, Tmux, and Neovim.
 
 ### Installation
@@ -268,6 +268,15 @@ Run RSpec tests from within Neovim using `neotest` with the `neotest-rspec` adap
 | `:R`                  | Jump to related file (e.g. migration → schema)   |
 | `gf`                  | Enhanced go-to-file that understands Rails paths |
 
+## ZSH
+
+- **Modular config** — `.zshrc` sources `zsh/config/*.sh` (exports, aliases, functions) via the `zsh_add_config` helper.
+- **Plugins are committed** — git clones in `zsh/plugins/`, loaded with `zsh_add_plugin`.
+- **Update a plugin** — `git -C zsh/plugins/<name> pull`.
+- **Prompt** — pure-zsh async prompt in `zsh/user/prompt.sh` (no Starship).
+- **Secrets** — machine-local env vars live in `zsh/secrets.sh` (untracked).
+- **PATH hygiene** — versioned Homebrew paths use the `(N-/)` glob qualifier, so removed formula versions drop out automatically.
+
 ## Yabai
 
 The WM needs to add hacks to get it working fully:
@@ -278,6 +287,36 @@ The WM needs to add hacks to get it working fully:
 After upgrading Yabai, you need to follow these steps to properly setup application following:
 
 https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#updating-to-the-latest-release
+
+### SKHD Keybindings
+
+Window management shortcuts (defined in `skhd/skhdrc`):
+
+**Focus and movement**
+
+| Binding                    | Action                                  |
+| -------------------------- | --------------------------------------- |
+| `ctrl + 1-9`               | Focus space N                           |
+| `alt + 0`                  | Focus most recent space                 |
+| `alt + h/j/k/l`            | Focus window west/south/north/east      |
+| `shift + alt + h/j/k/l`    | Swap window in that direction           |
+| `shift + alt + ctrl + h/j/k/l` | Move (warp) window in that direction |
+| `shift + alt + 1-9`        | Send window to space N and follow       |
+| `shift + alt + n/p`        | Send window to next/prev display and follow |
+
+**Layout and window state**
+
+| Binding             | Action                              |
+| ------------------- | ----------------------------------- |
+| `alt + ctrl + h/j/k/l` | Resize window                    |
+| `alt + r`           | Rotate layout 90°                   |
+| `alt + f`           | Toggle fullscreen zoom              |
+| `alt + e`           | Toggle split direction              |
+| `alt + t`           | Float window and centre it          |
+| `alt + g`           | Toggle padding and gaps             |
+| `alt + b`           | Toggle window borders               |
+| `shift + alt + 0`   | Balance window sizes                |
+| `shift + ctrl + a/s` | Nudge floating window left/down    |
 
 ## Claude
 

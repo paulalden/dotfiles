@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# apple — Apple logo item with popup menu: Settings, Activity Monitor, Lock
 
 source "$CONFIG_DIR/scripts/config.sh"
 

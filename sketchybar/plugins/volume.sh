@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# volume — shows volume % and icon on volume_change events
 
 source "$CONFIG_DIR/scripts/config.sh"
 

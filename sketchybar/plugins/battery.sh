@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# battery — shows battery % and charge icon; runs on 60s timer and power events
 
 source "$CONFIG_DIR/scripts/config.sh"
 

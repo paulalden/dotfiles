@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# spaces-icons — space items showing app icons; space-icons.sh on space events
 
 SPACE_COUNT=$(yabai -m query --spaces 2>/dev/null | jq 'length')
 

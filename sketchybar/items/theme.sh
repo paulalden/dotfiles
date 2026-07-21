@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# theme — theme picker popup (Nord/2049/Evergreen) calling theme_switcher.sh
 
 source "$CONFIG_DIR/scripts/config.sh"
 

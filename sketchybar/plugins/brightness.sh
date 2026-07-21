@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# brightness — shows brightness % and icon on brightness_change events
 
 source "$CONFIG_DIR/scripts/config.sh"
 

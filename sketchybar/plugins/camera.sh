@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# camera — shows a red icon when the camera is streaming; polled every 3s
 
 source "$CONFIG_DIR/scripts/config.sh"
 

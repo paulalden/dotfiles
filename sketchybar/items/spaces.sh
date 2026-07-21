@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# spaces — numbered space indicator items; space.sh plugin on space/app events
 
 SPACE_COUNT=$(yabai -m query --spaces 2>/dev/null | jq 'length')
 

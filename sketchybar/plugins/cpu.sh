@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# cpu — shows CPU usage % colour-coded by load; runs on a 5s timer
 
 source "$CONFIG_DIR/scripts/config.sh"
 

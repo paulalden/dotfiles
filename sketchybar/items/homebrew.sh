@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# homebrew — outdated package count + popup list; homebrew.sh plugin every 5m
 
 source "$CONFIG_DIR/scripts/config.sh"
 

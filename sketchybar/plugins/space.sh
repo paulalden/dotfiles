@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# space — highlights the focused space indicator; runs on space/app events
 
 source "$CONFIG_DIR/scripts/config.sh"
 

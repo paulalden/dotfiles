@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# memory — shows used-memory % from vm_stat; runs on a 10s timer
 
 source "$CONFIG_DIR/scripts/config.sh"
 

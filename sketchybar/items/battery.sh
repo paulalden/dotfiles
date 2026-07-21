@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# battery — battery item; plugins/battery.sh on 60s timer + power events
 
 sketchybar --add item battery right \
   --set battery \

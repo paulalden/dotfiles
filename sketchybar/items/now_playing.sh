@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# now_playing — current media item; now_playing.sh on 3s timer and media_change
 
 source "$CONFIG_DIR/scripts/config.sh"
 

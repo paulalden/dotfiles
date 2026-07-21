@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# camera — camera-in-use item; camera.sh polls every 3s, hidden by default
 
 sketchybar --add item camera right \
   --set camera \

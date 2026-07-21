@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# homebrew — outdated brew package count and popup list; 5m timer, brew_update
 
 source "$CONFIG_DIR/scripts/config.sh"
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# space-icons — highlights focused space, shows app icons; space/app events
 
 source "$CONFIG_DIR/scripts/config.sh"
 source "$CONFIG_DIR/scripts/icon_map_fn.sh"

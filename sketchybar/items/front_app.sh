@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# front_app — focused-app item; plugins/front_app.sh on front_app_switched
 
 source "$CONFIG_DIR/scripts/config.sh"
 

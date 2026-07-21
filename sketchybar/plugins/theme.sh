@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# theme — updates the theme item icon to match the current theme file
 
 THEME_FILE="$HOME/.config/theme"
 CURRENT=$(cat "$THEME_FILE" 2>/dev/null || echo "nord")
