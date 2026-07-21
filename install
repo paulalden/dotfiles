@@ -31,7 +31,12 @@ echo ""
 echo "Window management tools (yabai, skhd, sketchybar, borders) require"
 echo "special macOS permissions and partial SIP disabling to work properly."
 echo ""
-read -rp "Install window management tools? (y/N) " install_wm
+if [ -t 0 ]; then
+  read -rp "Install window management tools? (y/N) " install_wm
+else
+  install_wm=n
+  echo "Non-interactive shell: skipping window management tools."
+fi
 
 dotbot -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 

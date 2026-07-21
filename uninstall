@@ -47,12 +47,11 @@ SYMLINKS=(
   ~/.editorconfig
   ~/.zshenv
   ~/.config/zsh
-)
-
-WM_SYMLINKS=(
-  ~/.config/sketchybar
-  ~/.config/skhd
-  ~/.config/yabai
+  ~/.asdfrc
+  ~/.claude/CLAUDE.md
+  ~/.claude/settings.json
+  ~/.claude/statusline-command.sh
+  ~/.claude/hooks/context-mode-cache-heal.mjs
 )
 
 for link in "${SYMLINKS[@]}"; do
