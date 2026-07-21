@@ -19,6 +19,9 @@ CORE=(bf616a d08770 ebcb8b 5e81ac a3be8c 88c0d0 b48ead 74819a 464f62 2e3440 6c86
 
 fail=0
 while IFS= read -r file; do
+  # Skip dangling symlinks and non-regular files (e.g. .tool-versions points
+  # into $HOME, which doesn't exist on a CI runner).
+  [ -f "$file" ] || continue
   count=0
   for hex in "${CORE[@]}"; do
     if grep -qi "$hex" "$file"; then
@@ -33,7 +36,9 @@ done < <(git ls-files \
   ':!tmux/config/nord.conf' \
   ':!kitty/themes/' \
   ':!*2049*' \
-  ':!*evergreen*')
+  ':!*evergreen*' \
+  ':!scripts/check-palette.sh')
+# (this script is excluded: it necessarily names the values it hunts)
 
 if [ "$fail" -ne 0 ]; then
   echo "" >&2
