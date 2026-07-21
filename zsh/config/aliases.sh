@@ -71,7 +71,7 @@ alias dcw="docker compose watch"
 
 # DO NOT use ctrl+c or it will exit the container, instead use ctrl+q+p
 function docker-attach() {
-  docker attach $(docker-compose ps -q $1)
+  docker attach "$(docker compose ps -q "$1")"
 }
 
 # Start app detached + run file watcher in background + attach.

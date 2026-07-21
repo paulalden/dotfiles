@@ -2,15 +2,18 @@
 # Exported Variables
 ################################################################################
 
-# Build PATH once (last entry has highest priority)
+# Build PATH once (last entry has highest priority). Versioned Homebrew
+# formula paths carry the (N-/) glob qualifier: if a version bump removes the
+# directory, the entry silently drops out instead of lingering as a dead PATH
+# segment until someone notices.
 path=(
-  /opt/homebrew/opt/openssl@3.5/bin
+  /opt/homebrew/opt/openssl@3.5/bin(N-/)
   /opt/homebrew/opt/rustup/bin
   /opt/homebrew/bin
   /opt/homebrew/sbin
-  /opt/homebrew/opt/python@3.9/bin
+  /opt/homebrew/opt/python@3.9/bin(N-/)
   /opt/homebrew/opt/yarn/bin
-  /opt/homebrew/opt/postgresql@15/bin
+  /opt/homebrew/opt/postgresql@15/bin(N-/)
   $HOME/.asdf/shims
   $HOME/.local/scripts
   $HOME/.local/bin
