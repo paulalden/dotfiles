@@ -40,3 +40,7 @@ zsh/.zcompcache
 neovim-lazy/lazyvim.json
 /.claude/settings.local.json
 settings.local.jsonclaude/.claude/
+
+# Theme switcher writes these (untracked) so switching does not dirty tracked configs
+kitty/themes/active.conf
+tmux/config/theme-active.conf

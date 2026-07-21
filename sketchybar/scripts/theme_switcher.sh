@@ -43,15 +43,17 @@ case "$new_theme" in
     ;;
 esac
 
-# --- Sketchybar ---
-sed -i '' "s|config-[a-z0-9-]*\.sh|$sketchybar_config|" "$DOTFILES/sketchybar/scripts/config.sh"
+# Each tool loads its theme from an untracked override file (or, for
+# sketchybar, straight from $THEME_FILE), so switching never dirties a tracked
+# file. $sketchybar_config is unused here — config.sh self-resolves.
 
-# --- Kitty ---
-sed -i '' "s|include ./themes/.*\.conf|include ./themes/$kitty_theme|" "$DOTFILES/kitty/kitty.conf"
+# --- Kitty --- untracked include override (themes/active.conf)
+printf 'include %s\n' "$kitty_theme" > "$DOTFILES/kitty/themes/active.conf"
 kill -SIGUSR1 $(pgrep -f kitty) 2>/dev/null
 
-# --- Tmux ---
-sed -i '' "s|/theme[a-z0-9-]*\.conf\"|/$tmux_theme\"|" "$DOTFILES/tmux/tmux.conf"
+# --- Tmux --- untracked source override (config/theme-active.conf)
+printf 'source-file ~/.config/tmux/config/%s\n' "$tmux_theme" \
+  > "$DOTFILES/tmux/config/theme-active.conf"
 tmux source-file "$HOME/.config/tmux/tmux.conf" 2>/dev/null
 
 # --- Neovim ---
