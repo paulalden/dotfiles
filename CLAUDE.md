@@ -24,8 +24,11 @@ stylua neovim/lua/
 # Edit dotfiles quickly
 editdots  # Alias that opens dotfiles in nvim
 
-# Update tmux plugins
+# Reload tmux config
 tmux source ~/.config/tmux/tmux.conf
+
+# Update tmux plugins (TPM): prefix + U inside tmux, or:
+~/.config/tmux/plugins/tpm/bin/update_plugins all
 
 # Update a zsh plugin (they are git clones under zsh/plugins/)
 git -C zsh/plugins/<name> pull
@@ -93,7 +96,7 @@ yabai --restart-service
 
 ### Plugin Management
 - Neovim plugins auto-install on first run via Lazy.nvim
-- Tmux plugins require manual installation: `<prefix> + I`
+- Tmux plugins install automatically during `./install`; add new ones with `<prefix> + I`, update with `<prefix> + U` (TPM)
 - ZSH plugins are committed to the repository
 
 ### Path Configuration

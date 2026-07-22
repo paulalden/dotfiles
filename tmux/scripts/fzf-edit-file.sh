@@ -6,6 +6,7 @@
 # Enter: edit in popup, Ctrl-S: edit in caller pane
 # Degrade gracefully when fzf is missing.
 command -v fzf >/dev/null 2>&1 || { echo 'fzf not installed'; sleep 2; exit 1; }
+command -v fd >/dev/null 2>&1 || { echo 'fd not installed'; sleep 2; exit 1; }
 
 RESULT_FILE=/tmp/tmux-fzf-result
 

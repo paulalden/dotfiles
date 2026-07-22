@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-DOTFILES="$HOME/Personal/repos/dotfiles"
+# Resolve the repo root from this script's real location (it is reached via
+# the ~/.config/sketchybar symlink, so resolve that first).
+DOTFILES="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../.." && pwd)"
 THEME_FILE="$HOME/.config/theme"
 
 # Read current theme, default to nord

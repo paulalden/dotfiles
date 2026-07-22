@@ -274,7 +274,7 @@ Run RSpec tests from within Neovim using `neotest` with the `neotest-rspec` adap
 - **Plugins are committed** — git clones in `zsh/plugins/`, loaded with `zsh_add_plugin`.
 - **Update a plugin** — `git -C zsh/plugins/<name> pull`.
 - **Prompt** — pure-zsh async prompt in `zsh/user/prompt.sh` (no Starship).
-- **Secrets** — machine-local env vars live in `zsh/secrets.sh` (untracked).
+- **Secrets** — machine-local env vars live in `~/secrets.sh` (outside the repo, sourced by `.zshrc`).
 - **PATH hygiene** — versioned Homebrew paths use the `(N-/)` glob qualifier, so removed formula versions drop out automatically.
 
 ## Yabai

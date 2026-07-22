@@ -38,7 +38,12 @@ else
   echo "Non-interactive shell: skipping window management tools."
 fi
 
-dotbot -d "${BASEDIR}" -c "${CONFIG}" "${@}"
+if ! dotbot -d "${BASEDIR}" -c "${CONFIG}" "${@}"; then
+  echo "" >&2
+  echo "dotbot failed — usually a pre-existing file where a symlink belongs." >&2
+  echo "Move the conflicting file aside and re-run ./install." >&2
+  exit 1
+fi
 
 if [[ "$install_wm" =~ ^[Yy]$ ]]; then
   echo ""
