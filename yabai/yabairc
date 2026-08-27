@@ -15,6 +15,9 @@ yabai -m signal --add event=space_destroyed action="sketchybar --reload"
 # run at startup and whenever displays change.
 yabai -m signal --add event=display_added   action="$HOME/.config/yabai/apply_padding.sh"
 yabai -m signal --add event=display_removed action="$HOME/.config/yabai/apply_padding.sh"
+# padding is set per-space (yabai has no --display config selector), so new
+# spaces need it applied too
+yabai -m signal --add event=space_created   action="$HOME/.config/yabai/apply_padding.sh"
 
 # global settings — top_padding here is only the global default; the real
 # per-display values are applied by apply_padding.sh below.
