@@ -2,7 +2,7 @@
 
 # Shared helpers for the Claude-in-tmux status feature.
 # Sourced by claude-notify.sh, claude-tick.sh, claude-jump.sh,
-# claude-clear-done.sh, fzf-claude.sh, claude-sidebar.sh,
+# claude-clear-done.sh, claude-dismiss.sh, fzf-claude.sh, claude-sidebar.sh,
 # claude-sidebar-toggle.sh.
 #
 # State lives in per-PANE tmux options (keyed by pane id, so it vanishes when a
