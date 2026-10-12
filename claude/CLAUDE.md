@@ -35,3 +35,17 @@ The rules:
 
 If unsure whether a reply qualifies as "long", err on the side of applying
 the rules — it's cheaper to over-format than to under-format.
+
+## ExamTrack branch workflow
+
+Applies only when the session's repo matches both checks below. Otherwise ignore
+this section.
+
+- **Worktree layout:** `git rev-parse --git-common-dir` ends in `/.bare`.
+- **Support branches:** `git branch -r --list origin/support origin/support-staging`
+  prints at least one branch.
+
+When both match, invoke the `fixing-live-and-staging` skill before creating a
+branch or worktree, opening or retargeting a PR, promoting, releasing, or
+handling a backport or sync PR. If the skill is not installed on this machine,
+say so and carry on.
