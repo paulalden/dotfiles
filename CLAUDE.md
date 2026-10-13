@@ -48,7 +48,7 @@ yabai --restart-service
   - `settings.json`, `CLAUDE.md`, `statusline-command.sh` and the hook are symlinked into `~/.claude/`, so edits apply to every Claude Code session at once
 
 ### Neovim Configuration
-- **Plugin Manager**: Lazy.nvim with lazy loading enabled
+- **Plugin Manager**: Lazy.nvim. Plugins load at startup by default (`lazy = false`); a spec must opt in to lazy loading.
 - **LSP Setup**: Native Neovim 0.11+ LSP configuration (no Mason), focused on Ruby development
 - **Key Features**: Treesitter, completion, AI assistance (CodeCompanion), formatting
 - **AI Assistance**: CodeCompanion is configured in `lua/plugins/codecompanion.lua` with the Anthropic adapter
@@ -76,6 +76,9 @@ yabai --restart-service
 - Neovim plugins auto-install on first run via Lazy.nvim
 - Tmux plugins install automatically during `./install`; add new ones with `<prefix> + I`, update with `<prefix> + U` (TPM)
 - ZSH plugins are committed to the repository under `zsh/plugins/` and loaded manually
+
+### Gotchas
+- `install.conf.yaml`: entries under `link:` must keep 4-space indentation, or dotbot fails. Run `yamllint install.conf.yaml` after editing.
 
 ### Path Configuration
 - Custom PATH setup in `zsh/config/exports.sh` prioritizes Homebrew tools
