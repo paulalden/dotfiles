@@ -36,7 +36,7 @@ yabai --restart-service
 ### Configuration Structure
 - **Dotbot Management**: Uses `install.conf.yaml` for symlink management and `./install` script for setup
 - **Window Management Links**: `install.wm.yaml` links yabai, skhd and sketchybar, and only runs if you accept the prompt in `./install`
-- **Uninstall**: `./uninstall` runs the dotfiles uninstaller
+- **Uninstall**: `./uninstall` removes the symlinks, then offers to remove Brewfile packages, tmux plugins and macOS defaults
 
 ### Key Directories
 - `neovim/`: Complete Neovim configuration with Lua-based plugin system
@@ -59,7 +59,7 @@ yabai --restart-service
 
 ### Tmux Configuration
 - **Key Plugins**: Resurrect (session persistence), Continuum (auto-save)
-- **Config Structure**: Split into `options.conf`, `keybindings.conf`, and `theme.conf`
+- **Config Structure**: Split into `options.conf`, `keybindings.conf`, and `theme.conf` (the default). `sketchybar/scripts/theme_switcher.sh` writes `theme-active.conf`, which is gitignored and overrides the theme. Do not edit or commit it.
 
 ### ZSH Configuration
 - **Key Plugins**: autosuggestions, syntax-highlighting, history-substring-search, autopair
@@ -75,10 +75,11 @@ yabai --restart-service
 ### Plugin Management
 - Neovim plugins auto-install on first run via Lazy.nvim
 - Tmux plugins install automatically during `./install`; add new ones with `<prefix> + I`, update with `<prefix> + U` (TPM)
-- ZSH plugins are committed to the repository under `zsh/plugins/` and loaded manually
+- ZSH plugins are not tracked. `zsh_add_plugin` in `zsh/user/packages.sh` clones each one into `zsh/plugins/` on first shell start. Add new ones in `zsh/.zshrc`; syntax-highlighting must stay last.
 
 ### Gotchas
 - `install.conf.yaml`: entries under `link:` must keep 4-space indentation, or dotbot fails. Run `yamllint install.conf.yaml` after editing.
+- `uninstall` has a hardcoded symlink list. Update it whenever a link is added to or removed from `install.conf.yaml` or `install.wm.yaml`.
 
 ### Path Configuration
 - Custom PATH setup in `zsh/config/exports.sh` prioritizes Homebrew tools
