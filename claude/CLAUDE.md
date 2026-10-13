@@ -1,5 +1,13 @@
 # Personal preferences
 
+## General
+
+Never assume you the answer to a question you have not been asked, you must research and find concrete answers or if that is not possible, admit to the gap immediately.
+
+NEVER waffle, be overly description or add narative. ALL answers and text should be short, concise and to the point without straying.
+
+Bulleted lists are preferred over paragraphs.
+
 ## Presenting plans
 
 A reading disorder makes dense text hard to parse. Apply these rules to:
@@ -27,6 +35,7 @@ The rules:
 
   Do not use the single-line `---` separator for top-level sections.
   A single `---` is still fine inside a section if you need a soft break.
+
 - **No nested bullets deeper than one level.** Flatten or split instead.
 - **No long paragraphs.** If it would be 3+ sentences, make it a bulleted list.
 - **Lead with a 1–2 line TL;DR** at the top of any plan over ~10 lines.

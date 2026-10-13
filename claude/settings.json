@@ -81,9 +81,9 @@
       "Bash(rake db:reset*)",
       "Bash(rake db:purge*)"
     ],
-    "defaultMode": "plan"
+    "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "opus",
   "hooks": {
     "PermissionRequest": [
       {
@@ -218,6 +218,11 @@
     }
   },
   "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-opus-5": {
+      "effortLevel": "xhigh"
+    }
+  },
   "autoUpdatesChannel": "stable",
   "tui": "default",
   "skipWorkflowUsageWarning": true,
@@ -226,6 +231,44 @@
   "preferredNotifChannel": "kitty",
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(gh pr create:*)",
+      "Bash(docker compose:*)"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(git push:*origin*main*)",
+      "Bash(git push:*origin*staging*)"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: ExamTrack (github.com/ExamTrack)",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: PRIVATE — ExamTrack/UwlSystem confirmed private via gh API. Sibling org repos enumerated by gh are all private (UwlSystem, examtrack_test_suite, ExamtrackEngine, dre_workflow, curbcut, claude-shared, GenericPerformanceEngine, ExamtrackApiEngine, RadSystem, AbmaSystem, abma_regulated, LamdaEngine, LamdaSystem, et-support-assistant, DemoSystem, worktree-workflow, Anonymiser, github-workflows, jasper, GqalSystem and 5 more). No PUBLIC repo found.",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: Rails encrypted credentials (config/credentials.yml.enc, config/master.key) and Figaro (config/application.yml, gitignored); CI secret names referenced: RAILS_MASTER_KEY, SUBMODULES_PAT, ZAP_SCAN_PASSWORD",
+      "**Default / protected branches**: default branch `main`; protected branches `main` and `staging`; active rulesets `Protect Main` and `Protect Staging`",
+      "**CI/CD deploy targets**: None configured — GitHub Actions workflows present (.github/workflows) but no deploy target corroborated by usage",
+      "**Network posture**: None configured",
+      "**Source control**: GitHub, org `ExamTrack` — this repo's remote is `github.com:ExamTrack/UwlSystem.git`; submodule repos in the same org (ExamtrackEngine, ExamtrackApiEngine, GenericPerformanceEngine, examtrack_test_suite, claude-shared) are in-scope for normal engine/test/pointer work",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured — gems come from the public index plus path-based engine submodules",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar. In this repo that includes candidate/person records handled by Examtrack::Person and its role profiles, Examtrack::Account auth data (Devise, TOTP/backup codes, OTP secret migration), `.env`, `config/application.yml`, `config/credentials.yml.enc`, `config/master.key`, `config/credentials/development.key`, and MySQL dumps or fixtures derived from customer databases",
+      "**Data retention / declassification**: None configured — note engines/examtrack/docs/mux_video_retention.md and the Mux retention configuration migration describe app-level media retention, not a declassification policy",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment (hyphen/underscore/dot-delimited — e.g. matches `prod-db`, not `producer`); also the `staging` branch and any `bin/rails console -e production` session on a customer host, since each customer is a fully separate Rails app + MySQL database",
+      "**Protected deployment namespaces / environments**: protected git branches `main` and `staging` on ExamTrack/UwlSystem (rulesets `Protect Main`, `Protect Staging`); no cluster namespaces configured",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development — Rails 7.0 / Ruby 3.4 engine-and-submodule work on the ExamTrack platform, RSpec via the shared test_suite submodule, Docker-based dev/test",
+      "**Trusted repo**: /Users/paul/Dev/UwlSystem/misc/send-order-confirmation-email (worktree of ExamTrack/UwlSystem, private) and its remote `github.com:ExamTrack/UwlSystem.git`, plus the in-tree submodules `engines/examtrack`, `engines/examtrack_api`, `engines/generic_performance`, `test_suite`, `.claude` and their ExamTrack remotes. Also present locally: ~/Dev/ExamtrackEngine (github.com/ExamTrack/ExamtrackEngine, same org). Private visibility means confidential material may live here; secrets and personal/entrusted data are still never cleared into any repo by visibility alone.",
+      "**Org-specific CLIs**: `wt` (worktree-workflow), `dc` / `dcr` (Docker Compose wrappers) appear in README instructions but are not corroborated by usage counts — treated as unconfigured",
+      "**Routine under <user>/ prefix**: none observed"
+    ]
+  },
   "additionalDirectories": [
     "/Users/paul/Personal/repos/dotfiles"
   ]
