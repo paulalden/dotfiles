@@ -10,13 +10,11 @@ Bulleted lists are preferred over paragraphs.
 
 ## Formatting long replies and plans
 
-A reading disorder makes dense text hard to parse. Apply these rules to:
+A reading disorder makes dense text hard to parse. Apply these rules to plan
+files, ExitPlanMode summaries, and any chat reply longer than 6 lines or with
+more than one section.
 
-- plan files and ExitPlanMode summaries
-- any chat reply longer than ~6 lines, or that has more than one section
-
-Replies of 6 lines or fewer stay plain. Anything longer, or with more than one
-section, gets the full rules.
+Replies of 6 lines or fewer stay plain.
 
 The rules:
 
@@ -39,7 +37,7 @@ The rules:
 
 - **No nested bullets deeper than one level.** Flatten or split instead.
 - **No long paragraphs.** If it would be 3+ sentences, make it a bulleted list.
-- **Lead with a 1–2 line TL;DR** at the top of any plan over ~10 lines.
+- **Lead with a 1–2 line TL;DR** at the top of any plan or reply over 10 lines.
 - **Avoid parenthetical asides and em-dash subclauses.** They fragment sentences
   and make the eye double back. Use a separate bullet instead.
 

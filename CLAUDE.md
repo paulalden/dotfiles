@@ -12,7 +12,7 @@ This is a comprehensive macOS development environment dotfiles repository focuse
 ```bash
 # Install dotfiles: installs Homebrew/dotbot if missing, symlinks everything,
 # installs Brewfile packages and tmux plugins, prompts before the window
-# management extras (yabai/skhd/sketchybar need SIP changes).
+# management extras (yabai/skhd/sketchybar).
 ./install
 ```
 
@@ -20,9 +20,6 @@ This is a comprehensive macOS development environment dotfiles repository focuse
 ```bash
 # Edit dotfiles quickly
 editdots  # Alias that opens dotfiles in nvim
-
-# Reload tmux config
-tmux source ~/.config/tmux/tmux.conf
 
 # Update tmux plugins (TPM): prefix + U inside tmux, or:
 ~/.config/tmux/plugins/tpm/bin/update_plugins all
@@ -40,12 +37,11 @@ yabai --restart-service
 - **Dotbot Management**: Uses `install.conf.yaml` for symlink management and `./install` script for setup
 - **Window Management Links**: `install.wm.yaml` links yabai, skhd and sketchybar, and only runs if you accept the prompt in `./install`
 - **Uninstall**: `./uninstall` runs the dotfiles uninstaller
-- **Plugin Systems**: Neovim (Lazy.nvim), Tmux (TPM), ZSH (manual plugin management)
 
 ### Key Directories
 - `neovim/`: Complete Neovim configuration with Lua-based plugin system
 - `tmux/`: Tmux configuration split into options, keybindings, and themes
-- `zsh/`: ZSH configuration with modular loading (exports, aliases, functions)
+- `zsh/`: ZSH configuration with modular loading (exports, aliases, fzf, vim mode)
 - `yabai/`: Window manager configuration requiring special macOS permissions
 - `sketchybar/`: Status bar configuration with custom plugins and scripts
 - `claude/`: Claude Code settings, hooks, statusline, and local plugins (marketplace + timestamps)
@@ -55,30 +51,19 @@ yabai --restart-service
 - **Plugin Manager**: Lazy.nvim with lazy loading enabled
 - **LSP Setup**: Native Neovim 0.11+ LSP configuration (no Mason), focused on Ruby development
 - **Key Features**: Treesitter, completion, AI assistance (CodeCompanion), formatting
+- **AI Assistance**: CodeCompanion is configured in `lua/plugins/codecompanion.lua` with the Anthropic adapter
 - **Config Structure**: 
   - `lua/config/`: Core configuration (options, keymaps, autocmds)
   - `lua/plugins/`: Individual plugin configurations
   - `stylua.toml`: Formatting rules for Lua code
 
 ### Tmux Configuration
-- **Plugin Manager**: TPM (Tmux Plugin Manager)
 - **Key Plugins**: Resurrect (session persistence), Continuum (auto-save)
 - **Config Structure**: Split into `options.conf`, `keybindings.conf`, and `theme.conf`
 
 ### ZSH Configuration
-- **Plugin Management**: Manual plugin loading from `zsh/plugins/`
 - **Key Plugins**: autosuggestions, syntax-highlighting, history-substring-search, autopair
 - **Config Structure**: Modular loading from `zsh/config/` directory, plus `zsh/user/` for the prompt (`prompt.sh`) and plugin-loading helpers (`packages.sh`)
-
-## Development Workflow Patterns
-
-### AI-Assisted Development
-- CodeCompanion is configured in `neovim/lua/plugins/codecompanion.lua` with the Anthropic adapter
-
-### Window Management
-- Yabai requires System Integrity Protection modifications
-- SKHD for keyboard shortcuts
-- Sketchybar for status bar with custom plugins
 
 ## Important Notes
 
@@ -90,7 +75,7 @@ yabai --restart-service
 ### Plugin Management
 - Neovim plugins auto-install on first run via Lazy.nvim
 - Tmux plugins install automatically during `./install`; add new ones with `<prefix> + I`, update with `<prefix> + U` (TPM)
-- ZSH plugins are committed to the repository
+- ZSH plugins are committed to the repository under `zsh/plugins/` and loaded manually
 
 ### Path Configuration
 - Custom PATH setup in `zsh/config/exports.sh` prioritizes Homebrew tools
@@ -104,7 +89,7 @@ yabai --restart-service
 # Test Neovim configuration
 nvim --headless -c "checkhealth" -c "q"
 
-# Validate tmux configuration
+# Reload and validate tmux configuration
 tmux source ~/.config/tmux/tmux.conf
 
 # Test ZSH configuration
