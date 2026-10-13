@@ -8,7 +8,6 @@
   },
   "permissions": {
     "allow": [
-      "Bash(git push -f)",
       "Bash(find *)",
       "Bash(rm *)",
       "Bash(mv *)",
@@ -17,13 +16,6 @@
       "Bash(touch *)",
       "Bash(chmod *)",
       "Bash(chown *)",
-      "Bash(git status*)",
-      "Bash(git log*)",
-      "Bash(git diff*)",
-      "Bash(git show*)",
-      "Bash(git branch*)",
-      "Bash(git remote*)",
-      "Bash(git stash list*)",
       "Bash(brew install*)",
       "Bash(brew update*)",
       "Bash(ruby *)",
@@ -48,18 +40,11 @@
       "Bash(vim *)",
       "Bash(ls*)",
       "Bash(grep *)",
-      "Bash(git log *)",
-      "Bash(git diff *)",
-      "Bash(git branch *)",
-      "Bash(git status *)",
-      "Bash(git status *)",
       "Bash(cd * && git show *)",
       "Bash(cd * && git log *)",
       "Bash(cd * && git diff *)",
       "Bash(cd * && git branch *)",
       "Bash(cd * && git status *)",
-      "Bash(ls *)",
-      "Bash(ls)",
       "Bash(cd * && ls *)",
       "Bash(cat *)",
       "Bash(cd * && cat *)",
@@ -74,6 +59,10 @@
       "Bash(git reset*)",
       "Bash(sudo *)",
       "Bash(rm -r*)",
+      "Bash(rm -fr*)",
+      "Bash(rm -R*)",
+      "Bash(rm -f -r*)",
+      "Bash(rm --recursive*)",
       "Bash(rails destroy*)",
       "Bash(rails db:drop*)",
       "Bash(rails db:reset*)",
@@ -81,21 +70,13 @@
       "Bash(rake db:reset*)",
       "Bash(rake db:purge*)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "plan",
+    "additionalDirectories": [
+      "/Users/paul/Personal/repos/dotfiles"
+    ]
   },
   "model": "opus",
   "hooks": {
-    "PermissionRequest": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cmd=$(jq -r '.tool_input.command'); if echo \"$cmd\" | grep -qE 'git (show|log|diff|branch|status|remote|describe)'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PermissionRequest\",\"permissionDecision\":\"allow\",\"permissionDecisionReason\":\"Git read operation\"}}'; fi"
-          }
-        ]
-      }
-    ],
     "SessionStart": [
       {
         "hooks": [
@@ -183,21 +164,11 @@
     "typescript-lsp@claude-plugins-official": true,
     "understand-anything@understand-anything": true,
     "pyright-lsp@claude-plugins-official": true,
-    "timestamps@dotfiles": true
+    "timestamps@dotfiles": true,
+    "vibe-wise@anthropic-plugin-directory": true,
+    "context-mode@context-mode": true
   },
   "extraKnownMarketplaces": {
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
-      }
-    },
-    "ombulabs-ai": {
-      "source": {
-        "source": "github",
-        "repo": "ombulabs/claude-skills"
-      }
-    },
     "context-mode": {
       "source": {
         "source": "github",
@@ -218,13 +189,12 @@
     }
   },
   "effortLevel": "xhigh",
-  "modelSettings": {
-    "claude-opus-5": {
-      "effortLevel": "xhigh"
-    }
-  },
   "autoUpdatesChannel": "stable",
   "tui": "default",
+  "timeFormat": "24-hour",
+  "showTurnDuration": true,
+  "showMessageTimestamps": true,
+  "autoContinueAtUsageLimit": true,
   "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
   "verbose": false,
@@ -232,6 +202,7 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
+    "classifyAllShell": true,
     "allow": [
       "$defaults",
       "Bash(gh pr create:*)",
@@ -264,12 +235,9 @@
       "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
       "### User-specific",
       "**Primary use of Claude Code**: software development — Rails 7.0 / Ruby 3.4 engine-and-submodule work on the ExamTrack platform, RSpec via the shared test_suite submodule, Docker-based dev/test",
-      "**Trusted repo**: /Users/paul/Dev/UwlSystem/misc/send-order-confirmation-email (worktree of ExamTrack/UwlSystem, private) and its remote `github.com:ExamTrack/UwlSystem.git`, plus the in-tree submodules `engines/examtrack`, `engines/examtrack_api`, `engines/generic_performance`, `test_suite`, `.claude` and their ExamTrack remotes. Also present locally: ~/Dev/ExamtrackEngine (github.com/ExamTrack/ExamtrackEngine, same org). Private visibility means confidential material may live here; secrets and personal/entrusted data are still never cleared into any repo by visibility alone.",
+      "**Trusted repo**: /Users/paul/Dev/UwlSystem and every worktree under it (ExamTrack/UwlSystem, private) and its remote `github.com:ExamTrack/UwlSystem.git`, plus the in-tree submodules `engines/examtrack`, `engines/examtrack_api`, `engines/generic_performance`, `test_suite`, `.claude` and their ExamTrack remotes. Also present locally: ~/Dev/ExamtrackEngine (github.com/ExamTrack/ExamtrackEngine, same org). Private visibility means confidential material may live here; secrets and personal/entrusted data are still never cleared into any repo by visibility alone.",
       "**Org-specific CLIs**: `wt` (worktree-workflow), `dc` / `dcr` (Docker Compose wrappers) appear in README instructions but are not corroborated by usage counts — treated as unconfigured",
       "**Routine under <user>/ prefix**: none observed"
     ]
-  },
-  "additionalDirectories": [
-    "/Users/paul/Personal/repos/dotfiles"
-  ]
+  }
 }
