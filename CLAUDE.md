@@ -18,9 +18,6 @@ This is a comprehensive macOS development environment dotfiles repository focuse
 
 ### Development Commands
 ```bash
-# Format Neovim Lua files
-stylua neovim/lua/
-
 # Edit dotfiles quickly
 editdots  # Alias that opens dotfiles in nvim
 
@@ -41,7 +38,8 @@ yabai --restart-service
 
 ### Configuration Structure
 - **Dotbot Management**: Uses `install.conf.yaml` for symlink management and `./install` script for setup
-- **Modular Organization**: Each tool has its own directory with focused configuration files
+- **Window Management Links**: `install.wm.yaml` links yabai, skhd and sketchybar, and only runs if you accept the prompt in `./install`
+- **Uninstall**: `./uninstall` runs the dotfiles uninstaller
 - **Plugin Systems**: Neovim (Lazy.nvim), Tmux (TPM), ZSH (manual plugin management)
 
 ### Key Directories
@@ -51,6 +49,7 @@ yabai --restart-service
 - `yabai/`: Window manager configuration requiring special macOS permissions
 - `sketchybar/`: Status bar configuration with custom plugins and scripts
 - `claude/`: Claude Code settings, hooks, statusline, and local plugins (marketplace + timestamps)
+  - `settings.json`, `CLAUDE.md`, `statusline-command.sh` and the hook are symlinked into `~/.claude/`, so edits apply to every Claude Code session at once
 
 ### Neovim Configuration
 - **Plugin Manager**: Lazy.nvim with lazy loading enabled
@@ -63,24 +62,18 @@ yabai --restart-service
 
 ### Tmux Configuration
 - **Plugin Manager**: TPM (Tmux Plugin Manager)
-- **Key Plugins**: Resurrect (session persistence), Continuum (auto-save), Floax (floating windows)
+- **Key Plugins**: Resurrect (session persistence), Continuum (auto-save)
 - **Config Structure**: Split into `options.conf`, `keybindings.conf`, and `theme.conf`
 
 ### ZSH Configuration
 - **Plugin Management**: Manual plugin loading from `zsh/plugins/`
-- **Key Plugins**: autosuggestions, syntax-highlighting, history-substring-search
-- **Config Structure**: Modular loading from `zsh/config/` directory
+- **Key Plugins**: autosuggestions, syntax-highlighting, history-substring-search, autopair
+- **Config Structure**: Modular loading from `zsh/config/` directory, plus `zsh/user/` for the prompt (`prompt.sh`) and plugin-loading helpers (`packages.sh`)
 
 ## Development Workflow Patterns
 
-### Ruby Development Focus
-- LSP configured for Ruby, Rails, and related tools
-- Specific aliases for Rails commands and Ruby tools
-
 ### AI-Assisted Development
-- CodeCompanion plugin integrated with multiple AI providers
-- Slash commands for common development tasks (/commit, /explain, /fix)
-- Tools available: @cmd_runner, @editor, @files, @full_stack_dev
+- CodeCompanion is configured in `neovim/lua/plugins/codecompanion.lua` with the Anthropic adapter
 
 ### Window Management
 - Yabai requires System Integrity Protection modifications
@@ -115,7 +108,7 @@ nvim --headless -c "checkhealth" -c "q"
 tmux source ~/.config/tmux/tmux.conf
 
 # Test ZSH configuration
-zsh -n ~/.zshenv
+for f in zsh/config/*.sh zsh/user/*.sh; do zsh -n "$f"; done
 ```
 
 ### Linting

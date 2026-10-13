@@ -2,20 +2,21 @@
 
 ## General
 
-Never assume you the answer to a question you have not been asked, you must research and find concrete answers or if that is not possible, admit to the gap immediately.
+Never assume you know the answer to a question. Research and find concrete answers. If that is not possible, admit the gap immediately.
 
-NEVER waffle, be overly description or add narative. ALL answers and text should be short, concise and to the point without straying.
+Never waffle, over-describe or add narrative. Keep all answers short and to the point.
 
 Bulleted lists are preferred over paragraphs.
 
-## Presenting plans
+## Formatting long replies and plans
 
 A reading disorder makes dense text hard to parse. Apply these rules to:
 
 - plan files and ExitPlanMode summaries
 - any chat reply longer than ~6 lines, or that has more than one section
 
-Short answers (a sentence or two) stay terse — don't add ceremony to them.
+Replies of 6 lines or fewer stay plain. Anything longer, or with more than one
+section, gets the full rules.
 
 The rules:
 
@@ -41,9 +42,6 @@ The rules:
 - **Lead with a 1–2 line TL;DR** at the top of any plan over ~10 lines.
 - **Avoid parenthetical asides and em-dash subclauses.** They fragment sentences
   and make the eye double back. Use a separate bullet instead.
-
-If unsure whether a reply qualifies as "long", err on the side of applying
-the rules — it's cheaper to over-format than to under-format.
 
 ## ExamTrack branch workflow
 
