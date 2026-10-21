@@ -65,3 +65,5 @@
 	defaultBranch = main
 [interactive]
 	diffFilter = diff-so-fancy --patch
+[submodule]
+	recurse = true
