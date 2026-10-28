@@ -8,6 +8,9 @@
 # yabai has no --display selector for `config`, only --space, so this walks
 # each display's spaces and sets the padding on every one of them.
 #
+# This is the only place top padding is set — yabairc leaves it out because
+# per-space values would override it anyway.
+#
 # Check UUID with: yabai -m query --displays | python3 -m json.tool
 # Check hostname with: scutil --get LocalHostName
 
@@ -18,7 +21,7 @@ HOSTNAME_13INCH="PaulM1"                        # MacBook Pro 13" (no notch)
 
 EXTERNAL_TOP_PADDING=52 # sketchybar height (32) + gap (20)
 TOP_PADDING_16INCH=20   # MacBook Pro 16" — menubar/notch already excluded
-TOP_PADDING_13INCH=20   # MacBook Pro 13" — menubar already excluded
+TOP_PADDING_13INCH=52   # MacBook Pro 13" — menubar auto-hidden, so clear sketchybar
 
 case "$(scutil --get LocalHostName)" in
   "$HOSTNAME_16INCH") BUILTIN_TOP_PADDING=$TOP_PADDING_16INCH ;;
