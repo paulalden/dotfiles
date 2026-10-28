@@ -44,8 +44,13 @@ new_session() {
 # Killing the session the client is attached to would detach the client
 # (detach-on-destroy is on), so move the client elsewhere first.
 kill_session() {
-  local target="$1" next
+  local target="$1" next answer
   [ -n "$target" ] || return 0
+
+  printf 'Kill session "%s"? [Y/n] ' "$target"
+  # Single keypress, so Escape cancels at once instead of waiting for Enter.
+  read -rsn1 answer
+  case "$answer" in ''|[Yy]) ;; *) return 0 ;; esac
 
   if [ "$target" = "$(tmux display-message -p '#S')" ]; then
     next=$(tmux list-sessions -F '#{session_id}' \
@@ -101,7 +106,7 @@ rows \
   | fzf --no-tmux +m --reverse --exit-0 --no-preview \
     --delimiter "$tab" --tabstop 16 \
     --header "Enter: switch | Ctrl-X: kill | Ctrl-A: new | Ctrl-R: rename" \
-    --bind "ctrl-x:execute-silent($self --kill {1})+reload($self --rows)" \
+    --bind "ctrl-x:execute($self --kill {1})+reload($self --rows)" \
     --bind "ctrl-a:execute-silent($self --new)+reload($self --rows)" \
     --bind "ctrl-r:execute($self --rename {1})+reload($self --rows)" \
     --bind "enter:become($self --switch {1})"
