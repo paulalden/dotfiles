@@ -166,7 +166,8 @@
     "pyright-lsp@claude-plugins-official": true,
     "timestamps@dotfiles": true,
     "vibe-wise@anthropic-plugin-directory": true,
-    "context-mode@context-mode": true
+    "context-mode@context-mode": true,
+    "i-have-adhd@i-have-adhd": true
   },
   "extraKnownMarketplaces": {
     "context-mode": {
@@ -185,6 +186,12 @@
       "source": {
         "source": "directory",
         "path": "/Users/paul/Personal/repos/dotfiles/claude/plugins"
+      }
+    },
+    "i-have-adhd": {
+      "source": {
+        "source": "github",
+        "repo": "ayghri/i-have-adhd"
       }
     }
   },
