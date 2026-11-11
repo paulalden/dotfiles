@@ -75,7 +75,7 @@
       "/Users/paul/Personal/repos/dotfiles"
     ]
   },
-  "model": "opus",
+  "model": "sonnet",
   "hooks": {
     "SessionStart": [
       {
@@ -87,6 +87,16 @@
           {
             "type": "command",
             "command": "~/.config/tmux/scripts/claude-notify.sh working"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f '/Users/paul/.claude/skills/impeccable/scripts/impeccable' ] || '/Users/paul/.claude/skills/impeccable/scripts/impeccable' hook",
+            "timeout": 5,
+            "statusMessage": "Preparing build session"
           }
         ]
       }
@@ -110,6 +120,16 @@
             "command": "~/.config/tmux/scripts/claude-notify.sh done"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f '/Users/paul/.claude/skills/impeccable/scripts/impeccable' ] || '/Users/paul/.claude/skills/impeccable/scripts/impeccable' hook",
+            "timeout": 30,
+            "statusMessage": "Design deep pass"
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -130,6 +150,15 @@
             "command": "~/.config/tmux/scripts/claude-notify.sh working"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r \".tool_input.command // empty\" | grep -Eq \"(^|[^[:alnum:]_-])cut[[:space:]]+(-[a-zA-Z]*c|--characters)\" && { jq -n \"{hookSpecificOutput:{hookEventName:\\\"PreToolUse\\\",permissionDecision:\\\"deny\\\",permissionDecisionReason:\\\"Character truncation is blocked: it cuts code off mid-line. Read the file in full with the Read tool, or use git show or gh api with no width limit.\\\"}}\"; } || true"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -138,6 +167,17 @@
           {
             "type": "command",
             "command": "~/.config/tmux/scripts/claude-notify.sh working"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f '/Users/paul/.claude/skills/impeccable/scripts/impeccable' ] || '/Users/paul/.claude/skills/impeccable/scripts/impeccable' hook",
+            "timeout": 5,
+            "statusMessage": "Checking UI changes"
           }
         ]
       }
@@ -196,20 +236,25 @@
     }
   },
   "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "xhigh"
+    }
+  },
+  "advisorModel": "opus",
   "autoUpdatesChannel": "stable",
   "tui": "default",
   "timeFormat": "24-hour",
-  "showTurnDuration": true,
-  "showMessageTimestamps": true,
-  "autoContinueAtUsageLimit": true,
   "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
   "verbose": false,
   "preferredNotifChannel": "kitty",
+  "autoContinueAtUsageLimit": true,
+  "showTurnDuration": true,
+  "showMessageTimestamps": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
-    "classifyAllShell": true,
     "allow": [
       "$defaults",
       "Bash(gh pr create:*)",
@@ -245,6 +290,8 @@
       "**Trusted repo**: /Users/paul/Dev/UwlSystem and every worktree under it (ExamTrack/UwlSystem, private) and its remote `github.com:ExamTrack/UwlSystem.git`, plus the in-tree submodules `engines/examtrack`, `engines/examtrack_api`, `engines/generic_performance`, `test_suite`, `.claude` and their ExamTrack remotes. Also present locally: ~/Dev/ExamtrackEngine (github.com/ExamTrack/ExamtrackEngine, same org). Private visibility means confidential material may live here; secrets and personal/entrusted data are still never cleared into any repo by visibility alone.",
       "**Org-specific CLIs**: `wt` (worktree-workflow), `dc` / `dcr` (Docker Compose wrappers) appear in README instructions but are not corroborated by usage counts — treated as unconfigured",
       "**Routine under <user>/ prefix**: none observed"
-    ]
-  }
+    ],
+    "classifyAllShell": true
+  },
+  "description": "Impeccable design detector: immediate-tier checks after Edit/Write on UI files, full-rule deep pass on Stop."
 }
