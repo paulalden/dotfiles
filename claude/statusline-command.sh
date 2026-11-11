@@ -63,6 +63,7 @@ fi
 GREY='\e[2;37m'
 BLUE='\e[34m'
 MAGENTA='\e[35m'
+GREEN='\e[32m'
 ORANGE='\e[38;5;208m'
 RED='\e[31m'
 RESET='\e[0m'
@@ -77,6 +78,13 @@ parts+=("${GREY}${dir}${RESET}")
 
 # Model
 [[ -n "$model" ]] && parts+=("${MAGENTA}${model}${RESET}")
+
+# Advisor model (from settings; the statusline JSON has no advisor field)
+advisor=$(jq -r '.advisorModel // empty' "$HOME/.claude/settings.json" 2>/dev/null)
+[[ -n "$advisor" ]] && parts+=("${MAGENTA}Advisor:${advisor}${RESET}")
+
+# i-have-adhd always-on flag
+[[ -f "$HOME/.claude/.i-have-adhd-always" ]] && parts+=("${GREEN}ADHD${RESET}")
 
 
 # -- Combined context + rate-limit segment ------------------------------------
