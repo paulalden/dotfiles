@@ -41,6 +41,10 @@ The rules:
 - **Avoid parenthetical asides and em-dash subclauses.** They fragment sentences
   and make the eye double back. Use a separate bullet instead.
 
+## Merging PRs
+
+When I say "merge the PRs", "merge them" or similar, invoke the `pr-merge` skill. Never merge by hand with `gh`.
+
 ## ExamTrack branch workflow
 
 Applies only when the session's repo matches both checks below. Otherwise ignore
