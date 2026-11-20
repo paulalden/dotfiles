@@ -10,12 +10,12 @@
 #   on   -> SessionStart
 #   off  -> SessionEnd (the shell left in the pane gets the theme's colour back)
 #
-# TEXT matches "text": "ansi256(251)" in claude/themes/nord.json, which
+# TEXT matches "text": "ansi256(253)" in claude/themes/nord.json, which
 # colours your own prompts.
 
 [ -n "$TMUX_PANE" ] || exit 0
 
-TEXT='#c6c6c6'
+TEXT='#dadada'
 
 case "${1:-on}" in
   on) tmux set-option -p -t "$TMUX_PANE" window-active-style "fg=$TEXT" 2>/dev/null ;;
