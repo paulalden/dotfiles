@@ -51,6 +51,7 @@ SYMLINKS=(
   ~/.claude/CLAUDE.md
   ~/.claude/settings.json
   ~/.claude/statusline-command.sh
+  ~/.claude/themes/nord.json
   ~/.claude/hooks/context-mode-cache-heal.mjs
 )
 

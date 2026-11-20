@@ -8,6 +8,7 @@
 - create:
     - ~/.local/bin
     - ~/.config/ranger
+    - ~/.claude/themes
 
 # Requires 4 space indentation or it will fail
 - link:
@@ -31,6 +32,7 @@
     ~/.claude/CLAUDE.md: claude/CLAUDE.md
     ~/.claude/settings.json: claude/settings.json
     ~/.claude/statusline-command.sh: claude/statusline-command.sh
+    ~/.claude/themes/nord.json: claude/themes/nord.json
     ~/.claude/hooks/context-mode-cache-heal.mjs:
       claude/hooks/context-mode-cache-heal.mjs
 

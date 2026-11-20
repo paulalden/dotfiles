@@ -1,0 +1,7 @@
+{
+  "name": "Nord",
+  "base": "dark",
+  "overrides": {
+    "permission": "#ebcb8b"
+  }
+}

@@ -62,15 +62,17 @@ const bashLines = (output: unknown): string[] | null => {
 }
 
 export const register: Register = on => {
-  // Claude's own words: normal markdown beside a bright accent bar.
-  on('ui.render', { component: 'AssistantMessage' }, ($, e, next) => {
+  // Claude's own words: the engine's own drawing, so the theme's colours
+  // apply, wrapped with a bright accent bar.
+  on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) => {
     if (e.props.isSummary) {
       return next(e)
     }
 
-    const { Box, Text, Markdown } = $.ui.resolve(e)
+    const { Box, Text } = $.ui.resolve(e)
     const stamp = STAMP.exec(e.props.text)
     const body = stamp ? e.props.text.slice(stamp[0].length) : e.props.text
+    const drawn = await next({ ...e, props: { ...e.props, text: body } })
 
     return (
       <Box flexDirection="column" paddingLeft={2} marginTop={stamp ? 1 : 0}>
@@ -93,7 +95,7 @@ export const register: Register = on => {
             </Text>
           </Box>
         ) : null}
-        <Markdown text={stripControl(body)} />
+        {drawn}
       </Box>
     )
   })
@@ -135,7 +137,7 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column" paddingLeft={2}>
         {shown.map((line, i) => (
-          <Text key={i} color={TOOL}>
+          <Text key={String(i)} color={TOOL}>
             {oneLine(line, 120)}
           </Text>
         ))}

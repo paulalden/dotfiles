@@ -245,6 +245,7 @@
   "advisorModel": "fable",
   "autoUpdatesChannel": "stable",
   "tui": "fullscreen",
+  "theme": "custom:nord",
   "timeFormat": "24-hour",
   "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
