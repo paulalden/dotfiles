@@ -1,6 +1,7 @@
 {
   "env": {
-    "ENABLE_LSP_TOOL": "1"
+    "ENABLE_LSP_TOOL": "1",
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/Personal/repos/dotfiles/claude/mods/readable-transcript"
   },
   "attribution": {
     "commit": "",
@@ -75,7 +76,7 @@
       "/Users/paul/Personal/repos/dotfiles"
     ]
   },
-  "model": "sonnet",
+  "model": "opus",
   "hooks": {
     "SessionStart": [
       {
@@ -241,9 +242,9 @@
       "effortLevel": "xhigh"
     }
   },
-  "advisorModel": "opus",
+  "advisorModel": "fable",
   "autoUpdatesChannel": "stable",
-  "tui": "default",
+  "tui": "fullscreen",
   "timeFormat": "24-hour",
   "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
