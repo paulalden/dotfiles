@@ -88,12 +88,11 @@ export const register: Register = on => {
         >
           <Text color={PROSE}>{BAR}</Text>
         </Box>
+        {/* The engine's drawing opens with its own blank line. */}
         {stamp ? (
-          <Box marginBottom={1}>
-            <Text dimColor>
-              {stamp[1]} {RULE}
-            </Text>
-          </Box>
+          <Text dimColor>
+            {stamp[1]} {RULE}
+          </Text>
         ) : null}
         {drawn}
       </Box>
