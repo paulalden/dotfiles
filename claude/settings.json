@@ -88,6 +88,10 @@
           {
             "type": "command",
             "command": "~/.config/tmux/scripts/claude-notify.sh working"
+          },
+          {
+            "type": "command",
+            "command": "~/.config/tmux/scripts/claude-pane-style.sh on"
           }
         ]
       },
@@ -189,6 +193,10 @@
           {
             "type": "command",
             "command": "~/.config/tmux/scripts/claude-notify.sh clear"
+          },
+          {
+            "type": "command",
+            "command": "~/.config/tmux/scripts/claude-pane-style.sh off"
           }
         ]
       }

@@ -2,6 +2,8 @@
   "name": "Nord",
   "base": "dark",
   "overrides": {
-    "permission": "#ebcb8b"
+    "permission": "#ebcb8b",
+    "userMessageBackground": "ansi256(17)",
+    "text": "ansi256(251)"
   }
 }
