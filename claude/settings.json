@@ -252,7 +252,7 @@
   },
   "advisorModel": "fable",
   "autoUpdatesChannel": "stable",
-  "tui": "fullscreen",
+  "tui": "default",
   "theme": "custom:nord",
   "timeFormat": "24-hour",
   "skipWorkflowUsageWarning": true,
