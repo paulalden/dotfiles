@@ -2,12 +2,19 @@ import type { Register } from 'claude-code'
 
 // Nord, from dotfiles tmux/config/nord.conf.
 const PROSE = '#c895bf' // Kitty's bright magenta (color13)
+const PROMPT = '#88c0d0' // cyan
 const TOOL = '#616d85'
 const ERROR = '#bf616a'
 
 const RULE = '='.repeat(69)
-// More rows than any one reply block draws; the extra rows are clipped.
-const BAR = Array(400).fill('▌').join('\n')
+// More rows than any one block draws, or columns wider than any pane; the
+// extra is clipped. Thin lines throughout: a thick ▌ beside thin ones clashed.
+// tmux/scripts/copy-clean.pl strips these from copied text, so keep it in step.
+const BAR = Array(400).fill('│').join('\n')
+const FLOOR = '─'.repeat(400)
+
+// Your own messages: typed here, or sent from the phone or web app.
+const MINE = new Set(['composer', 'bridge'])
 const MAX_COMMAND = 100
 const MAX_RESULT_LINES = 3
 
@@ -75,7 +82,7 @@ export const register: Register = on => {
     const drawn = await next({ ...e, props: { ...e.props, text: body } })
 
     return (
-      <Box flexDirection="column" paddingLeft={2} marginTop={stamp ? 1 : 0}>
+      <Box flexDirection="column" paddingLeft={2}>
         {/* A column of glyphs pinned to the block's top and bottom, so every
             line gets one; the rows past the block's height are clipped. */}
         <Box
@@ -95,6 +102,41 @@ export const register: Register = on => {
           </Text>
         ) : null}
         {drawn}
+      </Box>
+    )
+  })
+
+  // Your own messages: a line down the left and along the bottom, so they
+  // stand out from Claude's replies.
+  on('ui.render', { component: 'UserMessage' }, async ($, e, next) => {
+    if (!MINE.has(e.props.origin.kind)) {
+      return next(e)
+    }
+
+    const { Box, Text } = $.ui.resolve(e)
+    const drawn = await next(e)
+
+    return (
+      <Box flexDirection="column">
+        <Box flexDirection="column">
+          {drawn}
+          {/* Drawn after the row, so it paints over the engine's ❯ in the
+              first column; the border replaces it. Starts below the blank
+              line the engine's drawing opens with. */}
+          <Box
+            position="absolute"
+            top={1}
+            bottom={0}
+            left={0}
+            width={1}
+            overflow="hidden"
+          >
+            <Text color={PROMPT}>{BAR}</Text>
+          </Box>
+        </Box>
+        <Box height={1} overflow="hidden">
+          <Text color={PROMPT}>└{FLOOR}</Text>
+        </Box>
       </Box>
     )
   })

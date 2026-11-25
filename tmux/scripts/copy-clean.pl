@@ -5,22 +5,29 @@
 #
 #   copy-clean.pl [pane-command] [pane-width] < copied-text
 #
-# 1. The readable-transcript Claude Code mod draws a ▌ bar beside each line
-#    of a reply. On lines that start with it, drop the bar and Claude's ⏺
-#    marker, then the indent those lines share (ignoring the mod's timestamp
-#    line), so a copied reply pastes as plain text.
+# 1. The readable-transcript Claude Code mod draws a │ bar beside each line
+#    of a reply and of your own messages, and a └──── line under each of
+#    yours (older versions drew the bar as ▌, and kept your ❯). On lines that
+#    start with the bar, drop it and Claude's ⏺ or an old ❯, then the indent
+#    those lines share (ignoring the mod's timestamp line), and drop the
+#    └──── lines, so a copied reply pastes as plain text.
 #
-# 2. Claude Code wraps a reply to the pane width, breaking a row only where
-#    the next word won't fit. Rejoin a bar line to the one before it when its
-#    first word wouldn't have fitted there, so paragraphs and list items paste
-#    as one line each. Breaks Claude meant (short lines, new list items, table
-#    rows) stay. A word longer than a row, such as a URL, rejoins with no space.
-#
-# 3. Only when pane-command is "claude": Claude Code draws a written file as
+# 2. Only when pane-command is "claude": Claude Code draws a written file as
 #    "<n> <code>" rows and an edit as "<n> <+|-| ><code>" rows, and breaks a
 #    long line onto rows with no number. Drop the numbers and rejoin broken
 #    lines. In an edit, also drop the removed rows and the +/- column, which
 #    leaves the code as it now is.
+#
+# 3. Only when pane-command is "claude": other text, such as the plan in the
+#    plan approval dialog, loses the indent its rows share.
+#
+# 4. Claude Code wraps text to the pane width, less up to 2 columns of
+#    padding, breaking a row only where the next word won't fit. Rejoin a row
+#    of a reply, or of other text from step 3, to the one before it when its
+#    first word wouldn't have fitted there, so paragraphs and list items paste
+#    as one line each. Breaks Claude meant (short lines, new list items, table
+#    rows, rules) stay. A word longer than a row, such as a URL, rejoins with
+#    no space.
 
 use strict;
 use warnings;
@@ -29,80 +36,129 @@ use open qw(:std :encoding(UTF-8));
 
 my $claude = ($ARGV[0] // '') eq 'claude';
 my $width = ($ARGV[1] // '') =~ /^\d+$/ ? $ARGV[1] : 0;
-my @l = split /\n/, do { local $/; <STDIN> // '' }, -1;
 
-# Each row's width and indent as drawn, before the bar comes off. A first row
-# with no bar is a selection that began at the text, 4 columns in.
-my @drawn = map { length($_) + (/^▌/ ? 0 : 4) } @l;
-my @indent = map { /^(▌ *)/ ? length $1 : 4 } @l;
+# Each row keeps its width and indent as drawn, which the rejoin needs.
+my @rows = map { { t => $_, drawn => length, lead => /^([│▌]? *)/ ? length $1 : 0 } }
+  split /\n/, do { local $/; <STDIN> // '' }, -1;
 
-my @bar = map { $l[$_] =~ s/^▌ ?// } 0 .. $#l;
-my @own = grep { $bar[$_] } 0 .. $#l;
-if (@own) {
-  s/^(\s*)⏺ /$1  / for @l[@own];
-  my ($min) = sort { $a <=> $b } map { /^( *)/; length $1 }
-    grep { /\S/ && !/^\[\d\d:\d\d:\d\d\] =+$/ } @l[@own];
-  if ($min) { s/^ {0,$min}// for @l[@own] }
-  rejoin() if $width;
+# 1. The bar
+# The └──── under your message becomes the blank line between it and the
+# reply, or goes, at either end of the copy.
+for (@rows) { $_->{t} = '' if $_->{t} =~ /^└─+\s*$/ && ($_->{floor} = 1) }
+shift @rows while @rows && $rows[0]{floor};
+pop @rows while @rows && $rows[-1]{floor};
+for (@rows) { $_->{kind} = 'bar' if $_->{t} =~ s/^[│▌] ?// }
+my @bars = grep { $_->{kind} } @rows;
+if (@bars) {
+  # A first row with no bar, above a bar row, is a selection that began at
+  # the text: 4 columns in for a reply, whose rows below are indented, or 2
+  # for your own message, whose rows aren't.
+  if (@rows > 1 && !$rows[0]{kind} && ($rows[1]{kind} // '') eq 'bar') {
+    my $in = $rows[1]{t} =~ /^\S/ ? 2 : 4;
+    $rows[0]{kind} = 'bar';
+    $rows[0]{drawn} += $in;
+    $rows[0]{lead} = $in;
+    $rows[0]{partial} = 1;
+  }
+  $_->{t} =~ s/^(\s*)[⏺❯] /$1  / for @bars;
+  # Each unbroken run of bar rows is one message. Dedent each on its own, as
+  # your messages sit 2 columns left of Claude's replies. A first row that
+  # began at the text has no indent to lose.
+  my @run;
+  for my $row (@rows, {}) {
+    if (($row->{kind} // '') eq 'bar' && !$row->{partial}) { push @run, $row; next }
+    next if $row->{partial};
+    dedent(grep { $_->{t} !~ /^\[\d\d:\d\d:\d\d\] =+$/ } @run);
+    @run = ();
+  }
 }
 
-@l = strip_numbers() if $claude;
-print join "\n", @l;
+if ($claude) {
+  # 2. Line numbers
+  @rows = strip_numbers(@rows);
+
+  # 3. Other text. The first row may start at the text, past the indent.
+  my @plain = grep { !$_->{kind} } @rows;
+  $_->{kind} = 'plain' for @plain;
+  my $first = @plain && $plain[0] == $rows[0] ? shift @plain : undef;
+  my $min = dedent(@plain);
+  if ($first) {
+    my ($own) = $first->{t} =~ /^( *)/;
+    if (defined $min && length $own < $min) {
+      $first->{drawn} += $min - length $own;
+      $first->{lead} = $min;
+    }
+    $first->{t} =~ s/^ {0,$min}// if $min;
+  }
+}
+
+# 4. Rejoin
+@rows = rejoin(@rows) if $width;
+print join "\n", map { $_->{t} } @rows;
+
+# Remove the indent the rows' text shares, ignoring blank rows and rules such as
+# ──── that hold no words. Returns it.
+sub dedent {
+  my ($min) = sort { $a <=> $b } map { $_->{t} =~ /^( *)/; length $1 } grep { $_->{t} =~ /\w/ } @_;
+  if ($min) { $_->{t} =~ s/^ {0,$min}// for @_ }
+  return $min;
+}
 
 sub rejoin {
-  my (@nl, @nb);
-  for my $i (0 .. $#l) {
-    my $s = $l[$i];
-    if ($i && $bar[$i] && ($bar[$i - 1] || $i == 1) && wrapped($l[$i - 1], $drawn[$i - 1], $s)) {
-      $s =~ s/^\s+//;
-      my ($tail) = $nl[-1] =~ /(\S+)$/;
-      my ($head) = $s =~ /^(\S+)/;
-      my $split = $drawn[$i - 1] >= $width && length($tail . $head) > $width - $indent[$i];
-      $nl[-1] .= ($split ? '' : ' ') . $s;
+  my @out;
+  for my $i (0 .. $#_) {
+    my ($prev, $row) = ($_[$i - 1], $_[$i]);
+    my $kind = $row->{kind} // '';
+    if ($i && ($kind eq 'bar' || $kind eq 'plain') && ($prev->{kind} // '') eq $kind
+      && wrapped($prev->{t}, $prev->{drawn}, $row->{t})) {
+      (my $t = $row->{t}) =~ s/^\s+//;
+      my ($tail) = $out[-1]{t} =~ /(\S+)$/;
+      my ($head) = $t =~ /^(\S+)/;
+      my $split = $prev->{drawn} >= $width - 2 && length($tail . $head) > $width - $row->{lead};
+      $out[-1]{t} .= ($split ? '' : ' ') . $t;
       next;
     }
-    push @nl, $s;
-    push @nb, $bar[$i];
+    push @out, { %$row };
   }
-  @l = @nl;
-  @bar = @nb;
+  return @out;
 }
 
 sub wrapped {
   my ($prev, $drawn, $next) = @_;
-  return 0 unless $prev =~ /\S/ && $next =~ /\S/;
+  return 0 unless $prev =~ /\w/ && $next =~ /\w/;
   return 0 if $prev =~ /^\[\d\d:\d\d:\d\d\] =+$/;
   return 0 if $next =~ /^\s*(?:[-*+•]|\d+[.)])\s/;
   return 0 if $next =~ /^\s*[│├└┌╭╰|]/ || $prev =~ /[│┤┐┘╮╯|]\s*$/;
   my ($word) = $next =~ /^\s*(\S+)/;
-  return $drawn + 1 + length($word) > $width;
+  return $drawn + 1 + length($word) > $width - 2;
 }
 
 # Group numbered rows, and the unnumbered rows that continue them, into
-# blocks, and hand each block to render. Bar lines are prose, never code.
+# blocks, and hand each block to render. Bar rows are prose, never code.
 sub strip_numbers {
   my (@out, @blk, $col);
-  for my $i (0 .. $#l) {
-    my $s = $l[$i];
+  for my $i (0 .. $#_) {
+    my $row = $_[$i];
     # The first row may start mid-gutter; later ones come from the left edge.
     my $lead = $i == 0 ? 0 : 2;
-    if (!$bar[$i] && $s =~ /^( {$lead,})(\d+)(?: (.*))?$/) {
+    if (!$row->{kind} && $row->{t} =~ /^( {$lead,})(\d+)(?: (.*))?$/) {
       $col = length($1) + length($2) + 1;
-      push @blk, { raw => $s, n => $2, lead => length $1, rest => $3 // '' };
-    } elsif (@blk && !$bar[$i] && $s =~ /^ {$col}(.*)$/) {
-      push @blk, { raw => $s, cont => 1, rest => $1 };
+      push @blk, { row => $row, n => $2, lead => length $1, rest => $3 // '' };
+    } elsif (@blk && !$row->{kind} && $row->{t} =~ /^ {$col}(.*)$/) {
+      push @blk, { row => $row, cont => 1, rest => $1 };
     } else {
-      push @out, render(@blk), $s;
+      push @out, render(@blk), $row;
       @blk = ();
     }
   }
   return (@out, render(@blk));
 }
 
+# A block's rows with the numbers gone, or as they were if it isn't code.
 sub render {
   my @b = @_;
   my @num = grep { !$_->{cont} } @b;
-  my @raw = map { $_->{raw} } @b;
+  my @raw = map { $_->{row} } @b;
   return @raw unless @num;
 
   my ($diff, $drop);
@@ -130,5 +186,5 @@ sub render {
     }
     if ($e->{cont} && @out) { $out[-1] .= $code } else { push @out, $code }
   }
-  return @out;
+  return map { { t => $_, kind => 'code' } } @out;
 }

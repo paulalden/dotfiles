@@ -8,12 +8,14 @@
 text=$(cat; printf x)
 text=${text%x}
 
-# Copies from a Claude Code pane, or carrying the readable-transcript bar, go
-# through copy-clean.pl to drop the bar and line numbers and rejoin wrapped
-# lines. Other copies pass through untouched, and so does any copy the cleaner
-# fails on.
+# Copies from a Claude Code pane, or carrying Claude's ⏺ or the old ▌ bar (a
+# transcript left in the scrollback after Claude exits), go through
+# copy-clean.pl to drop the bar and line numbers and rejoin wrapped lines. The
+# bar is now │, which tables and tree output also start lines with, so it
+# can't mark a copy alone. Other copies pass through untouched, and so does
+# any copy the cleaner fails on.
 read -r cmd width < <(tmux display-message -p '#{pane_current_command} #{pane_width}' 2>/dev/null)
-if [[ $cmd == claude || $text == *▌* ]]; then
+if [[ $cmd == claude || $text == *▌* || $text == *⏺* ]]; then
   if clean=$(printf '%s' "$text" | perl "$(dirname "$0")/copy-clean.pl" "$cmd" "$width" && printf x); then
     text=${clean%x}
   fi
