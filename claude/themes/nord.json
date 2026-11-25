@@ -4,6 +4,10 @@
   "overrides": {
     "permission": "#ebcb8b",
     "userMessageBackground": "ansi256(17)",
-    "text": "ansi256(18)"
+    "text": "ansi256(18)",
+    "diffAdded": "ansi256(23)",
+    "diffRemoved": "ansi256(24)",
+    "diffAddedWord": "ansi256(25)",
+    "diffRemovedWord": "ansi256(26)"
   }
 }
