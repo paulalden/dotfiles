@@ -15,8 +15,8 @@
 #   off      -> SessionEnd (the shell left in the pane gets the theme's colour back)
 #   refresh  -> tmux.conf, so a theme switch or reload reaches open Claude panes
 #
-# TEXT matches "text": "ansi256(253)" in claude/themes/nord.json, which
-# colours your own prompts.
+# TEXT is grey 253. Your own messages are dimmer: "text" in
+# claude/themes/nord.json, Nord grey7 through Kitty's color18.
 
 TEXT='#dadada'
 

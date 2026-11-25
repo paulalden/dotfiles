@@ -4,6 +4,6 @@
   "overrides": {
     "permission": "#ebcb8b",
     "userMessageBackground": "ansi256(17)",
-    "text": "ansi256(253)"
+    "text": "ansi256(18)"
   }
 }
