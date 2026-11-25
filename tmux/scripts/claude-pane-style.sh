@@ -7,19 +7,41 @@
 # near-white. A pane-level window-active-style overrides that for this pane
 # alone, leaving shell panes on the theme's colour.
 #
-#   on   -> SessionStart
-#   off  -> SessionEnd (the shell left in the pane gets the theme's colour back)
+# The pane-level style replaces the theme's whole style, not just its fg, and
+# an active pane with no bg falls back to window-style's darker inactive bg.
+# So the pane gets the theme's style with only fg changed.
+#
+#   on       -> SessionStart
+#   off      -> SessionEnd (the shell left in the pane gets the theme's colour back)
+#   refresh  -> tmux.conf, so a theme switch or reload reaches open Claude panes
 #
 # TEXT matches "text": "ansi256(253)" in claude/themes/nord.json, which
 # colours your own prompts.
 
-[ -n "$TMUX_PANE" ] || exit 0
-
 TEXT='#dadada'
 
+style() {
+  local theme
+  theme=$(tmux show-options -gv window-active-style 2>/dev/null)
+  printf '%s' "${theme:+$theme,}fg=$TEXT"
+}
+
 case "${1:-on}" in
-  on) tmux set-option -p -t "$TMUX_PANE" window-active-style "fg=$TEXT" 2>/dev/null ;;
-  off) tmux set-option -pu -t "$TMUX_PANE" window-active-style 2>/dev/null ;;
+  on)
+    [ -n "$TMUX_PANE" ] || exit 0
+    tmux set-option -p -t "$TMUX_PANE" window-active-style "$(style)" 2>/dev/null
+    ;;
+  off)
+    [ -n "$TMUX_PANE" ] || exit 0
+    tmux set-option -pu -t "$TMUX_PANE" window-active-style 2>/dev/null
+    ;;
+  refresh)
+    s=$(style)
+    for p in $(tmux list-panes -a -F '#{pane_id}' 2>/dev/null); do
+      [ -n "$(tmux show-options -pqv -t "$p" window-active-style)" ] &&
+        tmux set-option -p -t "$p" window-active-style "$s"
+    done
+    ;;
 esac
 
 exit 0
