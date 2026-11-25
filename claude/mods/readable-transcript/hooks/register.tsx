@@ -6,7 +6,6 @@ const PROMPT = '#88c0d0' // cyan
 const TOOL = '#616d85'
 const ERROR = '#bf616a'
 
-const RULE = '='.repeat(69)
 // More rows than any one block draws, or columns wider than any pane; the
 // extra is clipped. Thin lines throughout: a thick ▌ beside thin ones clashed.
 // tmux/scripts/copy-clean.pl strips these from copied text, so keep it in step.
@@ -19,7 +18,8 @@ const MAX_COMMAND = 100
 const MAX_RESULT_LINES = 3
 
 // The timestamps plugin prefixes a reply with a dim "[HH:MM:SS] " written as
-// ANSI codes. Draw it as a dim Text instead of literal escape text.
+// ANSI codes. Take it off the text and draw the time in the reply's bottom
+// line instead.
 // eslint-disable-next-line no-control-regex
 const STAMP = /^\u001b\[2m(\[\d{2}:\d{2}:\d{2}\])\u001b\[0m ?/
 
@@ -70,7 +70,9 @@ const bashLines = (output: unknown): string[] | null => {
 
 export const register: Register = on => {
   // Claude's own words: the engine's own drawing, so the theme's colours
-  // apply, wrapped with a bright accent bar.
+  // apply, with a line down the left and one along the bottom carrying the
+  // time at its right end. No top line: whatever is above, such as your
+  // message's bottom line, closes it off.
   on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) => {
     if (e.props.isSummary) {
       return next(e)
@@ -79,29 +81,48 @@ export const register: Register = on => {
     const { Box, Text } = $.ui.resolve(e)
     const stamp = STAMP.exec(e.props.text)
     const body = stamp ? e.props.text.slice(stamp[0].length) : e.props.text
+    const time = stamp?.[1]?.slice(1, -1)
     const drawn = await next({ ...e, props: { ...e.props, text: body } })
 
     return (
-      <Box flexDirection="column" paddingLeft={2}>
-        {/* A column of glyphs pinned to the block's top and bottom, so every
-            line gets one; the rows past the block's height are clipped. */}
-        <Box
-          position="absolute"
-          top={0}
-          bottom={0}
-          left={0}
-          width={1}
-          overflow="hidden"
-        >
-          <Text color={PROSE}>{BAR}</Text>
+      <Box flexDirection="column">
+        {/* Pulled up over the blank line the engine's drawing opens with,
+            so the text starts on the row after whatever is above it. */}
+        <Box flexDirection="column" marginTop={-1}>
+          {drawn}
+          {/* A column of glyphs pinned to the block's top and bottom, so
+              every line gets one; the rows past its height are clipped.
+              Drawn after the text, so it paints over the engine's ⏺ in the
+              first column, as your messages' line does their ❯. */}
+          <Box
+            position="absolute"
+            top={1}
+            bottom={0}
+            left={0}
+            width={1}
+            overflow="hidden"
+          >
+            <Text color={PROSE}>{BAR}</Text>
+          </Box>
         </Box>
-        {/* The engine's drawing opens with its own blank line. */}
-        {stamp ? (
-          <Text dimColor>
-            {stamp[1]} {RULE}
-          </Text>
-        ) : null}
-        {drawn}
+        {/* The line fills what the time leaves: in a Box of its own, so it
+            breaks at that Box's end rather than moving below, and is
+            clipped. The time's Box keeps its width. */}
+        <Box flexDirection="row" height={1}>
+          <Box width={0} flexGrow={1} height={1} overflow="hidden">
+            <Text color={PROSE}>└{FLOOR}</Text>
+          </Box>
+          {time ? (
+            <Box flexShrink={0} marginX={1}>
+              <Text dimColor>{time}</Text>
+            </Box>
+          ) : null}
+          {time ? (
+            <Box flexShrink={0}>
+              <Text color={PROSE}>─</Text>
+            </Box>
+          ) : null}
+        </Box>
       </Box>
     )
   })

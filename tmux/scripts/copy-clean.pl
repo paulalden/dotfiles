@@ -6,11 +6,12 @@
 #   copy-clean.pl [pane-command] [pane-width] < copied-text
 #
 # 1. The readable-transcript Claude Code mod draws a │ bar beside each line
-#    of a reply and of your own messages, and a └──── line under each of
-#    yours (older versions drew the bar as ▌, and kept your ❯). On lines that
-#    start with the bar, drop it and Claude's ⏺ or an old ❯, then the indent
-#    those lines share (ignoring the mod's timestamp line), and drop the
-#    └──── lines, so a copied reply pastes as plain text.
+#    of a reply and of your own messages, and a └──── line under each, a
+#    reply's carrying the time (older versions drew the bar as ▌, kept your
+#    ❯, and put the time in a line of its own). On lines
+#    that start with the bar, drop it and Claude's ⏺ or an old ❯, then the
+#    indent those lines share (ignoring an old timestamp line), and drop the
+#    border lines, so a copied reply pastes as plain text.
 #
 # 2. Only when pane-command is "claude": Claude Code draws a written file as
 #    "<n> <code>" rows and an edit as "<n> <+|-| ><code>" rows, and breaks a
@@ -42,12 +43,29 @@ my @rows = map { { t => $_, drawn => length, lead => /^([│▌]? *)/ ? length $
   split /\n/, do { local $/; <STDIN> // '' }, -1;
 
 # 1. The bar
-# The └──── under your message becomes the blank line between it and the
-# reply, or goes, at either end of the copy.
-for (@rows) { $_->{t} = '' if $_->{t} =~ /^└─+\s*$/ && ($_->{floor} = 1) }
+# The border lines: └──── under your message and └──── 12:34:56 ─ under a
+# reply (older versions drew a ┌──── line over a reply, and blank barred
+# rows inside it). Each, with any blank barred row beside it, becomes one
+# blank line between messages, or goes at either end of the copy.
+my @kept;
+for my $row (@rows) {
+  my $last = $kept[-1];
+  if ($row->{t} =~ /^[└┌]─(?:[─ ]|\d\d:\d\d:\d\d)*$/) {
+    if ($last && $last->{t} =~ /^[│▌]?\s*$/) { $last->{floor} = 1 }
+    else { push @kept, { t => '', drawn => 0, lead => 0, floor => 1 } }
+    next;
+  }
+  next if $last && $last->{floor} && $row->{t} =~ /^[│▌]\s*$/;
+  push @kept, $row;
+}
+@rows = @kept;
 shift @rows while @rows && $rows[0]{floor};
 pop @rows while @rows && $rows[-1]{floor};
 for (@rows) { $_->{kind} = 'bar' if $_->{t} =~ s/^[│▌] ?// }
+# A reply's blank first and last rows, at either end of the copy, go.
+my $blank = sub { ($_[0]{kind} // '') eq 'bar' && $_[0]{t} =~ /^\s*$/ };
+shift @rows while @rows && $blank->($rows[0]);
+pop @rows while @rows && $blank->($rows[-1]);
 my @bars = grep { $_->{kind} } @rows;
 if (@bars) {
   # A first row with no bar, above a bar row, is a selection that began at
@@ -61,12 +79,13 @@ if (@bars) {
     $rows[0]{partial} = 1;
   }
   $_->{t} =~ s/^(\s*)[⏺❯] /$1  / for @bars;
-  # Each unbroken run of bar rows is one message. Dedent each on its own, as
-  # your messages sit 2 columns left of Claude's replies. A first row that
-  # began at the text has no indent to lose.
+  # Each run of bar rows between └──── lines (or what stands in for them) is
+  # one message. Dedent each on its own, as your messages sit 2 columns left
+  # of Claude's replies. A first row that began at the text has no indent to
+  # lose.
   my @run;
   for my $row (@rows, {}) {
-    if (($row->{kind} // '') eq 'bar' && !$row->{partial}) { push @run, $row; next }
+    if (($row->{kind} // '') eq 'bar' && !$row->{partial} && !$row->{floor}) { push @run, $row; next }
     next if $row->{partial};
     dedent(grep { $_->{t} !~ /^\[\d\d:\d\d:\d\d\] =+$/ } @run);
     @run = ();
