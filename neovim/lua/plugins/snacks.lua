@@ -90,6 +90,8 @@ return {
     input = { enabled = true },
     git = { enabled = true },
     gitbrowse = { enabled = true },
+    -- GitHub issues and PRs through the gh CLI: <leader>gp / <leader>gi below.
+    gh = {},
     notifier = { enabled = true },
     picker = {
       prompt = " ",
@@ -560,6 +562,54 @@ return {
         Snacks.picker.git_status()
       end,
       desc = "[G]it [S]tatus",
+    },
+    -- GitHub. In a PR, <cr> lists actions (diff, review, checkout, merge);
+    -- in its diff, a comments on the line, or the lines selected.
+    {
+      "<leader>gp",
+      function()
+        Snacks.picker.gh_pr()
+      end,
+      desc = "GitHub [P]ull Requests (open)",
+    },
+    {
+      "<leader>gP",
+      function()
+        Snacks.picker.gh_pr({ state = "all" })
+      end,
+      desc = "GitHub [P]ull Requests (all)",
+    },
+    {
+      "<leader>gd",
+      function()
+        -- The current branch's PR, or ask for a number when it has none.
+        local out = vim.fn.system({ "gh", "pr", "view", "--json", "number", "--jq", ".number" })
+        local pr = vim.v.shell_error == 0 and tonumber(vim.trim(out)) or nil
+        if pr then
+          return Snacks.picker.gh_diff({ pr = pr })
+        end
+        vim.ui.input({ prompt = "PR number: " }, function(input)
+          local number = tonumber(input or "")
+          if number then
+            Snacks.picker.gh_diff({ pr = number })
+          end
+        end)
+      end,
+      desc = "GitHub PR [D]iff",
+    },
+    {
+      "<leader>gi",
+      function()
+        Snacks.picker.gh_issue()
+      end,
+      desc = "GitHub [I]ssues (open)",
+    },
+    {
+      "<leader>gI",
+      function()
+        Snacks.picker.gh_issue({ state = "all" })
+      end,
+      desc = "GitHub [I]ssues (all)",
     },
     -- Buffer
     {
