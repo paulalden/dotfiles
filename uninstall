@@ -48,6 +48,7 @@ SYMLINKS=(
   ~/.zshenv
   ~/.config/zsh
   ~/.asdfrc
+  ~/.default-gems
   ~/.claude/CLAUDE.md
   ~/.claude/settings.json
   ~/.claude/statusline-command.sh
