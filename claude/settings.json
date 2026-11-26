@@ -265,7 +265,7 @@
   "advisorModel": "fable",
   "autoUpdatesChannel": "stable",
   "tui": "default",
-  "theme": "custom:nord",
+  "theme": "custom:readable-transcript:nord-kitty",
   "timeFormat": "24-hour",
   "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
