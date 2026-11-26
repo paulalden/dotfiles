@@ -3,18 +3,6 @@
     "ENABLE_LSP_TOOL": "1",
     "CLAUDE_CODE_PLUGIN_DIRS": "~/Personal/repos/readable-transcript"
   },
-  "pluginConfigs": {
-    "readable-transcript": {
-      "options": {
-        "prose": "ansi256(19)",
-        "prompt": "ansi256(20)",
-        "tool": "ansi256(21)",
-        "spinner": "ansi256(27)",
-        "done": "ansi256(28)",
-        "error": "ansi256(29)"
-      }
-    }
-  },
   "attribution": {
     "commit": "",
     "pr": ""
@@ -263,11 +251,23 @@
     }
   },
   "advisorModel": "fable",
+  "pluginConfigs": {
+    "readable-transcript": {
+      "options": {
+        "prose": "ansi256(19)",
+        "prompt": "ansi256(20)",
+        "tool": "ansi256(21)",
+        "spinner": "ansi256(27)",
+        "done": "ansi256(28)",
+        "error": "ansi256(29)"
+      }
+    }
+  },
   "autoUpdatesChannel": "stable",
   "tui": "default",
-  "theme": "custom:readable-transcript:nord-kitty",
   "timeFormat": "24-hour",
   "skipWorkflowUsageWarning": true,
+  "theme": "custom:readable-transcript:nord-kitty",
   "editorMode": "normal",
   "verbose": false,
   "preferredNotifChannel": "kitty",
