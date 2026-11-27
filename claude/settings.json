@@ -260,6 +260,7 @@
         "toolLine": "ansi256(27)",
         "toolBackground": "ansi256(30)",
         "spinner": "ansi256(27)",
+        "spinnerBackground": "ansi256(30)",
         "turnEnd": "ansi256(28)",
         "turnEndBackground": "ansi256(31)",
         "done": "ansi256(28)",
