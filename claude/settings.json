@@ -257,7 +257,11 @@
         "prose": "ansi256(19)",
         "prompt": "ansi256(20)",
         "tool": "ansi256(21)",
+        "toolLine": "ansi256(27)",
+        "toolBackground": "ansi256(30)",
         "spinner": "ansi256(27)",
+        "turnEnd": "ansi256(28)",
+        "turnEndBackground": "ansi256(31)",
         "done": "ansi256(28)",
         "error": "ansi256(29)"
       }
