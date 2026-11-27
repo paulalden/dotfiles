@@ -1,7 +1,7 @@
 {
   "env": {
     "ENABLE_LSP_TOOL": "1",
-    "CLAUDE_CODE_PLUGIN_DIRS": "~/Personal/repos/readable-transcript"
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/Personal/repos/cc-readable-transcript"
   },
   "attribution": {
     "commit": "",
@@ -252,7 +252,7 @@
   },
   "advisorModel": "fable",
   "pluginConfigs": {
-    "readable-transcript": {
+    "cc-readable-transcript": {
       "options": {
         "prose": "ansi256(19)",
         "prompt": "ansi256(20)",
@@ -271,7 +271,7 @@
   "tui": "default",
   "timeFormat": "24-hour",
   "skipWorkflowUsageWarning": true,
-  "theme": "custom:readable-transcript:nord-kitty",
+  "theme": "custom:cc-readable-transcript:nord-kitty",
   "editorMode": "normal",
   "verbose": false,
   "preferredNotifChannel": "kitty",

@@ -5,7 +5,7 @@
 #
 #   copy-clean.pl [pane-command] [pane-width] < copied-text
 #
-# 1. The readable-transcript Claude Code mod draws a │ bar beside each line
+# 1. The cc-readable-transcript Claude Code mod draws a │ bar beside each line
 #    of a reply and of your own messages, and a └──── line under each, a
 #    reply's carrying the time (older versions drew the bar as ▌, kept your
 #    ❯, and put the time in a line of its own). On lines
